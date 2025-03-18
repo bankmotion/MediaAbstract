@@ -51,15 +51,15 @@ const styles = makeStyles()((theme: any) => ({
     color: "#444",
     textAlign: "center",
   },
-  link: {
-    color: "#007BFF",
-    fontWeight: 500,
-    cursor: "pointer",
-    textDecoration: "underline",
-    "&:hover": {
-      color: "#0056b3",
-    },
-  },
+  // link: {
+  //   color: "#007BFF",
+  //   fontWeight: 500,
+  //   cursor: "pointer",
+  //   textDecoration: "underline",
+  //   "&:hover": {
+  //     color: "#0056b3",
+  //   },
+  // },
 }));
 
 export default styles;

@@ -68,7 +68,7 @@ const Login = () => {
             underline="hover"
             sx={{ color: "#007BFF", fontWeight: 500 }}
           >
-            Sign up
+            Sign Up
           </Link>
         </Typography>
       </Paper>

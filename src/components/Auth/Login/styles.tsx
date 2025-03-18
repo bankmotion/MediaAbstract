@@ -51,9 +51,10 @@ const styles = makeStyles()((theme: any) => ({
   },
 
   noteText: {
-    textAlign: "center",
     marginTop: theme.spacing(2.5),
+    fontSize: "0.95rem",
     color: "#444",
+    textAlign: "center",
   },
 }));
 

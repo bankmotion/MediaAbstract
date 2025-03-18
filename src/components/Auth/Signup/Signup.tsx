@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Box, Button, MenuItem, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  MenuItem,
+  TextField,
+  Typography,
+  Link,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 
@@ -67,11 +74,17 @@ const Signup = () => {
       >
         Sign Up
       </Button>
+
       <Typography className={classes.noteText}>
         Already have an account?{" "}
-        <span className={classes.link} onClick={() => navigate("/login")}>
-          Log in
-        </span>
+        <Link
+          component="button"
+          onClick={() => navigate("/")}
+          underline="hover"
+          sx={{ color: "#007BFF", fontWeight: 500 }}
+        >
+          Log In
+        </Link>
       </Typography>
     </Box>
   );
