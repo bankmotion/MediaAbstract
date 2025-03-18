@@ -11,8 +11,8 @@ const Terms = () => {
         Terms of Use
       </Typography>
       <Typography>
-        These terms govern your use of the Abstract Matching Platform. By
-        signing up, you agree to abide by these terms...
+        These terms govern your use of the WriteFor.co. By signing up, you agree
+        to abide by these terms...
         {/* Add full text from client asset */}
       </Typography>
     </Box>
