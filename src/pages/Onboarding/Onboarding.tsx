@@ -4,7 +4,17 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
 import useStyles from "./styles";
 
-const industryOptions = ["Business", "Tech", "Marketing", "General"];
+const industryOptions = [
+  "Business Executives",
+  "Tech",
+  "Marketing",
+  "General",
+  "Healthcare Tech",
+  "Sustainability",
+  "Cybersecurity",
+  "Real Estate",
+  "Energy",
+];
 
 const Onboarding = () => {
   const { classes } = useStyles();
@@ -40,11 +50,21 @@ const Onboarding = () => {
         />
         <TextField
           select
-          label="Select Industry"
+          label="Select Audience"
           fullWidth
           value={industry}
           onChange={(e) => setIndustry(e.target.value)}
           className={classes.tabLabel}
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                style: {
+                  maxHeight: 180, // Adjust the height as needed
+                  overflowY: "auto",
+                },
+              },
+            },
+          }}
         >
           {industryOptions.map((option) => (
             <MenuItem key={option} value={option}>

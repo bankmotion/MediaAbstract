@@ -33,14 +33,14 @@ const Home = () => {
           <Tab
             icon={<Lightbulb className={classes.tabIcon} />}
             iconPosition="start"
-            label="For Creators"
+            label="For Writers"
             className={classes.tabLabel}
             onClick={() => navigate("/onboarding")}
           />
           <Tab
             icon={<BusinessCenter className={classes.tabIcon} />}
             iconPosition="start"
-            label="For Companies"
+            label="For Agencies&Teams"
             className={classes.tabLabel}
             onClick={() => navigate("/onboarding")}
           />

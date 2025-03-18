@@ -12,9 +12,9 @@ import useStyles from "./styles";
 
 const planOptions = [
   { label: "Writer - $15/month", value: "writer" },
-  { label: "Agency - $75/month", value: "agency75" },
-  { label: "Agency - $150/month", value: "agency150" },
-  { label: "Agency - $250/month", value: "agency250" },
+  { label: "Agency&Team - $75/month", value: "agency75" },
+  { label: "Agency&Team - $150/month", value: "agency150" },
+  { label: "Agency&Team - $250/month", value: "agency250" },
 ];
 
 const Signup = () => {
