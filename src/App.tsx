@@ -32,11 +32,11 @@ function App() {
     <div className="min-h-screen flex flex-col">
       <div className="flex-grow">
         <Routes>
-          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/results" element={<Results />} />
           <Route path="/terms" element={<Terms />} />
-          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

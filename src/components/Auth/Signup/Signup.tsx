@@ -27,7 +27,7 @@ const Signup = () => {
   const handleSignup = () => {
     // Placeholder signup logic
     alert(`Signed up as ${plan}`);
-    navigate("/home");
+    navigate("/");
   };
 
   return (
@@ -79,7 +79,7 @@ const Signup = () => {
         Already have an account?{" "}
         <Link
           component="button"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/login")}
           underline="hover"
           sx={{ color: "#007BFF", fontWeight: 500 }}
         >

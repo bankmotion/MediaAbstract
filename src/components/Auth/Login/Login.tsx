@@ -14,7 +14,7 @@ const Login = () => {
   const handleLogin = () => {
     // Placeholder login logic
     alert("Login successful (mock)");
-    navigate("/home");
+    navigate("/");
   };
 
   return (

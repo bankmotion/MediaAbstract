@@ -66,7 +66,7 @@ const styles = makeStyles()((theme: any) => ({
   tooltip: {
     fontWeight: 600,
     color: "#007BFF",
-    marginTop: "8px",
+    //marginTop: "5px",
     cursor: "pointer",
     //    color: "#2e7d32", // MUI green tone
   },
