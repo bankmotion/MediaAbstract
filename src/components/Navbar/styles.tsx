@@ -1,10 +1,12 @@
 import { makeStyles } from "tss-react/mui";
 
 const styles = makeStyles()((theme: any) => ({
+  appbar: {
+    height: "100%",
+  },
   toolbar: {
     display: "flex",
     justifyContent: "space-between",
-    padding: theme.spacing(2),
   },
   logoButton: {
     textTransform: "none",

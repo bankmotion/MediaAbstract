@@ -12,11 +12,13 @@ const Navbar = () => {
   const showHome = location.pathname !== "/"; // Hide on home page if needed
 
   return (
-    <AppBar position="static" color="transparent" elevation={0}>
-      <Toolbar
-        style={{ display: "flex", justifyContent: "space-between" }}
-        className={classes.toolbar}
-      >
+    <AppBar
+      position="static"
+      color="transparent"
+      elevation={0}
+      className={classes.appbar}
+    >
+      <Toolbar className={classes.toolbar}>
         <Button
           onClick={() => navigate("/")}
           className={classes.logoButton}

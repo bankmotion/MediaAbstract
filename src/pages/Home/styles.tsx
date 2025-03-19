@@ -11,6 +11,22 @@ const useStyles = makeStyles()((theme) => ({
     padding: theme.spacing(4, 2),
   },
 
+  loginWrapper: {
+    display: "flex",
+    justifyContent: "flex-end",
+    paddingRight: theme.spacing(4),
+    paddingTop: theme.spacing(2),
+    position: "absolute",
+    right: 0,
+    top: 0,
+    zIndex: 10,
+  },
+
+  loginButton: {
+    textTransform: "none",
+    fontWeight: 600,
+  },
+
   heroSection: {
     backgroundColor: "#ffffff",
     borderRadius: 16,

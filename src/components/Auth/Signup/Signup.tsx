@@ -6,8 +6,11 @@ import {
   TextField,
   Typography,
   Link,
+  Paper,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Navbar from "../../Navbar/Nabvar";
+
 import useStyles from "./styles";
 
 const planOptions = [
@@ -31,62 +34,67 @@ const Signup = () => {
   };
 
   return (
-    <Box className={classes.body}>
-      <Typography variant="h5" className={classes.title}>
-        Sign Up
-      </Typography>
-      <TextField
-        label="Email"
-        type="email"
-        fullWidth
-        className={classes.email}
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <TextField
-        label="Password"
-        type="password"
-        fullWidth
-        className={classes.password}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <TextField
-        select
-        label="Select Plan"
-        fullWidth
-        className={classes.plan}
-        value={plan}
-        onChange={(e) => setPlan(e.target.value)}
-      >
-        {planOptions.map((opt) => (
-          <MenuItem key={opt.value} value={opt.value}>
-            {opt.label}
-          </MenuItem>
-        ))}
-      </TextField>
-      <Button
-        variant="contained"
-        color="primary"
-        fullWidth
-        onClick={handleSignup}
-        className={classes.signupButton}
-      >
-        Sign Up
-      </Button>
+    <>
+      <Navbar />
+      <Box className={classes.body}>
+        <Paper elevation={3} className={classes.content}>
+          <Typography variant="h5" className={classes.title}>
+            Sign Up
+          </Typography>
+          <TextField
+            label="Email"
+            type="email"
+            fullWidth
+            className={classes.email}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            label="Password"
+            type="password"
+            fullWidth
+            className={classes.password}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <TextField
+            select
+            label="Select Plan"
+            fullWidth
+            className={classes.plan}
+            value={plan}
+            onChange={(e) => setPlan(e.target.value)}
+          >
+            {planOptions.map((opt) => (
+              <MenuItem key={opt.value} value={opt.value}>
+                {opt.label}
+              </MenuItem>
+            ))}
+          </TextField>
+          <Button
+            variant="contained"
+            color="primary"
+            fullWidth
+            onClick={handleSignup}
+            className={classes.signupButton}
+          >
+            Sign Up
+          </Button>
 
-      <Typography className={classes.noteText}>
-        Already have an account?{" "}
-        <Link
-          component="button"
-          onClick={() => navigate("/login")}
-          underline="hover"
-          sx={{ color: "#007BFF", fontWeight: 500 }}
-        >
-          Log In
-        </Link>
-      </Typography>
-    </Box>
+          <Typography className={classes.noteText}>
+            Already have an account?{" "}
+            <Link
+              component="button"
+              onClick={() => navigate("/login")}
+              underline="hover"
+              sx={{ color: "#007BFF", fontWeight: 500 }}
+            >
+              Log In
+            </Link>
+          </Typography>
+        </Paper>
+      </Box>
+    </>
   );
 };
 

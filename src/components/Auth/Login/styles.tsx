@@ -7,16 +7,21 @@ const styles = makeStyles()((theme: any) => ({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f4f6f8",
-    padding: theme.spacing(2),
   },
 
   content: {
     width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
     maxWidth: 400,
     padding: theme.spacing(4),
     borderRadius: theme.shape.borderRadius * 2,
     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
     backgroundColor: "#fff",
+    margin: theme.spacing(15, 3),
+    marginTop: 0,
   },
 
   title: {

@@ -15,8 +15,29 @@ const Home = () => {
     setTab(newValue);
   };
 
+  const handleGetStarted = () => {
+    if (tab === 0) {
+      navigate("/writerintro");
+    } else {
+      navigate("/agenciesintro");
+    }
+  };
+  const handleLogin = () => {
+    navigate("/onboarding"); // Redirect to dashboard after login
+  };
+
   return (
     <Box className={classes.wrapper}>
+      <Box className={classes.loginWrapper}>
+        <Button
+          variant="outlined"
+          color="primary"
+          className={classes.loginButton}
+          onClick={handleLogin}
+        >
+          Login
+        </Button>
+      </Box>
       <Box className={classes.heroSection}>
         <Typography variant="h4" className={classes.title}>
           WriteFor.co
@@ -49,7 +70,7 @@ const Home = () => {
           variant="contained"
           color="primary"
           className={classes.startButton}
-          onClick={() => navigate("/login")}
+          onClick={handleGetStarted}
         >
           Get Started
         </Button>

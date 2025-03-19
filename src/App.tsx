@@ -9,6 +9,9 @@ import Terms from "./pages/Terms/Terms";
 import Login from "./components/Auth/Login/Login";
 import Signup from "./components/Auth/Signup/Signup";
 import NotFound from "./pages/NotFound/NotFound";
+import WritersIntro from "./pages/WriterIntro/WriterIntro";
+import AgenciesIntro from "./pages/AgenciesIntro/AgenciesIntro";
+
 import "./App.css";
 
 function App() {
@@ -33,6 +36,8 @@ function App() {
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/writerintro" element={<WritersIntro />} />
+          <Route path="/agenciesintro" element={<AgenciesIntro />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/results" element={<Results />} />
           <Route path="/terms" element={<Terms />} />
