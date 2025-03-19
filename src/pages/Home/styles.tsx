@@ -93,7 +93,7 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   startButton: {
-    marginTop: theme.spacing(5),
+    marginTop: theme.spacing(8),
     padding: theme.spacing(0.5, 2),
     fontSize: "1.2rem",
     fontWeight: 500,
