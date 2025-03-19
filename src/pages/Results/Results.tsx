@@ -30,9 +30,10 @@ const dummyOutlets: Outlet[] = [
     aiPartnered: true,
   },
   {
-    name: "TechCrunch",
-    url: "https://techcrunch.com/contact-us/",
-    guidelines: "600-1000 words, pitch@techcrunch.com",
+    name: "The Wall Street Journal",
+    url: "https://www.wsj.com/",
+    guidelines:
+      "400-1000 words, exclusive, strong argument. Contact wsjcontact@wsj.com for contributor info",
     score: 4.5,
     aiPartnered: true,
   },

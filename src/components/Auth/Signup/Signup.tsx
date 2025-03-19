@@ -15,9 +15,9 @@ import useStyles from "./styles";
 
 const planOptions = [
   { label: "Writer - $15/month", value: "writer" },
-  { label: "Agency&Team - $75/month", value: "agency75" },
-  { label: "Agency&Team - $150/month", value: "agency150" },
-  { label: "Agency&Team - $250/month", value: "agency250" },
+  { label: "Agency&Team - $75: 1 user, 5 matches", value: "agency75" },
+  { label: "Agency&Team - $150: 3 user, 15 matches", value: "agency150" },
+  { label: "Agency&Team - $250: unlimited, priority", value: "agency250" },
 ];
 
 const Signup = () => {
