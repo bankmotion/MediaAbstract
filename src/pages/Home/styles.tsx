@@ -63,7 +63,7 @@ const useStyles = makeStyles()((theme) => ({
   tabRoot: {
     display: "flex",
     justifyContent: "center",
-    maxWidth: 500,
+    maxWidth: 600,
     margin: "0 auto",
     marginTop: theme.spacing(2),
   },
@@ -72,6 +72,7 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 600,
     fontSize: "1rem",
     textTransform: "none",
+    width: "300px",
     // "&.Mui-selected": {
     //   color: "#007BFF",
     //   borderBottom: "2px solid #007BFF",
