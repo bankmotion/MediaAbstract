@@ -14,14 +14,14 @@ const Login = () => {
   const handleLogin = () => {
     // Placeholder login logic
     alert("Login successful (mock)");
-    navigate("/");
+    navigate("/onboarding");
   };
 
   return (
     <Box className={classes.body}>
       <Paper elevation={3} className={classes.content}>
         <Typography variant="h5" className={classes.title}>
-          Welcome Back
+          Log In
         </Typography>
         <Typography variant="body2" className={classes.subnotice}>
           Login to continue to WriteFor.co

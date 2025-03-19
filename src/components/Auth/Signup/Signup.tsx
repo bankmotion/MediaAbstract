@@ -27,7 +27,7 @@ const Signup = () => {
   const handleSignup = () => {
     // Placeholder signup logic
     alert(`Signed up as ${plan}`);
-    navigate("/");
+    navigate("/onboarding");
   };
 
   return (

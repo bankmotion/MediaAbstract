@@ -52,7 +52,7 @@ const dummyOutlets: Outlet[] = [
   },
   {
     name: "Wired",
-    url: "https://www.wired.com/about/contact-us/writers-guideline",
+    url: "https://www.wired.com/about/how-to-pitch-stories-to-wired/",
     guidelines: "600-1000 words, tech/culture, pitch first",
     score: 4.4,
     aiPartnered: true,
