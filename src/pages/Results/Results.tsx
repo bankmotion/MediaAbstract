@@ -39,14 +39,14 @@ const dummyOutlets: Outlet[] = [
   },
   {
     name: "Harvard Business Review",
-    url: "hbr.org/submitters",
+    url: "https://hbr.org/submitters",
     guidelines: "800-1200 words, research-backed, pitch first",
     score: 4.3,
     aiPartnered: false,
   },
   {
     name: "Inc42",
-    url: "https://www.inc.com",
+    url: "https://inc42.com/startup-submission/",
     guidelines: "800-1200 words, startup insights, pitch first",
     score: 4.0,
     aiPartnered: false,
