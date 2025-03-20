@@ -23,7 +23,7 @@ interface Outlet {
 const dummyOutlets: Outlet[] = [
   {
     name: "Forbes",
-    url: "https://www.forbes.com/contributor/how-to-become-one",
+    url: "https://www.forbes.com",
     guidelines:
       "800-1200 words, pitch letters@forbes.com or councils@forbescouncils.com",
     score: 4.7,
@@ -31,7 +31,7 @@ const dummyOutlets: Outlet[] = [
   },
   {
     name: "The Wall Street Journal",
-    url: "https://www.wsj.com/",
+    url: "https://www.wsj.com/articles/oped-guidelines-for-the-wall-street-journal-1384383173",
     guidelines:
       "400-1000 words, exclusive, strong argument. Contact wsjcontact@wsj.com for contributor info",
     score: 4.5,
