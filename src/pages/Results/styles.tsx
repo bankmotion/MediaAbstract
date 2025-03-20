@@ -33,11 +33,11 @@ const styles = makeStyles()((theme: any) => ({
       transform: "translateY(-3px)",
       boxShadow: "0 6px 20px rgba(0, 0, 0, 0.12)",
     },
-    height: "210px",
+    height: "100%",
   },
 
   cardcontent: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(4),
     display: "flex",
     flexDirection: "column",
     gap: theme.spacing(0.5),
@@ -69,6 +69,7 @@ const styles = makeStyles()((theme: any) => ({
     //marginTop: "5px",
     cursor: "pointer",
     //    color: "#2e7d32", // MUI green tone
+    marginBottom: "5px",
   },
 
   customTooltip: {
