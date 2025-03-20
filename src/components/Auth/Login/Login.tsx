@@ -69,7 +69,7 @@ const Login = () => {
             Don’t have an account?{" "}
             <Link
               component="button"
-              onClick={() => navigate("/signup")}
+              onClick={() => navigate("/")}
               underline="hover"
               sx={{ color: "#007BFF", fontWeight: 500 }}
             >

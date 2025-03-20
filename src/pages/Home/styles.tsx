@@ -9,6 +9,8 @@ const useStyles = makeStyles()((theme) => ({
     alignItems: "center",
     justifyContent: "center",
     padding: theme.spacing(4, 2),
+    paddingTop: theme.spacing(10),
+    paddingBottom: theme.spacing(30),
   },
 
   loginWrapper: {

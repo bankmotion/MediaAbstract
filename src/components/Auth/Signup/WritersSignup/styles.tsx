@@ -2,7 +2,6 @@ import { makeStyles } from "tss-react/mui";
 
 const styles = makeStyles()((theme: any) => ({
   body: {
-    minHeight: "100vh",
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -23,6 +22,11 @@ const styles = makeStyles()((theme: any) => ({
     backgroundColor: "#fff",
     margin: theme.spacing(15, 3),
     marginTop: 0,
+    [theme.breakpoints.down("sm")]: {
+      margin: theme.spacing(8, 2),
+      padding: theme.spacing(3),
+      maxWidth: "90%",
+    },
   },
   title: {
     fontWeight: 600,
@@ -30,6 +34,9 @@ const styles = makeStyles()((theme: any) => ({
     marginBottom: theme.spacing(3),
     textAlign: "center",
     color: "#333",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.5rem",
+    },
   },
   email: {
     marginBottom: theme.spacing(2),
@@ -58,12 +65,18 @@ const styles = makeStyles()((theme: any) => ({
     "&:hover": {
       backgroundColor: "#0069d9",
     },
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.95rem",
+    },
   },
   noteText: {
     marginTop: theme.spacing(2.5),
     fontSize: "0.95rem",
     color: "#444",
     textAlign: "center",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.85rem",
+    },
   },
   // link: {
   //   color: "#007BFF",

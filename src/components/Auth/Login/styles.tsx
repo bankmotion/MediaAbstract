@@ -2,11 +2,13 @@ import { makeStyles } from "tss-react/mui";
 
 const styles = makeStyles()((theme: any) => ({
   body: {
-    minHeight: "100vh",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f4f6f8",
+    padding: theme.spacing(2),
+    paddingTop: theme.spacing(5),
+    paddingBottom: theme.spacing(15),
   },
 
   content: {
@@ -20,8 +22,13 @@ const styles = makeStyles()((theme: any) => ({
     borderRadius: theme.shape.borderRadius * 2,
     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
     backgroundColor: "#fff",
-    margin: theme.spacing(15, 3),
+    margin: theme.spacing(10, 2),
     marginTop: 0,
+
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(3),
+      margin: theme.spacing(5, 1),
+    },
   },
 
   title: {
@@ -29,6 +36,10 @@ const styles = makeStyles()((theme: any) => ({
     marginBottom: theme.spacing(1.5),
     textAlign: "center",
     color: "#333",
+
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.4rem",
+    },
   },
 
   subnotice: {
@@ -36,6 +47,10 @@ const styles = makeStyles()((theme: any) => ({
     color: "#666",
     marginBottom: theme.spacing(3),
     fontSize: "0.95rem",
+
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.85rem",
+    },
   },
 
   email: {
@@ -53,6 +68,12 @@ const styles = makeStyles()((theme: any) => ({
     fontSize: "1rem",
     fontWeight: 600,
     borderRadius: 8,
+    width: "100%",
+
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.95rem",
+      padding: theme.spacing(1),
+    },
   },
 
   noteText: {
@@ -60,6 +81,10 @@ const styles = makeStyles()((theme: any) => ({
     fontSize: "0.95rem",
     color: "#444",
     textAlign: "center",
+
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.85rem",
+    },
   },
 }));
 

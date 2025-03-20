@@ -42,7 +42,7 @@ const Signup = () => {
             Sign Up
           </Typography>
           <TextField
-            label="Email"
+            label="Email Address"
             type="email"
             fullWidth
             className={classes.email}
@@ -66,7 +66,19 @@ const Signup = () => {
             onChange={(e) => setPlan(e.target.value)}
           >
             {planOptions.map((opt) => (
-              <MenuItem key={opt.value} value={opt.value}>
+              <MenuItem
+                key={opt.value}
+                value={opt.value}
+                sx={{
+                  whiteSpace: "normal", // Allows wrapping
+                  fontSize: {
+                    xs: "0.85rem",
+                    sm: "0.95rem",
+                  },
+                  lineHeight: 1.4,
+                  paddingY: 1,
+                }}
+              >
                 {opt.label}
               </MenuItem>
             ))}
