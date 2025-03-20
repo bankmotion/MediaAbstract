@@ -88,7 +88,7 @@ const AgenciesIntro = () => {
           variant="contained"
           color="primary"
           className={classes.continueBtn}
-          onClick={() => navigate("/signup")}
+          onClick={() => navigate("/signup/agencies")}
         >
           Continue to Signup
         </Button>

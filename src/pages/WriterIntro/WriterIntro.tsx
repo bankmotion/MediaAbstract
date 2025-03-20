@@ -67,7 +67,7 @@ const WritersIntro = () => {
           variant="contained"
           color="primary"
           className={classes.continueBtn}
-          onClick={() => navigate("/signup")}
+          onClick={() => navigate("/signup/writers")}
         >
           Continue to Signup
         </Button>

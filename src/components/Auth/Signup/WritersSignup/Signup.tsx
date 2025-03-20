@@ -9,15 +9,15 @@ import {
   Paper,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../../Navbar/Nabvar";
+import Navbar from "../../../Navbar/Nabvar";
 
 import useStyles from "./styles";
 
 const planOptions = [
   { label: "Writer - $15/month", value: "writer" },
-  { label: "Agency&Team - $75: 1 user, 5 matches", value: "agency75" },
-  { label: "Agency&Team - $150: 3 users, 15 matches", value: "agency150" },
-  { label: "Agency&Team - $250: unlimited, priority", value: "agency250" },
+  // { label: "Agency&Team - $75: 1 user, 5 matches", value: "agency75" },
+  // { label: "Agency&Team - $150: 3 users, 15 matches", value: "agency150" },
+  // { label: "Agency&Team - $250: unlimited, priority", value: "agency250" },
 ];
 
 const Signup = () => {
@@ -30,7 +30,7 @@ const Signup = () => {
   const handleSignup = () => {
     // Placeholder signup logic
     alert(`Signed up as ${plan}`);
-    navigate("/onboarding");
+    navigate("/writers/dashboard");
   };
 
   return (

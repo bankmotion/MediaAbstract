@@ -7,10 +7,13 @@ import Footer from "./components/Tabs/Footer/Footer";
 import Results from "./pages/Results/Results";
 import Terms from "./pages/Terms/Terms";
 import Login from "./components/Auth/Login/Login";
-import Signup from "./components/Auth/Signup/Signup";
+import AgenciesSignup from "./components/Auth/Signup/AgenciesSignup/Signup";
+import WritersSignup from "./components/Auth/Signup/WritersSignup/Signup";
 import NotFound from "./pages/NotFound/NotFound";
 import WritersIntro from "./pages/WriterIntro/WriterIntro";
 import AgenciesIntro from "./pages/AgenciesIntro/AgenciesIntro";
+import WritersDashboard from "./pages/WritersDashboard/WritersDashboard";
+import AgenciesDashboard from "./pages/AgenciesDashboard/AgenciesDashboard";
 
 import "./App.css";
 
@@ -38,11 +41,14 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/writerintro" element={<WritersIntro />} />
           <Route path="/agenciesintro" element={<AgenciesIntro />} />
+          <Route path="/writers/dashboard" element={<WritersDashboard />} />
+          <Route path="/agencies/dashboard" element={<AgenciesDashboard />} />
           <Route path="/onboarding" element={<Onboarding />} />
           <Route path="/results" element={<Results />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/signup/agencies" element={<AgenciesSignup />} />
+          <Route path="/signup/writers" element={<WritersSignup />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
