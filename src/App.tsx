@@ -51,8 +51,8 @@ function App() {
           <Route path="/signup/writers" element={<WritersSignup />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Footer />
       </div>
-      <Footer />
     </div>
   );
 }

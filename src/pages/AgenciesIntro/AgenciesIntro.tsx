@@ -31,8 +31,8 @@ const AgenciesIntro = () => {
             Pricing Plans
           </Typography>
 
-          <Grid container spacing={3} className={classes.pricingGrid}>
-            <Grid item xs={12} md={4}>
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={4} className={classes.pricingGrid}>
               <Card className={classes.pricingCard}>
                 <CardContent>
                   <Typography variant="h6" className={classes.planTitle}>
@@ -48,7 +48,7 @@ const AgenciesIntro = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={4} className={classes.pricingGrid}>
               <Card className={classes.pricingCard}>
                 <CardContent>
                   <Typography variant="h6" className={classes.planTitle}>
@@ -65,7 +65,7 @@ const AgenciesIntro = () => {
               </Card>
             </Grid>
 
-            <Grid item xs={12} md={4}>
+            <Grid item xs={12} md={4} className={classes.pricingGrid}>
               <Card className={classes.pricingCard}>
                 <CardContent>
                   <Typography variant="h6" className={classes.planTitle}>

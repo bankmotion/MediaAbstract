@@ -6,9 +6,13 @@ const useStyles = makeStyles()((theme) => ({
     maxWidth: 900,
     margin: "auto",
     textAlign: "center",
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(4, 2),
+    },
   },
   title: {
     fontWeight: 700,
+    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(2),
     fontSize: "2.5rem",
     [theme.breakpoints.down("sm")]: {
@@ -19,40 +23,64 @@ const useStyles = makeStyles()((theme) => ({
     fontSize: "1.2rem",
     color: "#666",
     marginBottom: theme.spacing(4),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1rem",
+      marginBottom: theme.spacing(3),
+    },
   },
   pricingSection: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     marginTop: theme.spacing(4),
+    [theme.breakpoints.down("sm")]: {
+      marginTop: theme.spacing(3),
+    },
   },
   pricingHeader: {
     fontWeight: 600,
     fontSize: "1.5rem",
     marginBottom: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.3rem",
+      marginBottom: theme.spacing(1.5),
+    },
   },
   pricingCard: {
     padding: theme.spacing(3),
+    border: "1px solid #ccc",
     borderRadius: 12,
     boxShadow: "0 8px 10px rgba(43, 42, 42, 0.08)",
     transition: "transform 0.3s ease",
     "&:hover": {
       transform: "scale(1.03)",
     },
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(2),
+    },
   },
   planTitle: {
     fontWeight: 600,
     marginBottom: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1rem",
+    },
   },
   planPrice: {
     fontSize: "1.5rem",
     fontWeight: 700,
     color: theme.palette.primary.main,
     marginBottom: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.3rem",
+    },
   },
   planDesc: {
     color: "#555",
     fontSize: "0.95rem",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.9rem",
+    },
   },
   continueBtn: {
     marginTop: theme.spacing(5),
@@ -60,6 +88,11 @@ const useStyles = makeStyles()((theme) => ({
     fontSize: "1rem",
     fontWeight: 600,
     textTransform: "none",
+    [theme.breakpoints.down("sm")]: {
+      marginTop: theme.spacing(4),
+      padding: theme.spacing(1, 3),
+      fontSize: "0.9rem",
+    },
   },
 }));
 

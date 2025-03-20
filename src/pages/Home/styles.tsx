@@ -20,11 +20,20 @@ const useStyles = makeStyles()((theme) => ({
     right: 0,
     top: 0,
     zIndex: 10,
+    [theme.breakpoints.down("sm")]: {
+      paddingRight: theme.spacing(2),
+      paddingTop: theme.spacing(1),
+    },
   },
 
   loginButton: {
     textTransform: "none",
     fontWeight: 600,
+    fontSize: "1rem",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.9rem",
+      padding: theme.spacing(0.5, 1.5),
+    },
   },
 
   heroSection: {
@@ -37,6 +46,7 @@ const useStyles = makeStyles()((theme) => ({
     width: "100%",
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(4),
+      margin: theme.spacing(8, 2, 0),
     },
   },
 
@@ -57,6 +67,7 @@ const useStyles = makeStyles()((theme) => ({
     marginBottom: theme.spacing(2),
     [theme.breakpoints.down("sm")]: {
       fontSize: "1rem",
+      marginTop: theme.spacing(2),
     },
   },
 
@@ -66,6 +77,10 @@ const useStyles = makeStyles()((theme) => ({
     maxWidth: 600,
     margin: "0 auto",
     marginTop: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "100%",
+      marginTop: theme.spacing(1),
+    },
   },
 
   tabLabel: {
@@ -73,23 +88,28 @@ const useStyles = makeStyles()((theme) => ({
     fontSize: "1rem",
     textTransform: "none",
     width: "300px",
-    // "&.Mui-selected": {
-    //   color: "#007BFF",
-    //   borderBottom: "2px solid #007BFF",
-    // },
+    "&.Mui-selected": {
+      color: "#007BFF",
+      borderBottom: "2px solid #007BFF",
+    },
     "&:hover": {
-      color: "#0056b3", // Darker shade of blue on hover
-      //textDecoration: "underline", // Underline on hover
+      color: "#0056b3",
       backgroundColor: "#f5faff",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.95rem",
+      fontSize: "0.9rem",
+      width: "150px",
+      padding: theme.spacing(0, 1),
     },
   },
 
   tabIcon: {
     color: "#007BFF",
     marginRight: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      marginRight: theme.spacing(0.5),
+      fontSize: "1rem",
+    },
   },
 
   startButton: {
@@ -103,6 +123,11 @@ const useStyles = makeStyles()((theme) => ({
     color: "#fff",
     "&:hover": {
       backgroundColor: "#0069d9",
+    },
+    [theme.breakpoints.down("sm")]: {
+      marginTop: theme.spacing(4),
+      fontSize: "1rem",
+      padding: theme.spacing(0.5, 1.5),
     },
   },
 }));
