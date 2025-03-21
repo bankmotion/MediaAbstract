@@ -6,11 +6,12 @@ const useStyles = makeStyles()((theme) => ({
     //minHeight: "100vh",
     background: "linear-gradient(to right, #fdfbfb, #ebedee)",
     display: "flex",
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
     padding: theme.spacing(4, 2),
-    paddingTop: theme.spacing(10),
-    paddingBottom: theme.spacing(25),
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(20),
   },
 
   loginWrapper: {
@@ -136,6 +137,67 @@ const useStyles = makeStyles()((theme) => ({
       marginTop: theme.spacing(4),
       fontSize: "1rem",
       padding: theme.spacing(0.5, 1.5),
+    },
+  },
+
+  howItWorksSection: {
+    marginTop: theme.spacing(6),
+    textAlign: "center",
+    padding: theme.spacing(4, 2),
+    [theme.breakpoints.down("sm")]: {
+      marginTop: theme.spacing(6),
+      padding: theme.spacing(3, 1),
+    },
+  },
+
+  howItWorksHeader: {
+    fontSize: "1.8rem",
+    fontWeight: 700,
+    marginBottom: theme.spacing(4),
+    color: "#1a1a1a",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.5rem",
+    },
+  },
+
+  howCard: {
+    height: "250px",
+    borderRadius: 16,
+    boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
+    transition: "all 0.3s ease",
+    "&:hover": {
+      transform: "translateY(-6px)",
+    },
+  },
+
+  howCardContent: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: theme.spacing(4),
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(3),
+    },
+  },
+
+  howIcon: {
+    fontSize: "3rem",
+    color: theme.palette.primary.main,
+    marginBottom: theme.spacing(2),
+  },
+
+  howTitle: {
+    fontWeight: 600,
+    fontSize: "1.2rem",
+    marginBottom: theme.spacing(1),
+  },
+
+  howText: {
+    fontSize: "1rem",
+    color: "#555",
+    textAlign: "center",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.95rem",
     },
   },
 }));

@@ -95,9 +95,14 @@ const useStyles = makeStyles()((theme) => ({
       flexDirection: "column",
     },
   },
-  primaryActionBtn: {
+  newPitchBtn: {
     textTransform: "none",
     fontWeight: 600,
+    backgroundColor: "#E6F0FA",
+    color: theme.palette.primary.main,
+    "&:hover": {
+      backgroundColor: "#d4e5f5",
+    },
     [theme.breakpoints.down("sm")]: {
       width: "100%",
     },
@@ -129,6 +134,27 @@ const useStyles = makeStyles()((theme) => ({
     marginBottom: 4,
     [theme.breakpoints.down("sm")]: {
       fontSize: "1rem",
+    },
+  },
+  sectionHeaderRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      alignItems: "flex-start",
+      gap: theme.spacing(1),
+    },
+  },
+  exportButton: {
+    textTransform: "none",
+    fontWeight: 500,
+    fontSize: "0.9rem",
+    color: theme.palette.primary.main,
+    borderColor: theme.palette.primary.main,
+    "&:hover": {
+      backgroundColor: "#f0f7ff",
     },
   },
 }));

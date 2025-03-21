@@ -11,6 +11,10 @@ import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import Navbar from "../../components/Navbar/Nabvar";
 
+import LightbulbIcon from "@mui/icons-material/Lightbulb";
+import ChecklistIcon from "@mui/icons-material/Checklist";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+
 const WritersIntro = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
@@ -26,12 +30,37 @@ const WritersIntro = () => {
           Supercharge your pitches. Get matched with top media outlets.
         </Typography>
 
+        <Box className={classes.whySection}>
+          <Typography variant="h6" className={classes.whyHeader}>
+            Why WriteFor.co?
+          </Typography>
+          <Grid container spacing={3} justifyContent="center">
+            <Grid item xs={12} sm={4} className={classes.whyItem}>
+              <LightbulbIcon className={classes.whyIcon} />
+              <Typography className={classes.whyTitle}>
+                Pitch Smarter
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={4} className={classes.whyItem}>
+              <ChecklistIcon className={classes.whyIcon} />
+              <Typography className={classes.whyTitle}>
+                Get Matches Fast
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={4} className={classes.whyItem}>
+              <DashboardIcon className={classes.whyIcon} />
+              <Typography className={classes.whyTitle}>
+                Track Progress
+              </Typography>
+            </Grid>
+          </Grid>
+        </Box>
+
         <Box className={classes.pricingSection}>
           <Typography variant="h6" className={classes.pricingHeader}>
             Pricing Plans
           </Typography>
 
-          {/* <Grid container spacing={3}> */}
           <Grid item xs={12} md={6}>
             <Card className={classes.pricingCard}>
               <CardContent>
@@ -45,22 +74,6 @@ const WritersIntro = () => {
               </CardContent>
             </Card>
           </Grid>
-          {/* <Grid item xs={12} md={6}>
-              <Card className={classes.pricingCard}>
-                <CardContent>
-                  <Typography variant="h6" className={classes.planTitle}>
-                    Pro Plan
-                  </Typography>
-                  <Typography className={classes.planPrice}>
-                    $45/month
-                  </Typography>
-                  <Typography className={classes.planDesc}>
-                    More features, faster matches, advanced outlet insights.
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid> */}
-          {/* </Grid> */}
         </Box>
 
         <Button

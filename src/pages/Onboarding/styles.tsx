@@ -34,22 +34,59 @@ const styles = makeStyles()((theme: any) => ({
     marginTop: theme.spacing(2),
   },
 
-  tabLabel: {
+  pitchField: {
     fontWeight: 600,
     textTransform: "none",
     fontSize: "1rem",
+    margin: "0",
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.9rem",
     },
   },
+
+  audienceOption: {
+    fontWeight: 600,
+    textTransform: "none",
+    fontSize: "1rem",
+    marginBottom: "15px",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.9rem",
+    },
+  },
+
   subbutton: {
-    margin: 30,
+    margin: 20,
     width: 200,
 
     [theme.breakpoints.down("sm")]: {
       width: "100%",
       margin: theme.spacing(3, 0),
     },
+  },
+  stepLabel: {
+    fontWeight: 700,
+    fontSize: "1.25rem",
+    marginTop: "3rem",
+    marginBottom: theme.spacing(1),
+    color: theme.palette.primary.main,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.1rem",
+    },
+  },
+  stepDescription: {
+    fontSize: "1rem",
+    marginBottom: theme.spacing(2),
+    color: "#555",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.95rem",
+    },
+  },
+  refineLink: {
+    cursor: "pointer",
+    textDecoration: "underline",
+    color: theme.palette.primary.main,
+    fontWeight: 500,
+    marginTop: "0",
   },
 }));
 

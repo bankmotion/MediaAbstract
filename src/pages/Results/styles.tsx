@@ -27,6 +27,23 @@ const styles = makeStyles()((theme: any) => ({
     },
   },
 
+  tableContainer: {
+    marginTop: theme.spacing(4),
+    boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
+    borderRadius: 10,
+    overflowX: "auto",
+    width: "100%",
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "100vw",
+    },
+  },
+
+  tableCell: {
+    [theme.breakpoints.down("sm")]: {
+      minWidth: "150px",
+    },
+  },
+
   cardbody: {
     marginBottom: theme.spacing(3),
     borderRadius: "10px",

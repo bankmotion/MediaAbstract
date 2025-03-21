@@ -7,6 +7,7 @@ import {
   CardContent,
   Grid,
 } from "@mui/material";
+import { Lightbulb, ListChecks, Gauge } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import Navbar from "../../components/Navbar/Nabvar";
@@ -25,6 +26,51 @@ const AgenciesIntro = () => {
         <Typography variant="subtitle1" className={classes.subtitle}>
           Collaborate better. Match your clients’ stories with top media.
         </Typography>
+
+        <Typography className={classes.tagline}>
+          Match Your Pitch in Seconds
+        </Typography>
+
+        <Box className={classes.whySection}>
+          <Typography variant="h5" className={classes.whyTitle}>
+            Why WriteFor.co?
+          </Typography>
+          <Grid container spacing={3} className={classes.iconTextGrid}>
+            <Grid item xs={12} md={4}>
+              <Box className={classes.iconTextItem}>
+                <Lightbulb size={40} className={classes.icon} />
+                <Typography className={classes.iconTextTitle}>
+                  Pitch Smarter
+                </Typography>
+                <Typography className={classes.iconTextDesc}>
+                  Leverage AI to fine-tune pitches that resonate.
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Box className={classes.iconTextItem}>
+                <ListChecks size={40} className={classes.icon} />
+                <Typography className={classes.iconTextTitle}>
+                  Get Matches Fast
+                </Typography>
+                <Typography className={classes.iconTextDesc}>
+                  Rapidly discover media outlets aligned with your story.
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Box className={classes.iconTextItem}>
+                <Gauge size={40} className={classes.icon} />
+                <Typography className={classes.iconTextTitle}>
+                  Track Progress
+                </Typography>
+                <Typography className={classes.iconTextDesc}>
+                  Monitor outreach and refine your strategy easily.
+                </Typography>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
 
         <Box className={classes.pricingSection}>
           <Typography variant="h6" className={classes.pricingHeader}>

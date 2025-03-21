@@ -28,6 +28,32 @@ const useStyles = makeStyles()((theme) => ({
       marginBottom: theme.spacing(3),
     },
   },
+
+  whySection: {
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(6),
+  },
+  whyHeader: {
+    fontSize: "1.6rem",
+    fontWeight: 600,
+    marginBottom: theme.spacing(3),
+  },
+  whyItem: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: theme.spacing(1),
+  },
+  whyIcon: {
+    fontSize: "3rem",
+    color: theme.palette.primary.main,
+  },
+  whyTitle: {
+    fontWeight: 500,
+    fontSize: "1rem",
+    color: "#333",
+  },
+
   pricingSection: {
     display: "flex",
     flexDirection: "column",

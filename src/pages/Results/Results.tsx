@@ -2,21 +2,25 @@ import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
-  Card,
-  CardContent,
   Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   Tooltip,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-
-import Navbar from "../../components/Navbar/Nabvar";
 import useStyles from "./styles";
+import Navbar from "../../components/Navbar/Nabvar";
 
 interface Outlet {
   name: string;
   url: string;
-  guidelines: string;
-  score: number;
+  contactEmail: string;
+  matchConfidence: number;
   aiPartnered: boolean;
 }
 
@@ -24,45 +28,42 @@ const dummyOutlets: Outlet[] = [
   {
     name: "Forbes",
     url: "https://www.forbes.com",
-    guidelines:
-      "800-1200 words, pitch letters@forbes.com or councils@forbescouncils.com",
-    score: 4.7,
+    contactEmail: "letters@forbes.com",
+    matchConfidence: 85,
     aiPartnered: true,
   },
   {
     name: "The Wall Street Journal",
     url: "https://www.wsj.com/articles/oped-guidelines-for-the-wall-street-journal-1384383173",
-    guidelines:
-      "400-1000 words, exclusive, strong argument. Contact wsjcontact@wsj.com for contributor info",
-    score: 4.5,
+    contactEmail: "wsjcontact@wsj.com",
+    matchConfidence: 82,
     aiPartnered: true,
   },
   {
     name: "Harvard Business Review",
     url: "https://hbr.org/submitters",
-    guidelines: "800-1200 words, research-backed, pitch first",
-    score: 4.3,
+    contactEmail: "submit@hbr.org",
+    matchConfidence: 79,
     aiPartnered: false,
   },
   {
     name: "Inc42",
     url: "https://inc42.com/startup-submission/",
-    guidelines: "800-1200 words, startup insights, pitch first",
-    score: 4.0,
+    contactEmail: "editorial@inc42.com",
+    matchConfidence: 73,
     aiPartnered: false,
   },
   {
     name: "Wired",
     url: "https://www.wired.com/about/how-to-pitch-stories-to-wired/",
-    guidelines: "600-1000 words, tech/culture, pitch first",
-    score: 4.4,
+    contactEmail: "pitch@wired.com",
+    matchConfidence: 80,
     aiPartnered: true,
   },
 ];
 
 const Results = () => {
   const { classes } = useStyles();
-  const navigate = useNavigate();
   const [matches, setMatches] = useState<Outlet[]>([]);
 
   useEffect(() => {
@@ -70,8 +71,30 @@ const Results = () => {
   }, []);
 
   const handleExportCSV = () => {
-    // Export to CSV logic placeholder
-    alert("Export CSV functionality goes here.");
+    const headers = [
+      "Outlet",
+      "Contact Email",
+      "Pitch Link",
+      "Match Confidence",
+    ];
+    const rows = matches.map((outlet) => [
+      outlet.name,
+      outlet.contactEmail,
+      outlet.url,
+      `${outlet.matchConfidence}%`,
+    ]);
+
+    let csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers, ...rows].map((e) => e.join(",")).join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "matched_outlets.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -82,52 +105,63 @@ const Results = () => {
           Top Matching Outlets
         </Typography>
 
-        {matches.map((outlet, index) => (
-          <Card key={index} className={classes.cardbody}>
-            <CardContent className={classes.cardcontent}>
-              <Typography variant="h6" className={classes.name}>
-                {outlet.name}
-              </Typography>
-              <a
-                href={outlet.url}
-                className="text-blue-600"
-                target="_blank"
-                rel="noreferrer"
-              >
-                Visit Website
-              </a>
-              <Typography className={classes.guide}>
-                {outlet.guidelines}
-              </Typography>
-              <Typography className={classes.score}>
-                Fit Score:
-                <span style={{ color: "#fbbf24", fontSize: "1.1rem" }}>
-                  {"★".repeat(Math.round(outlet.score))}
-                </span>
-              </Typography>
-              {outlet.aiPartnered && (
-                <Tooltip
-                  title={
-                    <Typography sx={{ fontSize: "1rem", padding: 1 }}>
-                      {/* <strong>AI Partnered:</strong> */}
-                      Cited by AI tools for extra reach.
-                    </Typography>
-                  }
-                  arrow
-                  componentsProps={{
-                    tooltip: {
-                      className: classes.customTooltip,
-                    },
-                  }}
-                >
-                  <Typography className={classes.tooltip}>
-                    ✓ AI Partnered
-                  </Typography>
-                </Tooltip>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+        <TableContainer component={Paper} className={classes.tableContainer}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.tableCell}>
+                  <strong>Outlet</strong>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <strong>Contact Email (C)</strong>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <strong>Pitch Link (B)</strong>
+                </TableCell>
+                <TableCell className={classes.tableCell}>
+                  <strong>Match Confidence</strong>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {matches.map((outlet, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Box display="flex" flexDirection="column">
+                      <Typography>{outlet.name}</Typography>
+                      {outlet.aiPartnered && (
+                        <Tooltip
+                          title="Cited by AI tools for extra reach."
+                          arrow
+                          componentsProps={{
+                            tooltip: { className: classes.customTooltip },
+                          }}
+                        >
+                          <span className={classes.tooltip}>
+                            {" "}
+                            ✓ AI Partnered
+                          </span>
+                        </Tooltip>
+                      )}
+                    </Box>
+                  </TableCell>
+                  <TableCell>{outlet.contactEmail}</TableCell>
+                  <TableCell>
+                    <a
+                      href={outlet.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      View Pitch Link
+                    </a>
+                  </TableCell>
+                  <TableCell>{outlet.matchConfidence}% Match</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
 
         <Box className={classes.actionButtons}>
           <Button
@@ -138,15 +172,6 @@ const Results = () => {
           >
             Export as CSV
           </Button>
-
-          {/* <Button
-            variant="text"
-            color="secondary"
-            onClick={() => navigate("/")}
-            className={classes.backHomeButton}
-          >
-            ← Back to Home
-          </Button> */}
         </Box>
       </Box>
     </>

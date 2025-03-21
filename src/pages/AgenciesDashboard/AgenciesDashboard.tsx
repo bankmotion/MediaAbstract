@@ -14,6 +14,7 @@ import {
   AddCircleOutline,
   Logout,
   Assessment,
+  Download,
 } from "@mui/icons-material";
 import useStyles from "./styles";
 
@@ -28,6 +29,7 @@ const AgenciesDashboard = () => {
       client: "GreenTech Ltd",
       title: "Sustainable Energy",
       status: "Matched",
+      matches: 10,
     },
     {
       id: 2,
@@ -35,10 +37,33 @@ const AgenciesDashboard = () => {
       client: "MedAI Group",
       title: "AI & Data Privacy",
       status: "Submitted",
+      matches: 5,
     },
   ];
 
   const currentPlan = "$150/month"; // Dynamically render in real case
+
+  const handleExportCSV = () => {
+    const headers = ["Pitch", "Client", "Status", "Matches"];
+    const rows = teamPitches.map((pitch) => [
+      pitch.title,
+      pitch.client,
+      pitch.status,
+      pitch.matches ?? "",
+    ]);
+
+    const csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers.join(","), ...rows.map((row) => row.join(","))].join("\n");
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "team_pitches.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <Box className={classes.wrapper}>
@@ -84,8 +109,8 @@ const AgenciesDashboard = () => {
       <Box className={classes.buttonRow}>
         <Button
           variant="contained"
-          color="primary"
-          className={classes.primaryActionBtn}
+          //color="primary"
+          className={classes.newPitchBtn}
           onClick={() => navigate("/onboarding")}
         >
           New Client Pitch
@@ -104,9 +129,20 @@ const AgenciesDashboard = () => {
         )}
       </Box>
 
-      <Typography variant="h6" className={classes.sectionHeader}>
-        Team Pitches
-      </Typography>
+      <Box className={classes.sectionHeaderRow}>
+        <Typography variant="h6" className={classes.sectionHeader}>
+          Team Pitches
+        </Typography>
+        <Button
+          startIcon={<Download />}
+          variant="outlined"
+          size="small"
+          className={classes.exportButton}
+          onClick={handleExportCSV}
+        >
+          Export Pitches
+        </Button>
+      </Box>
 
       {teamPitches.map((pitch) => (
         <Card key={pitch.id} className={classes.pitchCard}>

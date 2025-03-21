@@ -31,6 +31,53 @@ const useStyles = makeStyles()((theme) => ({
       marginBottom: theme.spacing(3),
     },
   },
+  tagline: {
+    fontSize: "1.2rem",
+    fontWeight: 500,
+    marginBottom: theme.spacing(4),
+    color: "#007BFF",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1rem",
+      marginBottom: theme.spacing(3),
+    },
+  },
+  whySection: {
+    marginBottom: theme.spacing(6),
+    marginTop: theme.spacing(2),
+  },
+  whyTitle: {
+    fontWeight: 700,
+    fontSize: "1.6rem",
+    marginBottom: theme.spacing(3),
+    color: "#1a1a1a",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.3rem",
+    },
+  },
+  iconTextGrid: {
+    marginBottom: theme.spacing(4),
+  },
+  iconTextItem: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    padding: theme.spacing(2),
+  },
+  icon: {
+    color: "#007BFF",
+    marginBottom: theme.spacing(1.5),
+  },
+  iconTextTitle: {
+    fontWeight: 600,
+    fontSize: "1.1rem",
+    marginBottom: theme.spacing(1),
+  },
+  iconTextDesc: {
+    fontSize: "0.95rem",
+    color: "#555",
+    lineHeight: 1.6,
+  },
   pricingSection: {
     marginTop: theme.spacing(4),
     [theme.breakpoints.down("sm")]: {
