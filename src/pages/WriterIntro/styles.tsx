@@ -38,6 +38,15 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 600,
     marginBottom: theme.spacing(3),
   },
+  whyDescription: {
+    fontSize: "1rem",
+    color: "#555",
+    marginBottom: theme.spacing(3),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.95rem",
+      marginBottom: theme.spacing(2),
+    },
+  },
   whyItem: {
     display: "flex",
     flexDirection: "column",

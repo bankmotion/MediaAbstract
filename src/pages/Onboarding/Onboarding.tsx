@@ -56,7 +56,7 @@ const Onboarding = () => {
           Describe your pitch idea in 1–2 sentences.
         </Typography>
         <TextField
-          label="200-word Abstract"
+          label="E.g., 'AI ethics in healthcare for startups' (1-2 sentences)"
           placeholder="E.g., 'AI ethics in healthcare for startups' (1-2 sentences)"
           multiline
           rows={6}

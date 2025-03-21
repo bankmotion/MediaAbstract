@@ -35,6 +35,10 @@ const AgenciesIntro = () => {
           <Typography variant="h5" className={classes.whyTitle}>
             Why WriteFor.co?
           </Typography>
+          <Typography className={classes.whyDescription}>
+            Built for content pitching—perfect for bylines, op-eds, commentary,
+            columns, and freelance articles.
+          </Typography>
           <Grid container spacing={3} className={classes.iconTextGrid}>
             <Grid item xs={12} md={4}>
               <Box className={classes.iconTextItem}>
@@ -84,9 +88,17 @@ const AgenciesIntro = () => {
                   <Typography variant="h6" className={classes.planTitle}>
                     Basic Plan
                   </Typography>
-                  <Typography className={classes.planPrice}>
-                    $75/month
-                  </Typography>
+                  <Box
+                    onClick={() => navigate("/signup/agencies")}
+                    sx={{ cursor: "pointer" }}
+                    role="button"
+                    aria-label="Navigate to Signup"
+                    tabIndex={0}
+                  >
+                    <Typography className={classes.planPrice}>
+                      $75/month
+                    </Typography>
+                  </Box>
                   <Typography className={classes.planDesc}>
                     1 user, 5 matches/day, basic media guidelines.
                   </Typography>
@@ -100,9 +112,17 @@ const AgenciesIntro = () => {
                   <Typography variant="h6" className={classes.planTitle}>
                     Team Plan
                   </Typography>
-                  <Typography className={classes.planPrice}>
-                    $150/month
-                  </Typography>
+                  <Box
+                    onClick={() => navigate("/signup/agencies")}
+                    sx={{ cursor: "pointer" }}
+                    role="button"
+                    aria-label="Navigate to Signup"
+                    tabIndex={0}
+                  >
+                    <Typography className={classes.planPrice}>
+                      $150/month
+                    </Typography>
+                  </Box>
                   <Typography className={classes.planDesc}>
                     3 users, 15 matches/day, CRM export, enhanced outreach
                     tools.
@@ -117,9 +137,17 @@ const AgenciesIntro = () => {
                   <Typography variant="h6" className={classes.planTitle}>
                     Enterprise Plan
                   </Typography>
-                  <Typography className={classes.planPrice}>
-                    $250/month
-                  </Typography>
+                  <Box
+                    onClick={() => navigate("/signup/agencies")}
+                    sx={{ cursor: "pointer" }}
+                    role="button"
+                    aria-label="Navigate to Signup"
+                    tabIndex={0}
+                  >
+                    <Typography className={classes.planPrice}>
+                      $250/month
+                    </Typography>
+                  </Box>
                   <Typography className={classes.planDesc}>
                     Unlimited users, unlimited matches, priority support,
                     premium insights.

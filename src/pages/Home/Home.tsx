@@ -54,8 +54,16 @@ const Home = () => {
         </Button>
       </Box>
       <Box className={classes.heroSection}>
-        <Typography variant="h4" className={classes.title}>
+        {/* <Typography variant="h4" className={classes.title}>
           WriteFor.co
+        </Typography> */}
+
+        <Typography variant="h4" className={classes.title}>
+          Pitch Your Content to Top Outlets
+        </Typography>
+        <Typography variant="subtitle1" className={classes.subtitle}>
+          Match your bylines, op-eds, and articles with the right media outlets
+          in seconds.
         </Typography>
         <Tabs
           className={classes.tabRoot}
@@ -117,7 +125,7 @@ const Home = () => {
               <CardContent className={classes.howCardContent}>
                 <Description className={classes.howIcon} />
                 <Typography variant="h6" className={classes.howTitle}>
-                  2. Submit Pitch Idea
+                  2. Submit Your Content Idea (Bylines, Op-Eds, Articles)
                 </Typography>
                 <Typography className={classes.howText}>
                   Enter your pitch concept and preferences in our smart form.

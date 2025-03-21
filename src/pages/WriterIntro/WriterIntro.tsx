@@ -34,6 +34,10 @@ const WritersIntro = () => {
           <Typography variant="h6" className={classes.whyHeader}>
             Why WriteFor.co?
           </Typography>
+          <Typography className={classes.whyDescription}>
+            Built for content pitching—perfect for bylines, op-eds, commentary,
+            columns, and freelance articles.
+          </Typography>
           <Grid container spacing={3} justifyContent="center">
             <Grid item xs={12} sm={4} className={classes.whyItem}>
               <LightbulbIcon className={classes.whyIcon} />

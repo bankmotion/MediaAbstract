@@ -39,8 +39,10 @@ const styles = makeStyles()((theme: any) => ({
   },
 
   tableCell: {
+    wordBreak: "break-word",
+    whiteSpace: "normal",
     [theme.breakpoints.down("sm")]: {
-      minWidth: "150px",
+      minWidth: "200px",
     },
   },
 

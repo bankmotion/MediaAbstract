@@ -54,6 +54,15 @@ const useStyles = makeStyles()((theme) => ({
       fontSize: "1.3rem",
     },
   },
+  whyDescription: {
+    fontSize: "1rem",
+    color: "#555",
+    marginBottom: theme.spacing(3),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.95rem",
+      marginBottom: theme.spacing(2),
+    },
+  },
   iconTextGrid: {
     marginBottom: theme.spacing(4),
   },
