@@ -53,7 +53,6 @@ const useStyles = makeStyles()((theme) => ({
     fontSize: "1rem",
     color: "#333",
   },
-
   pricingSection: {
     display: "flex",
     flexDirection: "column",
@@ -113,6 +112,8 @@ const useStyles = makeStyles()((theme) => ({
   },
   continueBtn: {
     marginTop: theme.spacing(5),
+    marginBottom: theme.spacing(5),
+
     padding: theme.spacing(1.5, 4),
     fontSize: "1rem",
     fontWeight: 600,
