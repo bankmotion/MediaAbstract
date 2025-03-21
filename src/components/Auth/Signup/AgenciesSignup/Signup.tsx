@@ -77,6 +77,11 @@ const Signup = () => {
                   },
                   lineHeight: 1.4,
                   paddingY: 1,
+                  "&:hover": {
+                    backgroundColor: "#f0f4ff", // light blue or any preferred tone
+                    transform: "scale(1.015)", // subtle zoom
+                    fontWeight: 500,
+                  },
                 }}
               >
                 {opt.label}
