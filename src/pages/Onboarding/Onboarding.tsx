@@ -35,11 +35,11 @@ const Onboarding = () => {
       <Navbar />
       <Box className={classes.body}>
         <Typography variant="h5" className={classes.title}>
-          Submit Your Abstract
+          Describe Your Pitch Idea (1-2 Sentences)
         </Typography>
         <TextField
           label="200-word Abstract"
-          placeholder="Paste your 200-word abstract here…"
+          placeholder="E.g., 'AI ethics in healthcare for startups' (1-2 sentences)"
           multiline
           rows={6}
           fullWidth
