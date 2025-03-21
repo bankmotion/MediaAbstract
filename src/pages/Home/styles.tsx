@@ -10,7 +10,7 @@ const useStyles = makeStyles()((theme) => ({
     justifyContent: "center",
     padding: theme.spacing(4, 2),
     paddingTop: theme.spacing(10),
-    paddingBottom: theme.spacing(30),
+    paddingBottom: theme.spacing(25),
   },
 
   loginWrapper: {
@@ -47,8 +47,9 @@ const useStyles = makeStyles()((theme) => ({
     maxWidth: 700,
     width: "100%",
     [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(4),
-      margin: theme.spacing(8, 2, 0),
+      borderRadius: 10,
+      padding: theme.spacing(4, 1.5),
+      margin: theme.spacing(10, 2, 0),
     },
   },
 
@@ -58,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
     marginBottom: theme.spacing(2),
     fontSize: "2.5rem",
     [theme.breakpoints.down("sm")]: {
-      fontSize: "2rem",
+      fontSize: "1.8rem",
     },
   },
 
@@ -75,13 +76,15 @@ const useStyles = makeStyles()((theme) => ({
 
   tabRoot: {
     display: "flex",
-    justifyContent: "center",
+    justifyContent: "space-between",
     maxWidth: 600,
     margin: "0 auto",
     marginTop: theme.spacing(2),
+
     [theme.breakpoints.down("sm")]: {
       maxWidth: "100%",
       marginTop: theme.spacing(1),
+      margin: "0",
     },
   },
 
@@ -89,6 +92,7 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 600,
     fontSize: "1rem",
     textTransform: "none",
+    //whiteSpace: "nowrap",
     width: "300px",
     "&.Mui-selected": {
       color: "#007BFF",
@@ -99,9 +103,10 @@ const useStyles = makeStyles()((theme) => ({
       backgroundColor: "#f5faff",
     },
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.9rem",
-      width: "150px",
-      padding: theme.spacing(0, 1),
+      fontSize: "0.8rem",
+      width: "170px",
+      padding: "0",
+      // padding: theme.spacing(0, 1),
     },
   },
 
@@ -109,8 +114,9 @@ const useStyles = makeStyles()((theme) => ({
     color: "#007BFF",
     marginRight: theme.spacing(1),
     [theme.breakpoints.down("sm")]: {
-      marginRight: theme.spacing(0.5),
+      // marginRight: theme.spacing(0.5),
       fontSize: "1rem",
+      margin: "0",
     },
   },
 

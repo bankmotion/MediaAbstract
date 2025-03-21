@@ -12,6 +12,7 @@ const styles = makeStyles()((theme: any) => ({
     backgroundColor: "#ffffff",
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(4, 2),
+      margin: theme.spacing(2),
     },
   },
 
@@ -22,6 +23,7 @@ const styles = makeStyles()((theme: any) => ({
     fontSize: "2rem",
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.5rem",
+      marginBottom: theme.spacing(3),
     },
   },
 
@@ -43,7 +45,11 @@ const styles = makeStyles()((theme: any) => ({
   subbutton: {
     margin: 30,
     width: 200,
-    //padding: 20,
+
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      margin: theme.spacing(3, 0),
+    },
   },
 }));
 

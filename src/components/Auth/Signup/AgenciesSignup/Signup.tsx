@@ -15,9 +15,9 @@ import useStyles from "./styles";
 
 const planOptions = [
   //{ label: "Writer - $15/month", value: "writer" },
-  { label: "Agency&Team - $75: 1 user, 5 matches", value: "agency75" },
-  { label: "Agency&Team - $150: 3 users, 15 matches", value: "agency150" },
-  { label: "Agency&Team - $250: unlimited, priority", value: "agency250" },
+  { label: "Agency & Team - $75: 1 user, 5 matches", value: "agency75" },
+  { label: "Agency & Team - $150: 3 users, 15 matches", value: "agency150" },
+  { label: "Agency & Team - $250: unlimited, priority", value: "agency250" },
 ];
 
 const Signup = () => {
@@ -72,7 +72,7 @@ const Signup = () => {
                 sx={{
                   whiteSpace: "normal", // Allows wrapping
                   fontSize: {
-                    xs: "0.85rem",
+                    xs: "0.8rem",
                     sm: "0.95rem",
                   },
                   lineHeight: 1.4,

@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
     boxShadow: "0 8px 10px rgba(43, 42, 42, 0.08)",
     transition: "transform 0.3s ease",
     "&:hover": {
-      transform: "scale(1.03)",
+      transform: "scale(1.04)",
     },
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(2),
@@ -71,6 +71,9 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 700,
     color: theme.palette.primary.main,
     marginBottom: theme.spacing(1),
+    "&:hover": {
+      transform: "scale(1.05)",
+    },
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.3rem",
     },

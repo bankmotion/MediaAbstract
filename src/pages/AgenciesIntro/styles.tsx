@@ -55,6 +55,9 @@ const useStyles = makeStyles()((theme) => ({
     borderRadius: 12,
     border: "1px solid #e0e0e0",
     height: "100%",
+    "&:hover": {
+      transform: "scale(1.04)",
+    },
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(1.5),
     },
@@ -68,6 +71,9 @@ const useStyles = makeStyles()((theme) => ({
     fontSize: "1.5rem",
     fontWeight: 600,
     marginBottom: theme.spacing(1),
+    "&:hover": {
+      transform: "scale(1.05)",
+    },
     color: "#007BFF",
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.3rem",

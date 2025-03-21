@@ -139,14 +139,14 @@ const Results = () => {
             Export as CSV
           </Button>
 
-          <Button
+          {/* <Button
             variant="text"
             color="secondary"
             onClick={() => navigate("/")}
             className={classes.backHomeButton}
           >
             ← Back to Home
-          </Button>
+          </Button> */}
         </Box>
       </Box>
     </>

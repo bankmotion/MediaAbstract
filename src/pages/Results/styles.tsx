@@ -11,7 +11,8 @@ const styles = makeStyles()((theme: any) => ({
     backgroundColor: "#f9f9f9",
     minHeight: "100vh",
     [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(4, 2),
+      padding: theme.spacing(3, 1.5),
+      gap: theme.spacing(3),
     },
   },
 
@@ -21,6 +22,9 @@ const styles = makeStyles()((theme: any) => ({
     textAlign: "center",
     marginBottom: theme.spacing(1),
     color: "#333",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.6rem",
+    },
   },
 
   cardbody: {
@@ -33,7 +37,9 @@ const styles = makeStyles()((theme: any) => ({
       transform: "translateY(-3px)",
       boxShadow: "0 6px 20px rgba(0, 0, 0, 0.12)",
     },
-    height: "100%",
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: theme.spacing(2),
+    },
   },
 
   cardcontent: {
@@ -41,6 +47,9 @@ const styles = makeStyles()((theme: any) => ({
     display: "flex",
     flexDirection: "column",
     gap: theme.spacing(0.5),
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(2.5),
+    },
   },
 
   name: {
@@ -48,12 +57,18 @@ const styles = makeStyles()((theme: any) => ({
     fontWeight: 600,
     color: "#1a1a1a",
     marginBottom: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.1rem",
+    },
   },
 
   guide: {
     marginTop: theme.spacing(1),
     fontSize: "0.95rem",
     color: "#555",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.9rem",
+    },
   },
 
   score: {
@@ -61,6 +76,9 @@ const styles = makeStyles()((theme: any) => ({
     fontSize: "0.95rem",
     fontWeight: 500,
     color: "#222",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.9rem",
+    },
   },
 
   tooltip: {
@@ -70,6 +88,9 @@ const styles = makeStyles()((theme: any) => ({
     cursor: "pointer",
     //    color: "#2e7d32", // MUI green tone
     marginBottom: "5px",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.9rem",
+    },
   },
 
   customTooltip: {
@@ -89,18 +110,32 @@ const styles = makeStyles()((theme: any) => ({
     fontWeight: 600,
     textTransform: "none",
     borderRadius: 8,
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      padding: theme.spacing(1.2, 2),
+    },
   },
 
   backHomeButton: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(4),
     textTransform: "none",
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+    },
   },
   actionButtons: {
-    marginTop: theme.spacing(4),
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
     display: "flex",
     justifyContent: "center",
     gap: theme.spacing(2),
     flexWrap: "wrap",
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      alignItems: "stretch",
+    },
   },
 }));
 

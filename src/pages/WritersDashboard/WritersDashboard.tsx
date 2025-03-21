@@ -11,7 +11,7 @@ import {
   Divider,
 } from "@mui/material";
 
-import { Logout } from "@mui/icons-material";
+import { Logout, Send, CheckCircle } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
@@ -29,13 +29,7 @@ const WritersDashboard = () => {
 
   return (
     <Box className={classes.wrapper}>
-      <Box className={classes.header}>
-        <Box className={classes.userInfo}>
-          <Avatar className={classes.avatar}>
-            <PersonIcon />
-          </Avatar>
-          <Typography className={classes.welcomeText}>Welcome, Jane</Typography>
-        </Box>
+      <Box className={classes.logoutContainer}>
         <Button
           startIcon={<Logout />}
           variant="outlined"
@@ -46,6 +40,14 @@ const WritersDashboard = () => {
           Logout
         </Button>
       </Box>
+      <Box className={classes.header}>
+        <Box className={classes.userInfo}>
+          <Avatar className={classes.avatar}>
+            <PersonIcon />
+          </Avatar>
+          <Typography className={classes.welcomeText}>Welcome, Jane</Typography>
+        </Box>
+      </Box>
 
       <Divider className={classes.divider} />
 
@@ -53,8 +55,13 @@ const WritersDashboard = () => {
         <Grid item xs={12} sm={6} md={4}>
           <Card className={classes.statCard}>
             <CardContent>
-              <Typography variant="subtitle2">Pitches Sent</Typography>
-              <Typography variant="h4" color="primary">
+              <Send className={classes.statIcon} />
+              <Typography variant="h6">Pitches Sent</Typography>
+              <Typography
+                variant="h4"
+                color="primary"
+                className={classes.statNumber}
+              >
                 5
               </Typography>
             </CardContent>
@@ -63,8 +70,13 @@ const WritersDashboard = () => {
         <Grid item xs={12} sm={6} md={4}>
           <Card className={classes.statCard}>
             <CardContent>
-              <Typography variant="subtitle2">Matches Found</Typography>
-              <Typography variant="h4" color="primary">
+              <CheckCircle className={classes.statIcon} />
+              <Typography variant="h6">Matches Found</Typography>
+              <Typography
+                variant="h4"
+                color="primary"
+                className={classes.statNumber}
+              >
                 15
               </Typography>
             </CardContent>

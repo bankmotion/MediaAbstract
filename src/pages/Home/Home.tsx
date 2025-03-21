@@ -55,14 +55,12 @@ const Home = () => {
             iconPosition="start"
             label="For Writers"
             className={classes.tabLabel}
-            //onClick={() => navigate("/login")}
           />
           <Tab
             icon={<BusinessCenter className={classes.tabIcon} />}
             iconPosition="start"
             label="For Agencies & Teams"
             className={classes.tabLabel}
-            //onClick={() => navigate("/login")}
           />
         </Tabs>
 

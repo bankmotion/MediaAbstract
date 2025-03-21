@@ -24,12 +24,14 @@ const AgenciesDashboard = () => {
   const teamPitches = [
     {
       id: 1,
+      name: "Sarah",
       client: "GreenTech Ltd",
       title: "Sustainable Energy",
       status: "Matched",
     },
     {
       id: 2,
+      name: "John",
       client: "MedAI Group",
       title: "AI & Data Privacy",
       status: "Submitted",
@@ -40,10 +42,7 @@ const AgenciesDashboard = () => {
 
   return (
     <Box className={classes.wrapper}>
-      <Box className={classes.header}>
-        <Typography className={classes.welcomeText}>
-          Welcome, Team GreenSpark
-        </Typography>
+      <Box className={classes.logoutContainer}>
         <Button
           startIcon={<Logout />}
           variant="outlined"
@@ -54,9 +53,14 @@ const AgenciesDashboard = () => {
           Logout
         </Button>
       </Box>
+      <Box className={classes.header}>
+        <Typography className={classes.welcomeText}>
+          Welcome, Team GreenSpark
+        </Typography>
+      </Box>
 
       <Grid container spacing={3} className={classes.statsSection}>
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
           <Card className={classes.statCard}>
             <CardContent>
               <Assessment className={classes.statIcon} />
@@ -66,11 +70,11 @@ const AgenciesDashboard = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={4}>
+        <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
           <Card className={classes.statCard}>
             <CardContent>
               <People className={classes.statIcon} />
-              <Typography variant="h6">Team Members</Typography>
+              <Typography variant="h6">Clients</Typography>
               <Typography className={classes.statNumber}>3</Typography>
             </CardContent>
           </Card>
@@ -108,12 +112,15 @@ const AgenciesDashboard = () => {
         <Card key={pitch.id} className={classes.pitchCard}>
           <CardContent>
             <Typography variant="h6" className={classes.pitchTitle}>
-              {pitch.title}
+              {pitch.name}: {pitch.title}
             </Typography>
             <Typography variant="body2" color="textSecondary">
               Client: {pitch.client}
             </Typography>
-            <Typography variant="body2" color="primary">
+            <Typography
+              variant="body2"
+              color={pitch.status === "Matched" ? "success" : "primary"}
+            >
               Status: {pitch.status}
             </Typography>
           </CardContent>

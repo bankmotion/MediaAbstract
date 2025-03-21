@@ -78,15 +78,6 @@ const styles = makeStyles()((theme: any) => ({
       fontSize: "0.85rem",
     },
   },
-  // link: {
-  //   color: "#007BFF",
-  //   fontWeight: 500,
-  //   cursor: "pointer",
-  //   textDecoration: "underline",
-  //   "&:hover": {
-  //     color: "#0056b3",
-  //   },
-  // },
 }));
 
 export default styles;
