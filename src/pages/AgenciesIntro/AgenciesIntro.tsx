@@ -83,7 +83,10 @@ const AgenciesIntro = () => {
 
           <Grid container spacing={3}>
             <Grid item xs={12} md={4} className={classes.pricingGrid}>
-              <Card className={classes.pricingCard}>
+              <Card
+                className={classes.pricingCard}
+                onClick={() => navigate("/signup/agencies")}
+              >
                 <CardContent>
                   <Typography variant="h6" className={classes.planTitle}>
                     Basic Plan
@@ -107,7 +110,10 @@ const AgenciesIntro = () => {
             </Grid>
 
             <Grid item xs={12} md={4} className={classes.pricingGrid}>
-              <Card className={classes.pricingCard}>
+              <Card
+                className={classes.pricingCard}
+                onClick={() => navigate("/signup/agencies")}
+              >
                 <CardContent>
                   <Typography variant="h6" className={classes.planTitle}>
                     Team Plan
@@ -132,7 +138,10 @@ const AgenciesIntro = () => {
             </Grid>
 
             <Grid item xs={12} md={4} className={classes.pricingGrid}>
-              <Card className={classes.pricingCard}>
+              <Card
+                className={classes.pricingCard}
+                onClick={() => navigate("/signup/agencies")}
+              >
                 <CardContent>
                   <Typography variant="h6" className={classes.planTitle}>
                     Enterprise Plan

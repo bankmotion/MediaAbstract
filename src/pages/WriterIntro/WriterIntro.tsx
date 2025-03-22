@@ -66,7 +66,10 @@ const WritersIntro = () => {
           </Typography>
 
           <Grid item xs={12} md={6}>
-            <Card className={classes.pricingCard}>
+            <Card
+              className={classes.pricingCard}
+              onClick={() => navigate("/signup/writers")}
+            >
               <CardContent>
                 <Typography variant="h6" className={classes.planTitle}>
                   Starter Plan

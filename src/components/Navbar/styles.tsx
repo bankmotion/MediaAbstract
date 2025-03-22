@@ -3,6 +3,10 @@ import { makeStyles } from "tss-react/mui";
 const styles = makeStyles()((theme: any) => ({
   appbar: {
     height: "100%",
+    position: "sticky",
+    top: "0",
+    background: "#fff",
+    zIndex: 1000,
   },
   toolbar: {
     display: "flex",

@@ -29,16 +29,26 @@ const WritersDashboard = () => {
 
   return (
     <Box className={classes.wrapper}>
-      <Box className={classes.logoutContainer}>
-        <Button
-          startIcon={<Logout />}
-          variant="outlined"
-          color="primary"
-          className={classes.logoutButton}
+      <Box className={classes.navheader}>
+        <Typography
+          variant="h6"
+          style={{ fontWeight: 600 }}
+          className={classes.logoText}
           onClick={() => navigate("/")}
         >
-          Logout
-        </Button>
+          WriteFor.co
+        </Typography>
+        <Box className={classes.logoutContainer}>
+          <Button
+            startIcon={<Logout />}
+            variant="outlined"
+            color="primary"
+            className={classes.logoutButton}
+            onClick={() => navigate("/")}
+          >
+            Logout
+          </Button>
+        </Box>
       </Box>
       <Box className={classes.header}>
         <Box className={classes.userInfo}>

@@ -68,7 +68,7 @@ const Home = () => {
         </Typography> */}
 
         <Typography variant="h4" className={classes.title}>
-          Pitch Your Content to Top Outlets
+          Pitch Your Content with WriteFor.co to Top Outlets
         </Typography>
         <Typography variant="subtitle1" className={classes.subtitle}>
           Match your bylines, op-eds, and articles with the right media outlets

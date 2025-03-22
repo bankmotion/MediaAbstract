@@ -10,18 +10,54 @@ const useStyles = makeStyles()((theme) => ({
       padding: theme.spacing(2),
     },
   },
+  navheader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    padding: theme.spacing(2, 1),
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: "#fff",
+
+    zIndex: 1000,
+    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(1.0, 0),
+      paddingLeft: theme.spacing(1.5),
+    },
+  },
+
+  logoText: {
+    display: "flex",
+    justifyContent: "flex-start",
+    fontWeight: 700,
+    fontSize: "1.25rem",
+    color: "#000",
+    paddingLeft: theme.spacing(1.5),
+
+    "&:hover": {
+      fontSize: "1.5rem",
+    },
+  },
+
   header: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: theme.spacing(3),
+    marginTop: theme.spacing(6),
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
       alignItems: "center",
       textAlign: "center",
       marginBottom: theme.spacing(2),
+      marginTop: theme.spacing(8),
     },
   },
+
   logoutContainer: {
     position: "absolute",
     top: theme.spacing(2),
@@ -66,10 +102,12 @@ const useStyles = makeStyles()((theme) => ({
   logoutButton: {
     fontWeight: 500,
     textTransform: "none",
+    marginRight: theme.spacing(2),
 
     [theme.breakpoints.down("sm")]: {
-      // fontSize: "0.9rem",
-      // padding: theme.spacing(0.5, 1.5),
+      fontSize: "0.8rem",
+      padding: theme.spacing(0.5, 1.0),
+      marginRight: theme.spacing(3),
     },
   },
   divider: {

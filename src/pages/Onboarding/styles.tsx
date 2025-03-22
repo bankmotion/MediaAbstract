@@ -39,8 +39,24 @@ const styles = makeStyles()((theme: any) => ({
     textTransform: "none",
     fontSize: "1rem",
     margin: "0",
+    "& .MuiInputBase-root": {
+      textAlign: "center",
+      alignItems: "center",
+      paddingTop: "44px",
+    },
+    "& textarea": {
+      textAlign: "center",
+      paddingTop: "44px",
+      lineHeight: "1.5",
+    },
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.9rem",
+      "& .MuiInputBase-root": {
+        paddingTop: "44px",
+      },
+      "& textarea": {
+        paddingTop: "44px",
+      },
     },
   },
 
