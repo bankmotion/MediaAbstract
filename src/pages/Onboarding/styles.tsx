@@ -44,6 +44,23 @@ const styles = makeStyles()((theme: any) => ({
     },
   },
 
+  inputLabel: {
+    fontSize: "1rem",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.85rem",
+    },
+  },
+
+  inputPlaceholder: {
+    "&::placeholder": {
+      fontSize: "1rem",
+
+      [theme.breakpoints.down("sm")]: {
+        fontSize: "0.85rem",
+      },
+    },
+  },
+
   audienceOption: {
     fontWeight: 600,
     textTransform: "none",

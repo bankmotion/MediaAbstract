@@ -43,15 +43,24 @@ const Home = () => {
 
   return (
     <Box className={classes.wrapper}>
-      <Box className={classes.loginWrapper}>
-        <Button
-          variant="outlined"
-          color="primary"
-          className={classes.loginButton}
-          onClick={handleLogin}
+      <Box className={classes.header}>
+        <Typography
+          variant="h6"
+          style={{ fontWeight: 600 }}
+          className={classes.logoText}
         >
-          Login
-        </Button>
+          WriteFor.co
+        </Typography>
+        <Box className={classes.loginWrapper}>
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.loginButton}
+            onClick={handleLogin}
+          >
+            Login
+          </Button>
+        </Box>
       </Box>
       <Box className={classes.heroSection}>
         {/* <Typography variant="h4" className={classes.title}>

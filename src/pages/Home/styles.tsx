@@ -14,6 +14,38 @@ const useStyles = makeStyles()((theme) => ({
     paddingBottom: theme.spacing(20),
   },
 
+  header: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
+    padding: theme.spacing(2, 1),
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
+    // backgroundColor: "#fff",
+
+    zIndex: 1000,
+    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(1.5, 0),
+      paddingLeft: theme.spacing(1.5),
+    },
+  },
+
+  logoText: {
+    display: "flex",
+    justifyContent: "flex-start",
+    fontWeight: 700,
+    fontSize: "1.25rem",
+    color: "#000",
+    paddingLeft: theme.spacing(1.5),
+
+    "&:hover": {
+      fontSize: "1.5rem",
+    },
+  },
   loginWrapper: {
     display: "flex",
     justifyContent: "flex-end",
@@ -24,7 +56,7 @@ const useStyles = makeStyles()((theme) => ({
     top: 0,
     zIndex: 10,
     [theme.breakpoints.down("sm")]: {
-      paddingRight: theme.spacing(2),
+      paddingRight: theme.spacing(3),
       paddingTop: theme.spacing(1),
     },
   },
@@ -43,6 +75,7 @@ const useStyles = makeStyles()((theme) => ({
     backgroundColor: "#ffffff",
     borderRadius: 16,
     padding: theme.spacing(6),
+    marginTop: theme.spacing(4),
     boxShadow: "0 12px 30px rgba(0, 0, 0, 0.1)",
     textAlign: "center",
     maxWidth: 700,
