@@ -65,6 +65,7 @@ const dummyOutlets: Outlet[] = [
 const Results = () => {
   const { classes } = useStyles();
   const [matches, setMatches] = useState<Outlet[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setMatches(dummyOutlets); // Simulate match fetch
@@ -178,6 +179,26 @@ const Results = () => {
             onClick={handleExportCSV}
           >
             Export as CSV
+          </Button>
+        </Box>
+
+        <Box className={classes.actionButtons}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.exportcsvButton}
+            onClick={() => navigate("/onboarding")}
+          >
+            Pitch Again
+          </Button>
+
+          <Button
+            variant="text"
+            color="secondary"
+            className={classes.backHomeButton}
+            onClick={() => navigate("/agencies/dashboard")}
+          >
+            Go to Dashboard
           </Button>
         </Box>
       </Box>

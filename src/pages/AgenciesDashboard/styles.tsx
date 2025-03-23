@@ -73,7 +73,7 @@ const useStyles = makeStyles()((theme) => ({
       fontSize: "1.5rem",
       width: "100%",
       textAlign: "center",
-      paddingTop: theme.spacing(5),
+      paddingTop: theme.spacing(8),
     },
   },
   logoutButton: {

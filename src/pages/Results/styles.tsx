@@ -3,6 +3,7 @@ import { makeStyles } from "tss-react/mui";
 const styles = makeStyles()((theme: any) => ({
   body: {
     padding: theme.spacing(4),
+    paddingTop: "60px",
     maxWidth: "1000px",
     margin: "0 auto",
     display: "flex",
@@ -13,6 +14,7 @@ const styles = makeStyles()((theme: any) => ({
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(3, 1.5),
       gap: theme.spacing(3),
+      paddingTop: "60px",
     },
   },
 
@@ -137,7 +139,7 @@ const styles = makeStyles()((theme: any) => ({
 
   backHomeButton: {
     marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(4),
+    // marginBottom: theme.spacing(4),
     textTransform: "none",
     [theme.breakpoints.down("sm")]: {
       width: "100%",
@@ -146,9 +148,10 @@ const styles = makeStyles()((theme: any) => ({
   actionButtons: {
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    // paddingBottom: theme.spacing(4),
     display: "flex",
     justifyContent: "center",
+    alignItems: "center",
     gap: theme.spacing(2),
     flexWrap: "wrap",
     [theme.breakpoints.down("sm")]: {

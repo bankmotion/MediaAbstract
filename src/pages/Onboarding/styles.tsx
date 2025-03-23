@@ -6,6 +6,7 @@ const styles = makeStyles()((theme: any) => ({
     flexDirection: "column",
     alignItems: "center",
     padding: theme.spacing(6, 2),
+    // paddingTop: "80px",
     maxWidth: "800px",
     margin: "0 auto",
     textAlign: "center",
@@ -13,6 +14,7 @@ const styles = makeStyles()((theme: any) => ({
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(4, 2),
       margin: theme.spacing(2),
+      paddingTop: "40px",
     },
   },
 
@@ -39,6 +41,8 @@ const styles = makeStyles()((theme: any) => ({
     textTransform: "none",
     fontSize: "1rem",
     margin: "0",
+    transition: "none",
+    animation: "none",
     "& .MuiInputBase-root": {
       textAlign: "center",
       alignItems: "center",
