@@ -7,7 +7,10 @@ const styles = makeStyles()((theme: any) => ({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f4f6f8",
-    padding: theme.spacing(3),
+    padding: theme.spacing(15),
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(8, 2),
+    },
   },
   content: {
     width: "100%",

@@ -27,7 +27,7 @@ interface Outlet {
 const dummyOutlets: Outlet[] = [
   {
     name: "Forbes",
-    url: "https://www.forbes.com",
+    url: "https://www.forbes.com/sites/forbesopinion/",
     contactEmail: "letters@forbes.com",
     matchConfidence: 85,
     aiPartnered: true,
@@ -41,7 +41,7 @@ const dummyOutlets: Outlet[] = [
   },
   {
     name: "Harvard Business Review",
-    url: "https://hbr.org/submitters",
+    url: "https://hbr.org/guidelines-for-authors-hbr&gt",
     contactEmail: "submit@hbr.org",
     matchConfidence: 79,
     aiPartnered: false,

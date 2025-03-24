@@ -5,9 +5,11 @@ const useStyles = makeStyles()((theme) => ({
   wrapper: {
     background: "linear-gradient(to right, #fdfbfb, #ebedee)",
     paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(10),
 
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(2, 0),
+      paddingBottom: theme.spacing(6),
     },
   },
   appbar: {
@@ -47,7 +49,10 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   body: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2, 2),
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: "20px",
   },
   bodyHeader: {
     display: "flex",
@@ -61,19 +66,6 @@ const useStyles = makeStyles()((theme) => ({
       textAlign: "center",
       marginBottom: theme.spacing(2),
       marginTop: theme.spacing(8),
-    },
-  },
-
-  logoutContainer: {
-    top: theme.spacing(1),
-    right: theme.spacing(2),
-    zIndex: 10,
-    [theme.breakpoints.down("sm")]: {
-      position: "static",
-      width: "100%",
-      display: "flex",
-      justifyContent: "flex-end",
-      marginBottom: theme.spacing(1),
     },
   },
 
@@ -108,21 +100,61 @@ const useStyles = makeStyles()((theme) => ({
   divider: {
     margin: `${theme.spacing(2)} 0`,
   },
-  statsSection: {
+  nextStepsSection: {
     marginBottom: theme.spacing(4),
+    backgroundColor: "#f7f9fc",
+    padding: theme.spacing(2),
+    borderRadius: 12,
+    boxShadow: "0px 2px 8px rgba(0,0,0,0.5)",
+  },
+  sectionHeader: {
+    fontSize: "1.5rem",
+    fontWeight: 600,
+    marginBottom: theme.spacing(2),
     [theme.breakpoints.down("sm")]: {
-      marginBottom: theme.spacing(3),
+      fontSize: "1.25rem",
+    },
+  },
+
+  statsSection: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: theme.spacing(2),
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: theme.spacing(8),
+    [theme.breakpoints.down("sm")]: {
+      flexWrap: "wrap",
+      marginBottom: theme.spacing(5),
+    },
+  },
+  statGrid: {
+    maxWidth: 170,
+    flex: "1 1 auto", // allow to stretch a bit
+    display: "flex",
+    [theme.breakpoints.down("sm")]: {
+      marginBottom: theme.spacing(2),
     },
   },
   statCard: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: theme.spacing(2),
-    boxShadow: "0px 4px 12px rgba(0,0,0,0.05)",
+    width: "100%",
+    border: "1px solid #e0e0e0",
     textAlign: "center",
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(1.5),
-    },
+    padding: theme.spacing(2),
+    borderRadius: 12,
+    boxShadow: "0 3px 10px rgba(0,0,0,0.08)",
+    backgroundColor: "#fff",
+    height: "100%",
+  },
+  statIcon: {
+    fontSize: 36,
+    color: theme.palette.primary.main,
+    marginBottom: theme.spacing(1),
+  },
+  statNumber: {
+    fontSize: "2rem",
+    fontWeight: 600,
+    marginTop: theme.spacing(1),
   },
   buttonContainer: {
     display: "flex",
@@ -167,21 +199,28 @@ const useStyles = makeStyles()((theme) => ({
       fontSize: "1rem",
     },
   },
-  statIcon: {
-    fontSize: 36,
-    color: theme.palette.primary.main,
-    marginBottom: theme.spacing(1),
-    [theme.breakpoints.down("sm")]: {
-      fontSize: 30,
-    },
+  // statIcon: {
+  //   fontSize: 36,
+  //   color: theme.palette.primary.main,
+  //   marginBottom: theme.spacing(1),
+  //   [theme.breakpoints.down("sm")]: {
+  //     fontSize: 30,
+  //   },
+  // },
+  // statNumber: {
+  //   fontSize: "2rem",
+  //   fontWeight: 600,
+  //   marginTop: theme.spacing(1),
+  //   [theme.breakpoints.down("sm")]: {
+  //     fontSize: "1.6rem",
+  //   },
+  // },
+  activityTimeline: {
+    paddingLeft: 0, // remove extra left padding if needed
+    marginTop: theme.spacing(2),
   },
-  statNumber: {
-    fontSize: "2rem",
-    fontWeight: 600,
-    marginTop: theme.spacing(1),
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "1.6rem",
-    },
+  activityItem: {
+    alignItems: "flex-start",
   },
 }));
 

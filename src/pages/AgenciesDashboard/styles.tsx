@@ -5,15 +5,10 @@ const useStyles = makeStyles()((theme) => ({
   wrapper: {
     background: "linear-gradient(to right, #fdfbfb, #ebedee)",
     paddingTop: theme.spacing(10),
-
-    // backgroundColor: "#f5f7fa",
-
-    //display: "flex",
-    //flexDirection: "column",
-    //alignItems: "center",
-    //justifyContent: "center",
-    //padding: theme.spacing(4, 2),
-    // paddingBottom: theme.spacing(10),
+    paddingBottom: theme.spacing(10),
+    [theme.breakpoints.down("sm")]: {
+      paddingBottom: theme.spacing(6),
+    },
   },
   appbar: {
     display: "flex",
@@ -73,36 +68,32 @@ const useStyles = makeStyles()((theme) => ({
 
   body: {
     padding: theme.spacing(4, 2),
-  },
-
-  welcomeText: {
-    fontSize: "2rem",
-    fontWeight: 700,
-    color: theme.palette.primary.main,
-    paddingTop: theme.spacing(8),
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "1.5rem",
-      width: "100%",
-      textAlign: "center",
-      paddingTop: theme.spacing(8),
-    },
+    display: "flex",
+    flexDirection: "column",
   },
 
   statsSection: {
     display: "flex",
+    //flexWrap: "wrap",
+    // gap: theme.spacing(2),
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: theme.spacing(8),
+    marginBottom: theme.spacing(6),
     [theme.breakpoints.down("sm")]: {
-      marginBottom: theme.spacing(5),
+      flexWrap: "wrap",
+      marginBottom: theme.spacing(2),
     },
   },
   statGrid: {
+    maxWidth: 180,
+    flex: "1 1 auto", // allow to stretch a bit
+    display: "flex",
     [theme.breakpoints.down("sm")]: {
       marginBottom: theme.spacing(2),
     },
   },
   statCard: {
+    width: "100%",
     border: "1px solid #e0e0e0",
     textAlign: "center",
     padding: theme.spacing(2),
@@ -138,6 +129,13 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 600,
     backgroundColor: "#E6F0FA",
     color: theme.palette.primary.main,
+
+    width: "200px",
+    height: "50px",
+    fontSize: "18px",
+    padding: "15px 25px",
+    marginTop: "16px",
+
     "&:hover": {
       backgroundColor: "#d4e5f5",
     },
@@ -148,9 +146,20 @@ const useStyles = makeStyles()((theme) => ({
   addUserBtn: {
     textTransform: "none",
     fontWeight: 600,
+    marginBottom: "15px",
+    width: "200px",
+
     [theme.breakpoints.down("sm")]: {
       width: "100%",
     },
+  },
+
+  nextStepsSection: {
+    marginBottom: theme.spacing(4),
+    backgroundColor: "#f7f9fc",
+    padding: theme.spacing(2),
+    borderRadius: 12,
+    boxShadow: "0px 2px 8px rgba(0,0,0,0.5)",
   },
   sectionHeader: {
     fontSize: "1.5rem",
