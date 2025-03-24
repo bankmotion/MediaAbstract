@@ -17,6 +17,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import Navbar from "../../components/Navbar/Nabvar";
+import { fetchResults } from "../../services/api";
 
 interface Outlet {
   name: string;
@@ -28,9 +29,9 @@ interface Outlet {
 
 const dummyOutlets: Outlet[] = [
   {
-    name: "Forbes",
-    url: "https://www.forbes.com/sites/forbesopinion/",
-    contactEmail: "letters@forbes.com",
+    name: "TIME",
+    url: "https://time.com/section/opinion/",
+    contactEmail: "opinion@time.com",
     matchConfidence: 85,
     aiPartnered: true,
   },
@@ -74,6 +75,10 @@ const Results = () => {
 
   useEffect(() => {
     setMatches(dummyOutlets); // Simulate match fetch
+  }, []);
+
+  useEffect(() => {
+    fetchResults().then(setMatches);
   }, []);
 
   const handleExportCSV = () => {

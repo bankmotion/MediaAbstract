@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
+import { submitPitch } from "../../services/api";
 import useStyles from "./styles";
 
 const industryOptions = [
@@ -32,10 +33,11 @@ const Onboarding = () => {
   const [industry, setIndustry] = useState("");
   const [role, setRole] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // For MVP: Save to localStorage and simulate navigation
     localStorage.setItem("abstract", abstract);
     localStorage.setItem("industry", industry);
+    await submitPitch(abstract, industry);
     navigate("/results");
   };
 
