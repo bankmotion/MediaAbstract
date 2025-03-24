@@ -25,7 +25,7 @@ const styles = makeStyles()((theme: any) => ({
     fontSize: "2rem",
     fontWeight: 700,
     textAlign: "center",
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(4),
     color: "#333",
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.6rem",

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../Navbar/Nabvar";
-
+import WelcomeModal from "../../../WelcomeModal/WelcomeModal";
 import useStyles from "./styles";
 
 const planOptions = [
@@ -27,10 +27,19 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [plan, setPlan] = useState("");
 
+  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+
   const handleSignup = () => {
-    // Placeholder signup logic
-    alert(`Signed up as ${plan}`);
-    navigate("/writers/dashboard");
+    setShowWelcomeModal(true);
+  };
+
+  const handleContinue = () => {
+    setShowWelcomeModal(false);
+    navigate("/onboarding");
+  };
+
+  const handleCloseModal = () => {
+    setShowWelcomeModal(false);
   };
 
   return (
@@ -111,6 +120,12 @@ const Signup = () => {
           </Typography>
         </Paper>
       </Box>
+
+      <WelcomeModal
+        open={showWelcomeModal}
+        onClose={handleCloseModal}
+        onContinue={handleContinue}
+      />
     </>
   );
 };

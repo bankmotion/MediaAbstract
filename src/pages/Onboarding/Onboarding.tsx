@@ -45,10 +45,6 @@ const Onboarding = () => {
     <>
       <Navbar />
       <Box className={classes.body}>
-        {/* <Typography variant="h5" className={classes.title}>
-          Describe Your Pitch Idea (1-2 Sentences)
-        </Typography> */}
-
         <Typography variant="h6" className={classes.stepLabel}>
           Step 1: Describe Your Pitch Idea
         </Typography>
@@ -71,6 +67,7 @@ const Onboarding = () => {
           }}
           InputLabelProps={{
             classes: { root: classes.inputLabel },
+            shrink: true,
           }}
         />
         <Link
