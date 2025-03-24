@@ -56,10 +56,10 @@ const styles = makeStyles()((theme: any) => ({
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.9rem",
       "& .MuiInputBase-root": {
-        paddingTop: "44px",
+        // paddingTop: "44px",
       },
       "& textarea": {
-        paddingTop: "44px",
+        // paddingTop: "44px",
       },
     },
   },

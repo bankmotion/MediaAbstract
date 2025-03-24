@@ -11,6 +11,8 @@ import {
   TableRow,
   Paper,
   Tooltip,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
@@ -67,6 +69,9 @@ const Results = () => {
   const [matches, setMatches] = useState<Outlet[]>([]);
   const navigate = useNavigate();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
   useEffect(() => {
     setMatches(dummyOutlets); // Simulate match fetch
   }, []);
@@ -113,7 +118,7 @@ const Results = () => {
           Top Matching Outlets
         </Typography>
 
-        <TableContainer component={Paper} className={classes.tableContainer}>
+        {/* <TableContainer component={Paper} className={classes.tableContainer}>
           <Table>
             <TableHead>
               <TableRow>
@@ -169,7 +174,96 @@ const Results = () => {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+        </TableContainer> */}
+
+        {isMobile ? (
+          // Mobile: Show stacked cards
+          <Box className={classes.mobileList}>
+            {matches.map((outlet, index) => (
+              <Paper key={index} className={classes.mobileCard}>
+                <Typography className={classes.name}>{outlet.name}</Typography>
+                {outlet.aiPartnered && (
+                  <Tooltip title="Cited by AI tools for extra reach." arrow>
+                    <span className={classes.tooltip}>✓ AI Partnered</span>
+                  </Tooltip>
+                )}
+                <Typography className={classes.guide}>
+                  Contact: {outlet.contactEmail}
+                </Typography>
+                <Typography className={classes.score}>
+                  {outlet.matchConfidence}% Match
+                </Typography>
+                <a
+                  href={outlet.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-blue-600 underline"
+                >
+                  View Pitch Link
+                </a>
+              </Paper>
+            ))}
+          </Box>
+        ) : (
+          // Desktop: Show table
+          <TableContainer component={Paper} className={classes.tableContainer}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell className={classes.tableCell}>
+                    <strong>Outlet</strong>
+                  </TableCell>
+                  <TableCell className={classes.tableCell}>
+                    <strong>Contact Email (C)</strong>
+                  </TableCell>
+                  <TableCell className={classes.tableCell}>
+                    <strong>Pitch Link (B)</strong>
+                  </TableCell>
+                  <TableCell className={classes.tableCell}>
+                    <strong>Match Confidence</strong>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {matches.map((outlet, index) => (
+                  <TableRow key={index}>
+                    <TableCell>
+                      <Box display="flex" flexDirection="column">
+                        <Typography>{outlet.name}</Typography>
+                        {outlet.aiPartnered && (
+                          <Tooltip
+                            title="Cited by AI tools for extra reach."
+                            arrow
+                            componentsProps={{
+                              tooltip: { className: classes.customTooltip },
+                            }}
+                          >
+                            <span className={classes.tooltip}>
+                              {" "}
+                              ✓ AI Partnered
+                            </span>
+                          </Tooltip>
+                        )}
+                      </Box>
+                    </TableCell>
+                    <TableCell>{outlet.contactEmail}</TableCell>
+                    <TableCell>
+                      <a
+                        href={outlet.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-600 underline"
+                      >
+                        View Pitch Link
+                      </a>
+                    </TableCell>
+                    <TableCell>{outlet.matchConfidence}% Match</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        )}
 
         <Box className={classes.actionButtons}>
           <Button

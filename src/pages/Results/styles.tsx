@@ -2,22 +2,22 @@ import { makeStyles } from "tss-react/mui";
 
 const styles = makeStyles()((theme: any) => ({
   body: {
-    padding: theme.spacing(4),
-    paddingTop: "60px",
-    maxWidth: "1000px",
-    margin: "0 auto",
     display: "flex",
     flexDirection: "column",
-    gap: theme.spacing(4),
+    alignItems: "center",
+    maxWidth: "1000px",
+    // width: "100%",
+    padding: theme.spacing(6, 2),
+    paddingTop: "80px",
+    margin: "0 auto",
+    textAlign: "center",
+    overflow: "hidden",
     backgroundColor: "#f9f9f9",
-    minHeight: "100vh",
-    marginTop: theme.spacing(8),
 
     [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(3, 1.5),
-      gap: theme.spacing(3),
-      paddingTop: "60px",
-      marginTop: theme.spacing(4),
+      padding: theme.spacing(4, 1),
+      margin: theme.spacing(1),
+      paddingTop: "80px",
     },
   },
 
@@ -31,6 +31,24 @@ const styles = makeStyles()((theme: any) => ({
       fontSize: "1.6rem",
     },
   },
+  mobileList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+  },
+
+  mobileCard: {
+    padding: theme.spacing(2),
+    backgroundColor: "#fff",
+    borderRadius: "10px",
+    boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
+    transition: "0.3s ease",
+    "&:hover": {
+      transform: "translateY(-3px)",
+      boxShadow: "0 6px 20px rgba(0,0,0,0.12)",
+    },
+  },
 
   tableContainer: {
     marginTop: theme.spacing(4),
@@ -38,8 +56,11 @@ const styles = makeStyles()((theme: any) => ({
     borderRadius: 10,
     overflowX: "auto",
     width: "100%",
+    maxWidth: "100%",
+
     [theme.breakpoints.down("sm")]: {
       maxWidth: "100vw",
+      overflow: "auto",
     },
   },
 
@@ -47,7 +68,9 @@ const styles = makeStyles()((theme: any) => ({
     wordBreak: "break-word",
     whiteSpace: "normal",
     [theme.breakpoints.down("sm")]: {
-      minWidth: "200px",
+      minWidth: "150px",
+      fontSize: "0.9rem",
+      padding: theme.spacing(1),
     },
   },
 
