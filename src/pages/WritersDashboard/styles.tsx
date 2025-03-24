@@ -3,10 +3,12 @@ import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()((theme) => ({
   wrapper: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     background: "linear-gradient(to right, #fdfbfb, #ebedee)",
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(10),
-
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(2, 0),
       paddingBottom: theme.spacing(6),
@@ -53,6 +55,7 @@ const useStyles = makeStyles()((theme) => ({
     display: "flex",
     flexDirection: "column",
     marginBottom: "20px",
+    // maxWidth: "1000px",
   },
   bodyHeader: {
     display: "flex",

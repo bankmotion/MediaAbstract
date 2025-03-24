@@ -60,7 +60,7 @@ const styles = makeStyles()((theme: any) => ({
   inputLabel: {
     fontSize: "1rem",
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.85rem",
+      // fontSize: "0.9rem",
     },
   },
 
@@ -85,6 +85,15 @@ const styles = makeStyles()((theme: any) => ({
   },
 
   subbutton: {
+    margin: 20,
+    width: 200,
+
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      margin: theme.spacing(3, 0),
+    },
+  },
+  backDashboardButton: {
     margin: 20,
     width: 200,
 

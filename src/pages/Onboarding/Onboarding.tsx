@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -7,7 +7,7 @@ import {
   Typography,
   Link,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
 import useStyles from "./styles";
 
@@ -27,8 +27,10 @@ const Onboarding = () => {
   const { classes } = useStyles();
 
   const navigate = useNavigate();
+  const location = useLocation();
   const [abstract, setAbstract] = useState("");
   const [industry, setIndustry] = useState("");
+  const [role, setRole] = useState("");
 
   const handleSubmit = () => {
     // For MVP: Save to localStorage and simulate navigation
@@ -39,6 +41,22 @@ const Onboarding = () => {
 
   const handleRefinePitch = () => {
     setAbstract("");
+  };
+
+  useEffect(() => {
+    if (location.state?.role) {
+      setRole(location.state.role);
+    }
+  }, [location.state]);
+
+  const handleGoToDashboard = () => {
+    if (role === "writers") {
+      navigate("/writers/dashboard");
+    } else if (role === "agencies") {
+      navigate("/agencies/dashboard");
+    } else {
+      navigate("/");
+    }
   };
 
   return (
@@ -123,6 +141,14 @@ const Onboarding = () => {
           onClick={handleSubmit}
         >
           Submit
+        </Button>
+        <Button
+          variant="text"
+          color="secondary"
+          className={classes.backDashboardButton}
+          onClick={handleGoToDashboard}
+        >
+          Go to Dashboard
         </Button>
       </Box>
     </>

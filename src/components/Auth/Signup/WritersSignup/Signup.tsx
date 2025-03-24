@@ -35,7 +35,7 @@ const Signup = () => {
 
   const handleContinue = () => {
     setShowWelcomeModal(false);
-    navigate("/onboarding");
+    navigate("/onboarding", { state: { role: "writers" } });
   };
 
   const handleCloseModal = () => {
