@@ -7,7 +7,10 @@ const styles = makeStyles()((theme: any) => ({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f4f6f8",
-    padding: theme.spacing(3),
+    padding: theme.spacing(15, 2),
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(2, 2),
+    },
   },
   content: {
     width: "100%",
@@ -23,7 +26,7 @@ const styles = makeStyles()((theme: any) => ({
     margin: theme.spacing(15, 3),
     marginTop: 0,
     [theme.breakpoints.down("sm")]: {
-      margin: theme.spacing(8, 2),
+      margin: theme.spacing(15, 2),
       padding: theme.spacing(3),
       maxWidth: "90%",
     },

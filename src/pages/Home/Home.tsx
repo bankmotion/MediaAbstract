@@ -1,5 +1,7 @@
 import React from "react";
 import {
+  AppBar,
+  Toolbar,
   Tabs,
   Tab,
   Box,
@@ -16,6 +18,7 @@ import {
   PersonAdd,
   Description,
   Verified,
+  Login,
 } from "@mui/icons-material";
 import useStyles from "./styles";
 
@@ -43,30 +46,42 @@ const Home = () => {
 
   return (
     <Box className={classes.wrapper}>
-      <Box className={classes.header}>
-        <Typography
-          variant="h6"
-          style={{ fontWeight: 600 }}
-          className={classes.logoText}
-        >
-          WriteFor.co
-        </Typography>
-        <Box className={classes.loginWrapper}>
+      <AppBar
+        position="static"
+        color="transparent"
+        elevation={0}
+        className={classes.appbar}
+      >
+        <Toolbar className={classes.toolbar}>
           <Button
-            variant="outlined"
-            color="primary"
-            className={classes.loginButton}
-            onClick={handleLogin}
+            onClick={() => navigate("/")}
+            className={classes.logoButton}
+            disableRipple
           >
-            Login
+            <Typography
+              variant="h6"
+              style={{ fontWeight: 600 }}
+              className={classes.logoText}
+            >
+              WriteFor.co
+            </Typography>
           </Button>
-        </Box>
-      </Box>
-      <Box className={classes.heroSection}>
-        {/* <Typography variant="h4" className={classes.title}>
-          WriteFor.co
-        </Typography> */}
 
+          <>
+            <Button
+              startIcon={<Login />}
+              color="primary"
+              variant="outlined"
+              onClick={() => navigate("/agencies/dashboard")}
+              sx={{ fontWeight: 500 }}
+              className={classes.loginButton}
+            >
+              LogIn
+            </Button>
+          </>
+        </Toolbar>
+      </AppBar>
+      <Box className={classes.heroSection}>
         <Typography variant="h4" className={classes.title}>
           Pitch Your Content with WriteFor.co to Top Outlets
         </Typography>

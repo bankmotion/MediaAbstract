@@ -3,13 +3,54 @@ import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()((theme) => ({
   wrapper: {
-    padding: theme.spacing(4),
-    minHeight: "100vh",
-    backgroundColor: "#f5f7fa",
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2),
+    background: "linear-gradient(to right, #fdfbfb, #ebedee)",
+    paddingTop: theme.spacing(10),
+
+    // backgroundColor: "#f5f7fa",
+
+    //display: "flex",
+    //flexDirection: "column",
+    //alignItems: "center",
+    //justifyContent: "center",
+    //padding: theme.spacing(4, 2),
+    // paddingBottom: theme.spacing(10),
+  },
+  appbar: {
+    display: "flex",
+    height: "60px",
+    position: "fixed",
+    top: "0",
+    background: "#fff",
+    zIndex: 1000,
+  },
+  toolbar: {
+    display: "flex",
+    justifyContent: "space-between",
+  },
+  logoButton: {
+    textTransform: "none",
+    padding: 0,
+    minWidth: "auto",
+  },
+  logoText: {
+    fontWeight: 700,
+    fontSize: "1.25rem",
+    color: "#000",
+    "&:hover": {
+      fontSize: "1.5rem",
     },
   },
+  logoutButton: {
+    fontWeight: 600,
+    width: "100px",
+    height: "40px",
+    textTransform: "none",
+    [theme.breakpoints.down("sm")]: {
+      width: "100px",
+      height: "30px",
+    },
+  },
+
   navheader: {
     display: "flex",
     justifyContent: "space-between",
@@ -30,38 +71,8 @@ const useStyles = makeStyles()((theme) => ({
     },
   },
 
-  logoText: {
-    display: "flex",
-    justifyContent: "flex-start",
-    fontWeight: 700,
-    fontSize: "1.25rem",
-    color: "#000",
-    paddingLeft: theme.spacing(1.5),
-
-    "&:hover": {
-      fontSize: "1.5rem",
-    },
-  },
-
-  header: {
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    gap: theme.spacing(2),
-    marginBottom: theme.spacing(4),
-  },
-  logoutContainer: {
-    position: "absolute",
-    top: theme.spacing(2),
-    right: theme.spacing(2),
-    zIndex: 10,
-    [theme.breakpoints.down("sm")]: {
-      position: "static",
-      width: "100%",
-      display: "flex",
-      justifyContent: "flex-end",
-      // marginBottom: theme.spacing(1),
-    },
+  body: {
+    padding: theme.spacing(4, 2),
   },
 
   welcomeText: {
@@ -76,17 +87,7 @@ const useStyles = makeStyles()((theme) => ({
       paddingTop: theme.spacing(8),
     },
   },
-  logoutButton: {
-    fontWeight: 500,
-    textTransform: "none",
-    marginRight: theme.spacing(2),
 
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "0.8rem",
-      padding: theme.spacing(0.5, 1.0),
-      marginRight: theme.spacing(3),
-    },
-  },
   statsSection: {
     display: "flex",
     justifyContent: "center",

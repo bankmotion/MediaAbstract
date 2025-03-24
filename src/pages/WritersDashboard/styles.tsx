@@ -3,47 +3,53 @@ import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()((theme) => ({
   wrapper: {
-    padding: theme.spacing(4),
-    minHeight: "100vh",
-    backgroundColor: "#f3f4f8",
+    background: "linear-gradient(to right, #fdfbfb, #ebedee)",
+    paddingTop: theme.spacing(8),
+
     [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2),
+      padding: theme.spacing(2, 0),
     },
   },
-  navheader: {
+  appbar: {
+    display: "flex",
+    height: "60px",
+    position: "fixed",
+    top: "0",
+    background: "#fff",
+    zIndex: 1000,
+  },
+  toolbar: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    padding: theme.spacing(2, 1),
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "#fff",
-
-    zIndex: 1000,
-    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(1.0, 0),
-      paddingLeft: theme.spacing(1.5),
-    },
   },
-
+  logoButton: {
+    textTransform: "none",
+    padding: 0,
+    minWidth: "auto",
+  },
   logoText: {
-    display: "flex",
-    justifyContent: "flex-start",
     fontWeight: 700,
     fontSize: "1.25rem",
     color: "#000",
-    paddingLeft: theme.spacing(1.5),
-
     "&:hover": {
       fontSize: "1.5rem",
     },
   },
+  logoutButton: {
+    fontWeight: 600,
+    width: "100px",
+    height: "40px",
+    textTransform: "none",
+    [theme.breakpoints.down("sm")]: {
+      width: "100px",
+      height: "30px",
+    },
+  },
 
-  header: {
+  body: {
+    padding: theme.spacing(2),
+  },
+  bodyHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
@@ -59,8 +65,7 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   logoutContainer: {
-    position: "absolute",
-    top: theme.spacing(2),
+    top: theme.spacing(1),
     right: theme.spacing(2),
     zIndex: 10,
     [theme.breakpoints.down("sm")]: {
@@ -99,17 +104,7 @@ const useStyles = makeStyles()((theme) => ({
       fontSize: "1.3rem",
     },
   },
-  logoutButton: {
-    fontWeight: 500,
-    textTransform: "none",
-    marginRight: theme.spacing(2),
 
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "0.8rem",
-      padding: theme.spacing(0.5, 1.0),
-      marginRight: theme.spacing(3),
-    },
-  },
   divider: {
     margin: `${theme.spacing(2)} 0`,
   },

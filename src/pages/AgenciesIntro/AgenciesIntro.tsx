@@ -17,7 +17,7 @@ const AgenciesIntro = () => {
   const navigate = useNavigate();
 
   return (
-    <>
+    <Box className={classes.wrapper}>
       <Navbar />
       <Box className={classes.introWrapper}>
         <Typography variant="h4" className={classes.title}>
@@ -176,7 +176,7 @@ const AgenciesIntro = () => {
           Continue to Signup
         </Button>
       </Box>
-    </>
+    </Box>
   );
 };
 

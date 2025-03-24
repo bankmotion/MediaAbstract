@@ -2,6 +2,17 @@
 import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()((theme) => ({
+  wrapper: {
+    background: "linear-gradient(to right, #fdfbfb, #ebedee)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: theme.spacing(4, 2),
+    paddingTop: theme.spacing(8),
+    paddingBottom: theme.spacing(10),
+  },
+
   introWrapper: {
     padding: theme.spacing(6),
     maxWidth: 1200,

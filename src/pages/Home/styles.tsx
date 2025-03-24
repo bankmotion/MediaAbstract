@@ -3,7 +3,6 @@ import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()((theme) => ({
   wrapper: {
-    //minHeight: "100vh",
     background: "linear-gradient(to right, #fdfbfb, #ebedee)",
     display: "flex",
     flexDirection: "column",
@@ -14,60 +13,39 @@ const useStyles = makeStyles()((theme) => ({
     paddingBottom: theme.spacing(20),
   },
 
-  header: {
+  appbar: {
+    display: "flex",
+    height: "60px",
+    position: "fixed",
+    top: "0",
+    background: "#fff",
+    zIndex: 1000,
+  },
+  toolbar: {
     display: "flex",
     justifyContent: "space-between",
-    alignItems: "center",
-    width: "100%",
-    padding: theme.spacing(2, 1),
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: "#fff",
-
-    zIndex: 1000,
-    boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(1.5, 0),
-      paddingLeft: theme.spacing(1.5),
-    },
   },
-
+  logoButton: {
+    textTransform: "none",
+    padding: 0,
+    minWidth: "auto",
+  },
   logoText: {
-    display: "flex",
-    justifyContent: "flex-start",
     fontWeight: 700,
     fontSize: "1.25rem",
     color: "#000",
-    paddingLeft: theme.spacing(1.5),
-
     "&:hover": {
       fontSize: "1.5rem",
     },
   },
-  loginWrapper: {
-    display: "flex",
-    justifyContent: "flex-end",
-    paddingRight: theme.spacing(4),
-    paddingTop: theme.spacing(2),
-    position: "absolute",
-    right: 0,
-    top: 0,
-    zIndex: 10,
-    [theme.breakpoints.down("sm")]: {
-      paddingRight: theme.spacing(3),
-      paddingTop: theme.spacing(1),
-    },
-  },
-
   loginButton: {
-    textTransform: "none",
     fontWeight: 600,
-    fontSize: "1rem",
+    width: "100px",
+    height: "40px",
+    textTransform: "none",
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.9rem",
-      padding: theme.spacing(0.5, 1.5),
+      width: "100px",
+      height: "30px",
     },
   },
 

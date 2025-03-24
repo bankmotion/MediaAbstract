@@ -5,10 +5,13 @@ const styles = makeStyles()((theme: any) => ({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f4f6f8",
+    // backgroundColor: "#f4f6f8",
+    background: "linear-gradient(to right, #fdfbfb, #ebedee)",
+
     padding: theme.spacing(2),
     paddingTop: theme.spacing(5),
     paddingBottom: theme.spacing(15),
+    // marginTop: theme.spacing(10),
   },
 
   content: {
@@ -22,12 +25,11 @@ const styles = makeStyles()((theme: any) => ({
     borderRadius: theme.shape.borderRadius * 2,
     boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
     backgroundColor: "#fff",
-    margin: theme.spacing(10, 2),
-    marginTop: 0,
+    margin: theme.spacing(15, 2),
 
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(3),
-      margin: theme.spacing(5, 1),
+      margin: theme.spacing(15, 1),
     },
   },
 

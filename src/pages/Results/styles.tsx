@@ -11,10 +11,13 @@ const styles = makeStyles()((theme: any) => ({
     gap: theme.spacing(4),
     backgroundColor: "#f9f9f9",
     minHeight: "100vh",
+    marginTop: theme.spacing(8),
+
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(3, 1.5),
       gap: theme.spacing(3),
       paddingTop: "60px",
+      marginTop: theme.spacing(4),
     },
   },
 

@@ -2,8 +2,9 @@ import { makeStyles } from "tss-react/mui";
 
 const styles = makeStyles()((theme: any) => ({
   appbar: {
-    height: "100%",
-    position: "sticky",
+    display: "flex",
+    height: "60px",
+    position: "fixed",
     top: "0",
     background: "#fff",
     zIndex: 1000,
@@ -26,7 +27,13 @@ const styles = makeStyles()((theme: any) => ({
     },
   },
   backButton: {
-    fontWeight: 500,
+    fontWeight: 600,
+    width: "80px",
+    height: "40px",
+    [theme.breakpoints.down("sm")]: {
+      width: "60px",
+      height: "30px",
+    },
   },
 }));
 

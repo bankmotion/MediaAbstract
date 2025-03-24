@@ -7,6 +7,8 @@ import {
   Card,
   CardContent,
   Grid,
+  AppBar,
+  Toolbar,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
@@ -67,112 +69,121 @@ const AgenciesDashboard = () => {
 
   return (
     <Box className={classes.wrapper}>
-      <Box className={classes.navheader}>
-        <Typography
-          variant="h6"
-          style={{ fontWeight: 600 }}
-          className={classes.logoText}
-          onClick={() => navigate("/")}
-        >
-          WriteFor.co
-        </Typography>
-
-        <Box className={classes.logoutContainer}>
+      <AppBar
+        position="static"
+        color="transparent"
+        elevation={0}
+        className={classes.appbar}
+      >
+        <Toolbar className={classes.toolbar}>
           <Button
-            startIcon={<Logout />}
-            variant="outlined"
-            color="primary"
-            className={classes.logoutButton}
             onClick={() => navigate("/")}
+            className={classes.logoButton}
+            disableRipple
           >
-            Logout
+            <Typography
+              variant="h6"
+              style={{ fontWeight: 600 }}
+              className={classes.logoText}
+            >
+              WriteFor.co
+            </Typography>
+          </Button>
+
+          <>
+            <Button
+              startIcon={<Logout />}
+              color="primary"
+              variant="outlined"
+              onClick={() => navigate("/")}
+              sx={{ fontWeight: 500 }}
+              className={classes.logoutButton}
+            >
+              LogOut
+            </Button>
+          </>
+        </Toolbar>
+      </AppBar>
+      <Box className={classes.body}>
+        <Grid container spacing={3} className={classes.statsSection}>
+          <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
+            <Card className={classes.statCard}>
+              <CardContent>
+                <Assessment className={classes.statIcon} />
+                <Typography variant="h6">Matches</Typography>
+                <Typography className={classes.statNumber}>15</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
+            <Card className={classes.statCard}>
+              <CardContent>
+                <People className={classes.statIcon} />
+                <Typography variant="h6">Clients</Typography>
+                <Typography className={classes.statNumber}>3</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+
+        <Box className={classes.buttonRow}>
+          <Button
+            variant="contained"
+            //color="primary"
+            className={classes.newPitchBtn}
+            onClick={() => navigate("/onboarding")}
+          >
+            New Client Pitch
+          </Button>
+
+          {(currentPlan === "$150/month" || currentPlan === "$250/month") && (
+            <Button
+              variant="outlined"
+              color="secondary"
+              startIcon={<AddCircleOutline />}
+              className={classes.addUserBtn}
+              onClick={() => alert("Redirect to Add User functionality")}
+            >
+              Add User
+            </Button>
+          )}
+        </Box>
+
+        <Box className={classes.sectionHeaderRow}>
+          <Typography variant="h6" className={classes.sectionHeader}>
+            Team Pitches
+          </Typography>
+          <Button
+            startIcon={<Download />}
+            variant="outlined"
+            size="small"
+            className={classes.exportButton}
+            onClick={handleExportCSV}
+          >
+            Export Pitches
           </Button>
         </Box>
-      </Box>
-      <Box className={classes.header}>
-        <Typography className={classes.welcomeText}>
-          Welcome, Team GreenSpark
-        </Typography>
-      </Box>
 
-      <Grid container spacing={3} className={classes.statsSection}>
-        <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
-          <Card className={classes.statCard}>
+        {teamPitches.map((pitch) => (
+          <Card key={pitch.id} className={classes.pitchCard}>
             <CardContent>
-              <Assessment className={classes.statIcon} />
-              <Typography variant="h6">Matches</Typography>
-              <Typography className={classes.statNumber}>15</Typography>
+              <Typography variant="h6" className={classes.pitchTitle}>
+                {pitch.name}: {pitch.title}
+              </Typography>
+              <Typography variant="body2" color="textSecondary">
+                Client: {pitch.client}
+              </Typography>
+              <Typography
+                variant="body2"
+                color={pitch.status === "Matched" ? "success" : "primary"}
+              >
+                Status: {pitch.status}
+              </Typography>
             </CardContent>
           </Card>
-        </Grid>
-
-        <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
-          <Card className={classes.statCard}>
-            <CardContent>
-              <People className={classes.statIcon} />
-              <Typography variant="h6">Clients</Typography>
-              <Typography className={classes.statNumber}>3</Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-      </Grid>
-
-      <Box className={classes.buttonRow}>
-        <Button
-          variant="contained"
-          //color="primary"
-          className={classes.newPitchBtn}
-          onClick={() => navigate("/onboarding")}
-        >
-          New Client Pitch
-        </Button>
-
-        {(currentPlan === "$150/month" || currentPlan === "$250/month") && (
-          <Button
-            variant="outlined"
-            color="secondary"
-            startIcon={<AddCircleOutline />}
-            className={classes.addUserBtn}
-            onClick={() => alert("Redirect to Add User functionality")}
-          >
-            Add User
-          </Button>
-        )}
+        ))}
       </Box>
-
-      <Box className={classes.sectionHeaderRow}>
-        <Typography variant="h6" className={classes.sectionHeader}>
-          Team Pitches
-        </Typography>
-        <Button
-          startIcon={<Download />}
-          variant="outlined"
-          size="small"
-          className={classes.exportButton}
-          onClick={handleExportCSV}
-        >
-          Export Pitches
-        </Button>
-      </Box>
-
-      {teamPitches.map((pitch) => (
-        <Card key={pitch.id} className={classes.pitchCard}>
-          <CardContent>
-            <Typography variant="h6" className={classes.pitchTitle}>
-              {pitch.name}: {pitch.title}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Client: {pitch.client}
-            </Typography>
-            <Typography
-              variant="body2"
-              color={pitch.status === "Matched" ? "success" : "primary"}
-            >
-              Status: {pitch.status}
-            </Typography>
-          </CardContent>
-        </Card>
-      ))}
     </Box>
   );
 };

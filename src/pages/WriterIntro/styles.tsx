@@ -6,6 +6,7 @@ const useStyles = makeStyles()((theme) => ({
     maxWidth: 900,
     margin: "auto",
     textAlign: "center",
+    marginTop: theme.spacing(8),
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(4, 2),
     },
