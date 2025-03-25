@@ -243,7 +243,7 @@ const Results = () => {
                     <TableCell>
                       <Box display="flex" flexDirection="column">
                         <Typography>{outlet.name}</Typography>
-                        {outlet.aiPartnered && (
+                        {outlet.ai_partnered === "Yes" && (
                           <Tooltip
                             title="Cited by AI tools for extra reach."
                             arrow
@@ -259,7 +259,7 @@ const Results = () => {
                         )}
                       </Box>
                     </TableCell>
-                    <TableCell>{outlet.contactEmail}</TableCell>
+                    <TableCell>{outlet.contact_email}</TableCell>
                     <TableCell>
                       <a
                         href={outlet.url}
@@ -270,7 +270,7 @@ const Results = () => {
                         View Pitch Link
                       </a>
                     </TableCell>
-                    <TableCell>{outlet.matchConfidence}% Match</TableCell>
+                    <TableCell>{outlet.match_confidence}% Match</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
