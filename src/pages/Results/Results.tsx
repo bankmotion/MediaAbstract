@@ -15,71 +15,79 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import useStyles from "./styles";
 import Navbar from "../../components/Navbar/Nabvar";
-import { fetchResults } from "../../services/api";
+// import { fetchResults } from "../../services/api";
 
-interface Outlet {
-  name: string;
-  url: string;
-  contactEmail: string;
-  matchConfidence: number;
-  aiPartnered: boolean;
-}
+import { useSelector } from "react-redux";
+import { RootState } from "../../redux/store";
 
-const dummyOutlets: Outlet[] = [
-  {
-    name: "TIME",
-    url: "https://time.com/section/opinion/",
-    contactEmail: "opinion@time.com",
-    matchConfidence: 85,
-    aiPartnered: true,
-  },
-  {
-    name: "The Wall Street Journal",
-    url: "https://www.wsj.com/articles/oped-guidelines-for-the-wall-street-journal-1384383173",
-    contactEmail: "wsjcontact@wsj.com",
-    matchConfidence: 82,
-    aiPartnered: true,
-  },
-  {
-    name: "Harvard Business Review",
-    url: "https://hbr.org/guidelines-for-authors-hbr&gt",
-    contactEmail: "submit@hbr.org",
-    matchConfidence: 79,
-    aiPartnered: false,
-  },
-  {
-    name: "Inc42",
-    url: "https://inc42.com/startup-submission/",
-    contactEmail: "editorial@inc42.com",
-    matchConfidence: 73,
-    aiPartnered: false,
-  },
-  {
-    name: "Wired",
-    url: "https://www.wired.com/about/how-to-pitch-stories-to-wired/",
-    contactEmail: "pitch@wired.com",
-    matchConfidence: 80,
-    aiPartnered: true,
-  },
-];
+import useStyles from "./styles";
+
+// interface Outlet {
+//   name: string;
+//   url: string;
+//   contactEmail: string;
+//   matchConfidence: number;
+//   aiPartnered: boolean;
+// }
+
+// const dummyOutlets: Outlet[] = [
+//   {
+//     name: "TIME",
+//     url: "https://time.com/section/opinion/",
+//     contactEmail: "opinion@time.com",
+//     matchConfidence: 85,
+//     aiPartnered: true,
+//   },
+//   {
+//     name: "The Wall Street Journal",
+//     url: "https://www.wsj.com/articles/oped-guidelines-for-the-wall-street-journal-1384383173",
+//     contactEmail: "wsjcontact@wsj.com",
+//     matchConfidence: 82,
+//     aiPartnered: true,
+//   },
+//   {
+//     name: "Harvard Business Review",
+//     url: "https://hbr.org/guidelines-for-authors-hbr&gt",
+//     contactEmail: "submit@hbr.org",
+//     matchConfidence: 79,
+//     aiPartnered: false,
+//   },
+//   {
+//     name: "Inc42",
+//     url: "https://inc42.com/startup-submission/",
+//     contactEmail: "editorial@inc42.com",
+//     matchConfidence: 73,
+//     aiPartnered: false,
+//   },
+//   {
+//     name: "Wired",
+//     url: "https://www.wired.com/about/how-to-pitch-stories-to-wired/",
+//     contactEmail: "pitch@wired.com",
+//     matchConfidence: 80,
+//     aiPartnered: true,
+//   },
+// ];
 
 const Results = () => {
   const { classes } = useStyles();
-  const [matches, setMatches] = useState<Outlet[]>([]);
+  const results = useSelector((state: RootState) => state.pitch.results);
+  console.log("Results:", results);
+  const status = useSelector((state: RootState) => state.pitch.status);
+
+  // const [matches, setMatches] = useState<Outlet[]>([]);
   const navigate = useNavigate();
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  useEffect(() => {
-    setMatches(dummyOutlets); // Simulate match fetch
-  }, []);
+  // useEffect(() => {
+  //   setMatches(dummyOutlets); // Simulate match fetch
+  // }, []);
 
-  useEffect(() => {
-    fetchResults().then(setMatches);
-  }, []);
+  // useEffect(() => {
+  //   fetchResults().then(setMatches);
+  // }, []);
 
   const handleExportCSV = () => {
     const headers = [
@@ -88,7 +96,7 @@ const Results = () => {
       "Pitch Link",
       "Match Confidence",
     ];
-    const rows = matches.map((outlet) => [
+    const rows = results.map((outlet) => [
       outlet.name,
       outlet.contactEmail,
       outlet.url,
@@ -184,19 +192,19 @@ const Results = () => {
         {isMobile ? (
           // Mobile: Show stacked cards
           <Box className={classes.mobileList}>
-            {matches.map((outlet, index) => (
+            {results.map((outlet, index) => (
               <Paper key={index} className={classes.mobileCard}>
                 <Typography className={classes.name}>{outlet.name}</Typography>
-                {outlet.aiPartnered && (
+                {outlet.ai_partnered === "Yes" && (
                   <Tooltip title="Cited by AI tools for extra reach." arrow>
                     <span className={classes.tooltip}>✓ AI Partnered</span>
                   </Tooltip>
                 )}
                 <Typography className={classes.guide}>
-                  Contact: {outlet.contactEmail}
+                  Contact: {outlet.contact_email}
                 </Typography>
                 <Typography className={classes.score}>
-                  {outlet.matchConfidence}% Match
+                  {outlet.match_confidence}% Match
                 </Typography>
                 <a
                   href={outlet.url}
@@ -230,7 +238,7 @@ const Results = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {matches.map((outlet, index) => (
+                {results.map((outlet, index) => (
                   <TableRow key={index}>
                     <TableCell>
                       <Box display="flex" flexDirection="column">

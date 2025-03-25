@@ -9,7 +9,12 @@ import {
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
-import { submitPitch } from "../../services/api";
+// import { submitPitch } from "../../services/api";
+
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../redux/store";
+import { setPitchData, fetchPitchResults } from "../../redux/slices/pitchSlice";
+
 import useStyles from "./styles";
 
 const industryOptions = [
@@ -29,15 +34,21 @@ const Onboarding = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch<AppDispatch>();
+
   const [abstract, setAbstract] = useState("");
   const [industry, setIndustry] = useState("");
   const [role, setRole] = useState("");
 
   const handleSubmit = async () => {
     // For MVP: Save to localStorage and simulate navigation
-    localStorage.setItem("abstract", abstract);
-    localStorage.setItem("industry", industry);
-    await submitPitch(abstract, industry);
+    // localStorage.setItem("abstract", abstract);
+    // localStorage.setItem("industry", industry);
+    // const a = await submitPitch(abstract, industry);
+
+    dispatch(setPitchData({ abstract, industry }));
+    dispatch(fetchPitchResults({ abstract, industry }));
+
     navigate("/results");
   };
 

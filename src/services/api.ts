@@ -1,17 +1,31 @@
 const API_URL = "http://localhost:5000";
 
 export const submitPitch = async (abstract: string, industry: string) => {
-  const response = await fetch(`${API_URL}/onboarding`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ abstract, industry }),
-  });
-  return response.json();
-};
+  try {
+    const response = await fetch(`${API_URL}/submit_pitch`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({ abstract, industry }),
+    });
 
-export const fetchResults = async () => {
-  const response = await fetch(`${API_URL}/results`);
-  return response.json();
+    console.log("response", response);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Error submitting pitch:", errorText);
+      throw new Error(`Submission failed: ${errorText}`);
+    }
+
+    const data = await response.json();
+    console.log("Pitch submitted successfully:", data);
+
+    // Expecting the backend to return matched outlets inside the response
+    return data.matched_outlets || [];
+  } catch (error) {
+    console.error("Error in submitPitch", error);
+    return { error: "Failed to submit pitch" };
+  }
 };
