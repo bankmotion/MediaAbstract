@@ -14,7 +14,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
 // import { fetchResults } from "../../services/api";
 
@@ -71,6 +71,8 @@ import useStyles from "./styles";
 
 const Results = () => {
   const { classes } = useStyles();
+  const location = useLocation();
+
   const results = useSelector((state: RootState) => state.pitch.results);
   console.log("Results:", results);
   const status = useSelector((state: RootState) => state.pitch.status);
@@ -80,6 +82,7 @@ const Results = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [role, setRole] = useState("");
 
   // useEffect(() => {
   //   setMatches(dummyOutlets); // Simulate match fetch
@@ -122,6 +125,22 @@ const Results = () => {
     link.click();
     document.body.removeChild(link);
   };
+
+  const handleGoToDashboard = () => {
+    if (role === "writers") {
+      navigate("/writers/dashboard");
+    } else if (role === "agencies") {
+      navigate("/agencies/dashboard");
+    } else {
+      navigate("/");
+    }
+  };
+
+  useEffect(() => {
+    if (location.state?.role) {
+      setRole(location.state.role);
+    }
+  }, [location.state]);
 
   return (
     <>
@@ -303,7 +322,7 @@ const Results = () => {
             variant="text"
             color="secondary"
             className={classes.backHomeButton}
-            onClick={() => navigate("/agencies/dashboard")}
+            onClick={handleGoToDashboard}
           >
             Go to Dashboard
           </Button>

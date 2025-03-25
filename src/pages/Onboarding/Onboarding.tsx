@@ -49,18 +49,16 @@ const Onboarding = () => {
     dispatch(setPitchData({ abstract, industry }));
     dispatch(fetchPitchResults({ abstract, industry }));
 
-    navigate("/results");
+    if (role === "writers") {
+      navigate("/results", { state: { role: "writers" } });
+    } else if (role === "agencies") {
+      navigate("/results", { state: { role: "agencies" } });
+    }
   };
 
   const handleRefinePitch = () => {
     setAbstract("");
   };
-
-  useEffect(() => {
-    if (location.state?.role) {
-      setRole(location.state.role);
-    }
-  }, [location.state]);
 
   const handleGoToDashboard = () => {
     if (role === "writers") {
@@ -72,6 +70,11 @@ const Onboarding = () => {
     }
   };
 
+  useEffect(() => {
+    if (location.state?.role) {
+      setRole(location.state.role);
+    }
+  }, [location.state]);
   return (
     <>
       <Navbar />
