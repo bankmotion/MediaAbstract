@@ -101,9 +101,9 @@ const Results = () => {
     ];
     const rows = results.map((outlet) => [
       outlet.name,
-      outlet.contactEmail,
+      outlet.contact_email,
       outlet.url,
-      `${outlet.matchConfidence}%`,
+      `${outlet.match_confidence}%`,
     ]);
 
     const footer = [
@@ -149,64 +149,6 @@ const Results = () => {
         <Typography variant="h5" className={classes.title}>
           Top Matching Outlets
         </Typography>
-
-        {/* <TableContainer component={Paper} className={classes.tableContainer}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell className={classes.tableCell}>
-                  <strong>Outlet</strong>
-                </TableCell>
-                <TableCell className={classes.tableCell}>
-                  <strong>Contact Email (C)</strong>
-                </TableCell>
-                <TableCell className={classes.tableCell}>
-                  <strong>Pitch Link (B)</strong>
-                </TableCell>
-                <TableCell className={classes.tableCell}>
-                  <strong>Match Confidence</strong>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {matches.map((outlet, index) => (
-                <TableRow key={index}>
-                  <TableCell>
-                    <Box display="flex" flexDirection="column">
-                      <Typography>{outlet.name}</Typography>
-                      {outlet.aiPartnered && (
-                        <Tooltip
-                          title="Cited by AI tools for extra reach."
-                          arrow
-                          componentsProps={{
-                            tooltip: { className: classes.customTooltip },
-                          }}
-                        >
-                          <span className={classes.tooltip}>
-                            {" "}
-                            ✓ AI Partnered
-                          </span>
-                        </Tooltip>
-                      )}
-                    </Box>
-                  </TableCell>
-                  <TableCell>{outlet.contactEmail}</TableCell>
-                  <TableCell>
-                    <a
-                      href={outlet.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="text-blue-600 underline"
-                    >
-                      View Pitch Link
-                    </a>
-                  </TableCell>
-                  <TableCell>{outlet.matchConfidence}% Match</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer> */}
 
         {isMobile ? (
           // Mobile: Show stacked cards

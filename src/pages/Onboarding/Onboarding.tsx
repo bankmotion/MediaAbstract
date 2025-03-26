@@ -49,11 +49,12 @@ const Onboarding = () => {
     dispatch(setPitchData({ abstract, industry }));
     dispatch(fetchPitchResults({ abstract, industry }));
 
-    if (role === "writers") {
-      navigate("/results", { state: { role: "writers" } });
-    } else if (role === "agencies") {
-      navigate("/results", { state: { role: "agencies" } });
-    }
+    // if (role === "writers") {
+    //   navigate("/results", { state: { role: "writers" } });
+    // } else if (role === "agencies") {
+    //   navigate("/results", { state: { role: "agencies" } });
+    // }
+    navigate("/results");
   };
 
   const handleRefinePitch = () => {
