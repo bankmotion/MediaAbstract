@@ -13,6 +13,7 @@ import {
   Tooltip,
   useMediaQuery,
   useTheme,
+  CircularProgress,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
@@ -74,7 +75,7 @@ const Results = () => {
   const location = useLocation();
 
   const results = useSelector((state: RootState) => state.pitch.results);
-  console.log("Results:", results);
+  // console.log("Results:", results);
   const status = useSelector((state: RootState) => state.pitch.status);
 
   // const [matches, setMatches] = useState<Outlet[]>([]);
@@ -150,7 +151,25 @@ const Results = () => {
           Top Matching Outlets
         </Typography>
 
-        {isMobile ? (
+        {status === "loading" ? (
+          <Box className="flex justify-center items-center h-40">
+            <CircularProgress size={50} />
+          </Box>
+        ) : results.length === 0 ? (
+          <Box className={classes.noResultsContainer}>
+            <img
+              src="/no-results.svg"
+              alt="No Results"
+              className={classes.noResultsImage}
+            />
+            <Typography variant="h6" className={classes.noResultsMessage}>
+              Oops! No matches found.
+            </Typography>
+            <Typography variant="body2" className={classes.noResultsSubtext}>
+              Try refining your pitch or adjusting keywords for better matches.
+            </Typography>
+          </Box>
+        ) : isMobile ? (
           // Mobile: Show stacked cards
           <Box className={classes.mobileList}>
             {results.map((outlet, index) => (

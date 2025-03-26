@@ -31,6 +31,25 @@ const styles = makeStyles()((theme: any) => ({
       fontSize: "1.6rem",
     },
   },
+
+  noResultsContainer: {
+    textAlign: "center",
+    padding: theme.spacing(4),
+  },
+  noResultsImage: {
+    width: "200px",
+    margin: "0 auto",
+  },
+  noResultsMessage: {
+    marginTop: theme.spacing(2),
+    fontWeight: "bold",
+    color: theme.palette.text.primary,
+  },
+  noResultsSubtext: {
+    marginBottom: theme.spacing(2),
+    color: theme.palette.text.secondary,
+  },
+
   mobileList: {
     display: "flex",
     flexDirection: "column",

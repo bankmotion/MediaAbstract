@@ -39,8 +39,19 @@ const Onboarding = () => {
   const [abstract, setAbstract] = useState("");
   const [industry, setIndustry] = useState("");
   const [role, setRole] = useState("");
+  const [errors, setErrors] = useState({ abstract: false, industry: false });
+
+  const validateFields = () => {
+    const newErrors = {
+      abstract: abstract.trim() === "",
+      industry: industry === "",
+    };
+    setErrors(newErrors);
+    return !newErrors.abstract && !newErrors.industry;
+  };
 
   const handleSubmit = async () => {
+    if (!validateFields()) return;
     // For MVP: Save to localStorage and simulate navigation
     // localStorage.setItem("abstract", abstract);
     // localStorage.setItem("industry", industry);
@@ -88,13 +99,20 @@ const Onboarding = () => {
         </Typography>
         <TextField
           label="Describe Your Pitch Idea (1-2 sentences)"
-          placeholder="E.g., 'AI ethics in healthcare for startups' (1-2 sentences)"
+          // placeholder="E.g., 'AI ethics in healthcare for startups' (1-2 sentences)"
+          placeholder="E.g., 'AI ethics in healthcare for startups' (1-2 sentences). Enter a description with keywords like ‘business’, ‘tech’, or ‘innovation’ for best results"
           multiline
           rows={6}
           fullWidth
           value={abstract}
           onChange={(e) => setAbstract(e.target.value)}
-          helperText={`${abstract.length}/200 words`}
+          // helperText={`${abstract.length}/200 words`}
+          error={errors.abstract}
+          helperText={
+            errors.abstract
+              ? "This field is required."
+              : `${abstract.length}/200 words`
+          }
           className={classes.pitchField}
           margin="normal"
           InputProps={{
@@ -128,6 +146,8 @@ const Onboarding = () => {
           value={industry}
           onChange={(e) => setIndustry(e.target.value)}
           className={classes.audienceOption}
+          error={errors.industry}
+          helperText={errors.industry ? "Please select an audience." : ""}
           SelectProps={{
             MenuProps: {
               PaperProps: {
@@ -156,6 +176,7 @@ const Onboarding = () => {
           color="primary"
           className={classes.subbutton}
           onClick={handleSubmit}
+          // disabled={!abstract.trim() || !industry}
         >
           Submit
         </Button>
