@@ -1,5 +1,5 @@
 // const API_URL = "http://localhost:5000";
-const API_URL = "http://173.225.102.82:8000/";
+const API_URL = "http://173.225.102.82:5000/";
 
 export const submitPitch = async (abstract: string, industry: string) => {
   try {
