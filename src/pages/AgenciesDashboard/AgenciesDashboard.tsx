@@ -1,5 +1,5 @@
 // src/pages/dashboard/AgenciesDashboard.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -130,6 +130,9 @@ const AgenciesDashboard = () => {
     }
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Box className={classes.wrapper}>
       <AppBar

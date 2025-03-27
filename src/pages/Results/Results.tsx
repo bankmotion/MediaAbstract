@@ -16,82 +16,52 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useLocation, useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar/Nabvar";
 // import { fetchResults } from "../../services/api";
 
 import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
+import Navbar from "../../components/Navbar/Nabvar";
+import PublicationDetailsModal from "../../components/PublicationDetailModal/PublicationDetailModal";
+
 import useStyles from "./styles";
 
-// interface Outlet {
-//   name: string;
-//   url: string;
-//   contactEmail: string;
-//   matchConfidence: number;
-//   aiPartnered: boolean;
-// }
-
-// const dummyOutlets: Outlet[] = [
-//   {
-//     name: "TIME",
-//     url: "https://time.com/section/opinion/",
-//     contactEmail: "opinion@time.com",
-//     matchConfidence: 85,
-//     aiPartnered: true,
-//   },
-//   {
-//     name: "The Wall Street Journal",
-//     url: "https://www.wsj.com/articles/oped-guidelines-for-the-wall-street-journal-1384383173",
-//     contactEmail: "wsjcontact@wsj.com",
-//     matchConfidence: 82,
-//     aiPartnered: true,
-//   },
-//   {
-//     name: "Harvard Business Review",
-//     url: "https://hbr.org/guidelines-for-authors-hbr&gt",
-//     contactEmail: "submit@hbr.org",
-//     matchConfidence: 79,
-//     aiPartnered: false,
-//   },
-//   {
-//     name: "Inc42",
-//     url: "https://inc42.com/startup-submission/",
-//     contactEmail: "editorial@inc42.com",
-//     matchConfidence: 73,
-//     aiPartnered: false,
-//   },
-//   {
-//     name: "Wired",
-//     url: "https://www.wired.com/about/how-to-pitch-stories-to-wired/",
-//     contactEmail: "pitch@wired.com",
-//     matchConfidence: 80,
-//     aiPartnered: true,
-//   },
-// ];
+interface Outlet {
+  name: string;
+  guidelines: string;
+  pitchTips: string;
+  editorContact: string;
+}
 
 const Results = () => {
   const { classes } = useStyles();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const results = useSelector((state: RootState) => state.pitch.results);
   // console.log("Results:", results);
   const status = useSelector((state: RootState) => state.pitch.status);
 
-  // const [matches, setMatches] = useState<Outlet[]>([]);
-  const navigate = useNavigate();
-
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [role, setRole] = useState("");
 
-  // useEffect(() => {
-  //   setMatches(dummyOutlets); // Simulate match fetch
-  // }, []);
+  const [selectedOutlet, setSelectedOutlet] = useState<Outlet | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
 
-  // useEffect(() => {
-  //   fetchResults().then(setMatches);
-  // }, []);
+  const handleOpenModal = (outletName: string) => {
+    const outlet = results.find((o) => o.name === outletName);
+
+    if (outlet) {
+      setSelectedOutlet(outlet);
+      setModalOpen(true);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setSelectedOutlet(null);
+    setModalOpen(false);
+  };
 
   const handleExportCSV = () => {
     const headers = [
@@ -128,13 +98,13 @@ const Results = () => {
   };
 
   const handleGoToDashboard = () => {
-    if (role === "writers") {
-      navigate("/writers/dashboard");
-    } else if (role === "agencies") {
-      navigate("/agencies/dashboard");
-    } else {
-      navigate("/");
-    }
+    //if (role === "writers") {
+    //  navigate("/writers/dashboard");
+    //} else if (role === "agencies") {
+    navigate("/agencies/dashboard");
+    //} else {
+    //  navigate("/");
+    //}
   };
 
   useEffect(() => {
@@ -143,6 +113,9 @@ const Results = () => {
     }
   }, [location.state]);
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <Navbar />
@@ -174,7 +147,13 @@ const Results = () => {
           <Box className={classes.mobileList}>
             {results.map((outlet, index) => (
               <Paper key={index} className={classes.mobileCard}>
-                <Typography className={classes.name}>{outlet.name}</Typography>
+                <Typography
+                  className={classes.name}
+                  onClick={() => handleOpenModal(outlet.name)}
+                  style={{ cursor: "pointer", color: "#1976d2" }}
+                >
+                  {outlet.name}
+                </Typography>
                 {outlet.ai_partnered === "Yes" && (
                   <Tooltip title="Cited by AI tools for extra reach." arrow>
                     <span className={classes.tooltip}>✓ AI Partnered</span>
@@ -222,7 +201,12 @@ const Results = () => {
                   <TableRow key={index}>
                     <TableCell>
                       <Box display="flex" flexDirection="column">
-                        <Typography>{outlet.name}</Typography>
+                        <Typography
+                          style={{ cursor: "pointer", color: "#1976d2" }}
+                          onClick={() => handleOpenModal(outlet.name)}
+                        >
+                          {outlet.name}
+                        </Typography>
                         {outlet.ai_partnered === "Yes" && (
                           <Tooltip
                             title="Cited by AI tools for extra reach."
@@ -289,6 +273,12 @@ const Results = () => {
           </Button>
         </Box>
       </Box>
+
+      <PublicationDetailsModal
+        open={modalOpen}
+        handleClose={handleCloseModal}
+        outlet={selectedOutlet}
+      />
     </>
   );
 };

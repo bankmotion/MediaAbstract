@@ -1,5 +1,5 @@
 // src/pages/dashboard/WritersDashboard.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   Button,
@@ -91,6 +91,10 @@ const WritersDashboard = () => {
       setReminderDialogOpen(false);
     }
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Box className={classes.wrapper}>
@@ -257,13 +261,12 @@ const WritersDashboard = () => {
                             marginRight: 1,
                           }}
                         />
-                        <Typography variant="body2">{pitch.status}</Typography>
+                        <Typography variant="body2" color="textSecondary">
+                          {pitch.status}
+                        </Typography>
                       </Box>
                     </Tooltip>
                   </Box>{" "}
-                  {/* <Typography variant="body2" color="textSecondary">
-                    Status: {pitch.status}
-                  </Typography> */}
                   <Typography variant="body2">
                     Matches: {pitch.matches.join(", ")} |{" "}
                     <Button size="small" onClick={() => navigate("/results")}>

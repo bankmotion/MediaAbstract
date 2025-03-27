@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   AppBar,
   Toolbar,
@@ -44,6 +44,9 @@ const Home = () => {
     navigate("/onboarding"); // Redirect to dashboard after login
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Box className={classes.wrapper}>
       <AppBar

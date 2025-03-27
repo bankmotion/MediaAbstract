@@ -127,6 +127,15 @@ const styles = makeStyles()((theme: any) => ({
     fontWeight: 500,
     marginTop: "0",
   },
+  scrollToTopButton: {
+    position: "fixed",
+    bottom: 50,
+    right: 20,
+    zIndex: 1000,
+    backgroundColor: "#1976d2",
+    color: "white",
+    "&:hover": { backgroundColor: "#1565c0" },
+  },
 }));
 
 export default styles;

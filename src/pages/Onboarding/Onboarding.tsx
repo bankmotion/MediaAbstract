@@ -6,7 +6,9 @@ import {
   TextField,
   Typography,
   Link,
+  Fab,
 } from "@mui/material";
+import { KeyboardArrowUp } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
 // import { submitPitch } from "../../services/api";
@@ -40,6 +42,20 @@ const Onboarding = () => {
   const [industry, setIndustry] = useState("");
   const [role, setRole] = useState("");
   const [errors, setErrors] = useState({ abstract: false, industry: false });
+
+  const [showScrollButton, setShowScrollButton] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollButton(window.scrollY > 200);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   const validateFields = () => {
     const newErrors = {
@@ -87,6 +103,10 @@ const Onboarding = () => {
       setRole(location.state.role);
     }
   }, [location.state]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <Navbar />
@@ -189,6 +209,17 @@ const Onboarding = () => {
           Go to Dashboard
         </Button>
       </Box>
+
+      {showScrollButton && (
+        <Fab
+          color="primary"
+          size="small"
+          onClick={scrollToTop}
+          className={classes.scrollToTopButton}
+        >
+          <KeyboardArrowUp />
+        </Fab>
+      )}
     </>
   );
 };
