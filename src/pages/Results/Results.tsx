@@ -22,16 +22,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../redux/store";
 
 import Navbar from "../../components/Navbar/Nabvar";
-import PublicationDetailsModal from "../../components/PublicationDetailModal/PublicationDetailModal";
+import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
 
 import useStyles from "./styles";
-
-interface Outlet {
-  name: string;
-  guidelines: string;
-  pitchTips: string;
-  editorContact: string;
-}
 
 const Results = () => {
   const { classes } = useStyles();
@@ -46,7 +39,7 @@ const Results = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [role, setRole] = useState("");
 
-  const [selectedOutlet, setSelectedOutlet] = useState<Outlet | null>(null);
+  const [selectedOutlet, setSelectedOutlet] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
   const handleOpenModal = (outletName: string) => {
@@ -274,7 +267,7 @@ const Results = () => {
         </Box>
       </Box>
 
-      <PublicationDetailsModal
+      <OutletDetailModal
         open={modalOpen}
         handleClose={handleCloseModal}
         outlet={selectedOutlet}
