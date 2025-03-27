@@ -50,7 +50,7 @@ const OutletDetailModal: React.FC<OutletDetailsModalProps> = ({
           </Typography>
         </Box>
         <Typography className={classes.text}>
-          {outlet.submission_guidelines || "No guidelines available."}
+          {outlet.guidelines || "No guidelines available."}
         </Typography>
         <Divider className={classes.divider} />
 
