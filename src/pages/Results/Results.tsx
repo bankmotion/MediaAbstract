@@ -51,7 +51,7 @@ const Results = () => {
 
   const handleOpenModal = (outletName: string) => {
     const outlet = results.find((o) => o.name === outletName);
-
+    console.log("Outlet", outlet);
     if (outlet) {
       setSelectedOutlet(outlet);
       setModalOpen(true);

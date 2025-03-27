@@ -89,13 +89,13 @@ const Onboarding = () => {
   };
 
   const handleGoToDashboard = () => {
-    if (role === "writers") {
-      navigate("/writers/dashboard");
-    } else if (role === "agencies") {
-      navigate("/agencies/dashboard");
-    } else {
-      navigate("/");
-    }
+    //if (role === "writers") {
+    navigate("/writers/dashboard");
+    //} else if (role === "agencies") {
+    //  navigate("/agencies/dashboard");
+    //} else {
+    //  navigate("/");
+    //}
   };
 
   useEffect(() => {
