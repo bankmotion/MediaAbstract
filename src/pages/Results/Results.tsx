@@ -195,7 +195,11 @@ const Results = () => {
                     <TableCell>
                       <Box display="flex" flexDirection="column">
                         <Typography
-                          style={{ cursor: "pointer", color: "#1976d2" }}
+                          style={{
+                            cursor: "pointer",
+                            color: "#1976d2",
+                            textDecoration: "underline",
+                          }}
                           onClick={() => handleOpenModal(outlet.name)}
                         >
                           {outlet.name}
