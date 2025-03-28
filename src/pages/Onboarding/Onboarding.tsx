@@ -14,7 +14,7 @@ import Navbar from "../../components/Navbar/Nabvar";
 // import { submitPitch } from "../../services/api";
 
 import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { AppDispatch, RootState } from "../../redux/store";
 import { setPitchData, fetchPitchResults } from "../../redux/slices/pitchSlice";
 
 import useStyles from "./styles";

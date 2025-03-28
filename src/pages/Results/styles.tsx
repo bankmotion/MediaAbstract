@@ -123,6 +123,8 @@ const styles = makeStyles()((theme: any) => ({
     fontWeight: 600,
     color: "#1a1a1a",
     marginBottom: theme.spacing(1),
+    textDecoration: "underline",
+
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.1rem",
     },

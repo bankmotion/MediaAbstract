@@ -1,4 +1,4 @@
-// const API_URL = "http://localhost:5000";
+// const API_URL = "http://127.0.0.1:10000";
 const API_URL = "https://mediaabstract-backend.onrender.com";
 
 export const submitPitch = async (abstract: string, industry: string) => {
@@ -12,7 +12,7 @@ export const submitPitch = async (abstract: string, industry: string) => {
       body: JSON.stringify({ abstract, industry }),
     });
 
-    console.log("response", response);
+    // console.log("response", response);
 
     if (!response.ok) {
       const errorText = await response.text();

@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import pitchReducer from "./slices/pitchSlice";
-
+import dashboardReducer from "./slices/dashboardSlice";
 export const store = configureStore({
   reducer: {
     pitch: pitchReducer,
+    dashboard: dashboardReducer,
   },
 });
 

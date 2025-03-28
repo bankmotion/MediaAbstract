@@ -41,8 +41,22 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import { fetchDashboardData } from "../../redux/slices/dashboardSlice";
+
 const WritersDashboard = () => {
   const { classes } = useStyles();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const dashboardResult = useSelector((state: RootState) => state.dashboard);
+  // console.log("Pitches Sent, Matches Found", pitchesSent, matchesFound);
+  console.log("Dashboard Result", dashboardResult);
+
+  useEffect(() => {
+    dispatch(fetchDashboardData());
+  }, [dispatch]);
+
   const navigate = useNavigate();
 
   const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
@@ -198,7 +212,7 @@ const WritersDashboard = () => {
                   color="primary"
                   className={classes.statNumber}
                 >
-                  5
+                  {dashboardResult.pitchesSent}
                 </Typography>
               </CardContent>
             </Card>
@@ -213,7 +227,7 @@ const WritersDashboard = () => {
                   color="primary"
                   className={classes.statNumber}
                 >
-                  15
+                  {dashboardResult.matchesFound}
                 </Typography>
               </CardContent>
             </Card>
