@@ -129,8 +129,8 @@ const styles = makeStyles()((theme: any) => ({
   },
   scrollToTopButton: {
     position: "fixed",
-    bottom: 50,
-    right: 20,
+    bottom: theme.spacing(8),
+    right: theme.spacing(4),
     zIndex: 1000,
     backgroundColor: "#1976d2",
     color: "white",
