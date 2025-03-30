@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-
+import { fetchDashboardDataAPI } from "../../services/api";
 interface DashboardState {
   pitchesSent: number;
   matchesFound: number;
@@ -18,12 +18,9 @@ const initialState: DashboardState = {
 // Fetch dashboard data from backend
 export const fetchDashboardData = createAsyncThunk(
   "dashboard/fetchDashboardData",
+
   async () => {
-    const response = await axios.get(
-      "https://mediaabstract-backend.onrender.com/get_dashboard_data"
-    );
-    console.log("---response: ", response);
-    return response.data;
+    return await fetchDashboardDataAPI();
   }
 );
 

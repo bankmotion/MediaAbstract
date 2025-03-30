@@ -1,3 +1,5 @@
+import axios from "axios";
+
 // const API_URL = "http://127.0.0.1:10000";
 const API_URL = "https://mediaabstract-backend.onrender.com";
 
@@ -11,8 +13,6 @@ export const submitPitch = async (abstract: string, industry: string) => {
       },
       body: JSON.stringify({ abstract, industry }),
     });
-
-    // console.log("response", response);
 
     if (!response.ok) {
       const errorText = await response.text();
@@ -29,4 +29,10 @@ export const submitPitch = async (abstract: string, industry: string) => {
     console.error("Error in submitPitch", error);
     return { error: "Failed to submit pitch" };
   }
+};
+
+export const fetchDashboardDataAPI = async () => {
+  const response = await axios.get(`${API_URL}/get_dashboard_data`);
+  console.log("----response:", response);
+  return response.data;
 };

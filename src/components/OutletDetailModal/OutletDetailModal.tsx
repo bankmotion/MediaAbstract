@@ -9,6 +9,7 @@ import {
   Box,
   Divider,
   IconButton,
+  Link,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import InfoIcon from "@mui/icons-material/Info";
@@ -73,9 +74,11 @@ const OutletDetailModal: React.FC<OutletDetailsModalProps> = ({
             Editor Contact:
           </Typography>
         </Box>
-        <Typography className={classes.text}>
-          {outlet.contact_email || "No contact available."}
-        </Typography>
+        <Link href={"#"} color="primary">
+          <Typography className={classes.text}>
+            {outlet.contact_email || "No contact available."}
+          </Typography>
+        </Link>
       </DialogContent>
 
       {/* Footer */}

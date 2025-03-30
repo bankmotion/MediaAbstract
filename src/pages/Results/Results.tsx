@@ -14,7 +14,13 @@ import {
   useMediaQuery,
   useTheme,
   CircularProgress,
+  Checkbox,
+  Menu,
+  MenuItem,
+  IconButton,
 } from "@mui/material";
+import { MoreVert } from "@mui/icons-material";
+import { ExpandMore } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { fetchResults } from "../../services/api";
 
@@ -39,8 +45,13 @@ const Results = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [role, setRole] = useState("");
 
+  const [selectedOutlets, setSelectedOutlets] = useState<string[]>([]);
   const [selectedOutlet, setSelectedOutlet] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [selectAll, setSelectAll] = useState(false);
+
+  // Dropdown menu state
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleOpenModal = (outletName: string) => {
     const outlet = results.find((o) => o.name === outletName);
@@ -90,11 +101,36 @@ const Results = () => {
     document.body.removeChild(link);
   };
 
+  const handleCheckboxChange = (outletName: string) => {
+    setSelectedOutlets((prev) =>
+      prev.includes(outletName)
+        ? prev.filter((name) => name !== outletName)
+        : [...prev, outletName]
+    );
+  };
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSelectAll = () => {
+    if (selectAll) {
+      setSelectedOutlets([]);
+    } else {
+      setSelectedOutlets(results.map((outlet) => outlet.name));
+    }
+    setSelectAll(!selectAll);
+    handleMenuClose(); // Close menu after selection
+  };
+
   const handleGoToDashboard = () => {
     //if (role === "writers") {
     //  navigate("/writers/dashboard");
     //} else if (role === "agencies") {
-    navigate("/agencies/dashboard");
+    navigate("/writers/dashboard");
     //} else {
     //  navigate("/");
     //}
@@ -135,108 +171,205 @@ const Results = () => {
               Try refining your pitch or adjusting keywords for better matches.
             </Typography>
           </Box>
-        ) : isMobile ? (
-          // Mobile: Show stacked cards
-          <Box className={classes.mobileList}>
-            {results.map((outlet, index) => (
-              <Paper key={index} className={classes.mobileCard}>
-                <Typography
-                  className={classes.name}
-                  onClick={() => handleOpenModal(outlet.name)}
-                  style={{ cursor: "pointer", color: "#1976d2" }}
-                >
-                  {outlet.name}
-                </Typography>
-                {outlet.ai_partnered === "Yes" && (
-                  <Tooltip title="Cited by AI tools for extra reach." arrow>
-                    <span className={classes.tooltip}>✓ AI Partnered</span>
-                  </Tooltip>
-                )}
-                <Typography className={classes.guide}>
-                  Contact: {outlet.contact_email}
-                </Typography>
-                <Typography className={classes.score}>
-                  {outlet.match_confidence}% Match
-                </Typography>
-                <a
-                  href={outlet.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-blue-600 underline"
-                >
-                  View Pitch Link
-                </a>
-              </Paper>
-            ))}
-          </Box>
         ) : (
-          // Desktop: Show table
-          <TableContainer component={Paper} className={classes.tableContainer}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell className={classes.tableCell}>
-                    <strong>Outlet</strong>
-                  </TableCell>
-                  <TableCell className={classes.tableCell}>
-                    <strong>Contact Email (C)</strong>
-                  </TableCell>
-                  <TableCell className={classes.tableCell}>
-                    <strong>Pitch Link (B)</strong>
-                  </TableCell>
-                  <TableCell className={classes.tableCell}>
-                    <strong>Match Confidence</strong>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
+          <>
+            {/* Mobile: Dropdown at the top */}
+            {isMobile && (
+              // <Box display="flex" justifyContent="flex-end" mb={2}>
+              //   <IconButton onClick={handleMenuOpen}>
+              //     <MoreVert />
+              //   </IconButton>
+              //   <Menu
+              //     anchorEl={anchorEl}
+              //     open={Boolean(anchorEl)}
+              //     onClose={handleMenuClose}
+              //   >
+              //     <MenuItem onClick={handleSelectAll}>
+              //       {selectAll ? "Deselect All" : "Select All"}
+              //     </MenuItem>
+              //   </Menu>
+              // </Box>
+
+              <Box sx={{ minWidth: "120px" }}>
+                <Button
+                  variant="outlined"
+                  endIcon={<ExpandMore />}
+                  onClick={handleMenuOpen}
+                  sx={{
+                    minWidth: "120px",
+                    fontSize: "0.9rem",
+                    margin: "0",
+                    padding: "0,5",
+                    marginBottom: "10px",
+                  }} // Ensure button width is fixed
+                >
+                  Select
+                </Button>
+                <Menu
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleMenuClose}
+                  MenuListProps={{ sx: { padding: 0 } }} // Remove extra padding
+                  sx={{ minWidth: "120px" }} // Ensure menu matches button width
+                >
+                  <MenuItem
+                    onClick={handleSelectAll}
+                    dense // Reduce height
+                    sx={{
+                      fontSize: "0.9rem",
+                      paddingY: "0px",
+                      margin: "0",
+                      minWidth: "120px",
+                    }}
+                  >
+                    {selectAll ? "Deselect All" : "Select All"}
+                  </MenuItem>
+                </Menu>
+              </Box>
+            )}
+
+            {isMobile ? (
+              // Mobile: Show stacked cards
+              <Box className={classes.mobileList}>
                 {results.map((outlet, index) => (
-                  <TableRow key={index}>
-                    <TableCell>
-                      <Box display="flex" flexDirection="column">
-                        <Typography
-                          style={{
-                            cursor: "pointer",
-                            color: "#1976d2",
-                            textDecoration: "underline",
-                          }}
-                          onClick={() => handleOpenModal(outlet.name)}
-                        >
-                          {outlet.name}
-                        </Typography>
-                        {outlet.ai_partnered === "Yes" && (
-                          <Tooltip
-                            title="Cited by AI tools for extra reach."
-                            arrow
-                            componentsProps={{
-                              tooltip: { className: classes.customTooltip },
-                            }}
-                          >
-                            <span className={classes.tooltip}>
-                              {" "}
-                              ✓ AI Partnered
-                            </span>
-                          </Tooltip>
-                        )}
-                      </Box>
-                    </TableCell>
-                    <TableCell>{outlet.contact_email}</TableCell>
-                    <TableCell>
-                      <a
-                        href={outlet.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="text-blue-600 underline"
+                  <Paper key={index} className={classes.mobileCard}>
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Typography
+                        className={classes.name}
+                        onClick={() => handleOpenModal(outlet.name)}
+                        style={{ cursor: "pointer", color: "#1976d2" }}
                       >
-                        View Pitch Link
-                      </a>
-                    </TableCell>
-                    <TableCell>{outlet.match_confidence}% Match</TableCell>
-                  </TableRow>
+                        {outlet.name}
+                      </Typography>
+                      <Checkbox
+                        size="small"
+                        checked={selectedOutlets.includes(outlet.name)}
+                        onChange={() => handleCheckboxChange(outlet.name)}
+                      />
+                    </Box>
+                    {outlet.ai_partnered === "Yes" && (
+                      <Tooltip title="Cited by AI tools for extra reach." arrow>
+                        <span className={classes.tooltip}>✓ AI Partnered</span>
+                      </Tooltip>
+                    )}
+                    <Typography className={classes.guide}>
+                      Contact: {outlet.contact_email}
+                    </Typography>
+                    <Typography className={classes.score}>
+                      {outlet.match_confidence}% Match
+                    </Typography>
+                    <a
+                      href={outlet.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-blue-600 underline"
+                    >
+                      View Pitch Link
+                    </a>
+                  </Paper>
                 ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+              </Box>
+            ) : (
+              // Desktop: Show table
+              <TableContainer
+                component={Paper}
+                className={classes.tableContainer}
+              >
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>
+                        {/* Desktop: Dropdown in "Select" Header */}
+                        <Box display="flex" alignItems="center">
+                          <Typography variant="body1">Select</Typography>
+                          <IconButton onClick={handleMenuOpen}>
+                            <MoreVert />
+                          </IconButton>
+                          <Menu
+                            anchorEl={anchorEl}
+                            open={Boolean(anchorEl)}
+                            onClose={handleMenuClose}
+                          >
+                            <MenuItem onClick={handleSelectAll}>
+                              {selectAll ? "Deselect All" : "Select All"}
+                            </MenuItem>
+                          </Menu>
+                        </Box>
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        <strong>Outlet</strong>
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        <strong>Contact Email (C)</strong>
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        <strong>Pitch Link (B)</strong>
+                      </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        <strong>Match Confidence</strong>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {results.map((outlet, index) => (
+                      <TableRow key={index}>
+                        <TableCell>
+                          <Checkbox
+                            checked={selectedOutlets.includes(outlet.name)}
+                            onChange={() => handleCheckboxChange(outlet.name)}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Box display="flex" flexDirection="column">
+                            <Typography
+                              style={{
+                                cursor: "pointer",
+                                color: "#1976d2",
+                                textDecoration: "underline",
+                              }}
+                              onClick={() => handleOpenModal(outlet.name)}
+                            >
+                              {outlet.name}
+                            </Typography>
+                            {outlet.ai_partnered === "Yes" && (
+                              <Tooltip
+                                title="Cited by AI tools for extra reach."
+                                arrow
+                                componentsProps={{
+                                  tooltip: { className: classes.customTooltip },
+                                }}
+                              >
+                                <span className={classes.tooltip}>
+                                  {" "}
+                                  ✓ AI Partnered
+                                </span>
+                              </Tooltip>
+                            )}
+                          </Box>
+                        </TableCell>
+                        <TableCell>{outlet.contact_email}</TableCell>
+                        <TableCell>
+                          <a
+                            href={outlet.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-blue-600 underline"
+                          >
+                            View Pitch Link
+                          </a>
+                        </TableCell>
+                        <TableCell>{outlet.match_confidence}% Match</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            )}
+          </>
         )}
 
         <Box className={classes.actionButtons}>
