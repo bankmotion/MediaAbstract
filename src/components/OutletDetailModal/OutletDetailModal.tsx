@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -10,6 +10,7 @@ import {
   Divider,
   IconButton,
   Link,
+  Snackbar,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import InfoIcon from "@mui/icons-material/Info";
@@ -29,9 +30,16 @@ const OutletDetailModal: React.FC<OutletDetailsModalProps> = ({
   outlet,
 }) => {
   const { classes } = useStyles();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   if (!outlet) return null;
 
+  const handleCopyEmail = () => {
+    if (outlet.contact_email) {
+      navigator.clipboard.writeText(outlet.contact_email);
+      setSnackbarOpen(true);
+    }
+  };
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       {/* Header */}
@@ -74,11 +82,13 @@ const OutletDetailModal: React.FC<OutletDetailsModalProps> = ({
             Editor Contact:
           </Typography>
         </Box>
-        <Link href={"#"} color="primary">
-          <Typography className={classes.text}>
-            {outlet.contact_email || "No contact available."}
-          </Typography>
-        </Link>
+        <Typography
+          className={classes.text}
+          style={{ cursor: "pointer", color: "#1976d2" }}
+          onClick={handleCopyEmail}
+        >
+          {outlet.contact_email || "No contact available."}
+        </Typography>
       </DialogContent>
 
       {/* Footer */}
@@ -92,6 +102,13 @@ const OutletDetailModal: React.FC<OutletDetailsModalProps> = ({
           Close
         </Button>
       </DialogActions>
+
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={() => setSnackbarOpen(false)}
+        message="Email copied to clipboard!"
+      />
     </Dialog>
   );
 };

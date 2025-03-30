@@ -179,6 +179,7 @@ const useStyles = makeStyles()((theme) => ({
     },
   },
   sectionTitle: {
+    marginTop: theme.spacing(4),
     marginBottom: theme.spacing(2),
     fontWeight: 600,
     [theme.breakpoints.down("sm")]: {

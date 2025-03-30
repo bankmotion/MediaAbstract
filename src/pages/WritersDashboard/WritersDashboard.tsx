@@ -17,6 +17,8 @@ import {
   DialogActions,
   TextField,
   IconButton,
+  List,
+  ListItem,
 } from "@mui/material";
 
 import { Chip, Tooltip, Link as MuiLink } from "@mui/material";
@@ -53,6 +55,10 @@ const WritersDashboard = () => {
   // console.log("Pitches Sent, Matches Found", pitchesSent, matchesFound);
   console.log("Dashboard Result", dashboardResult);
 
+  const savedOutlets = useSelector(
+    (state: RootState) => state.savedOutlets.savedOutlets
+  );
+
   useEffect(() => {
     dispatch(fetchDashboardData());
   }, [dispatch]);
@@ -86,7 +92,7 @@ const WritersDashboard = () => {
   ]);
 
   const nextStepsPrompt = [
-    "Follow up on ‘AI for Healthcare’ with Forbes",
+    "Follow up on 'AI for Healthcare' with Forbes",
     "Submit another pitch!",
   ];
 
@@ -158,9 +164,7 @@ const WritersDashboard = () => {
             </Typography>
           </Box>
         </Box>
-
         <Divider className={classes.divider} />
-
         {/* <Box className={classes.nextStepsSection}>
           <Typography variant="h6" className={classes.sectionTitle}>
             Next Steps
@@ -177,7 +181,6 @@ const WritersDashboard = () => {
             </Button>
           </Box>
         </Box> */}
-
         <Box mb={3} className={classes.nextStepsSection}>
           <Typography variant="h6" className={classes.sectionHeader}>
             Next Steps
@@ -188,7 +191,6 @@ const WritersDashboard = () => {
             </Typography>
           ))}
         </Box>
-
         {/* <Box sx={{ textAlign: "center", my: 4 }} className={classes.buttonRow}>
           <Button
             variant="contained"
@@ -200,7 +202,6 @@ const WritersDashboard = () => {
             New Client Pitch
           </Button>
         </Box> */}
-
         <Grid container spacing={3} className={classes.statsSection}>
           <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
             <Card className={classes.statCard}>
@@ -233,7 +234,6 @@ const WritersDashboard = () => {
             </Card>
           </Grid>
         </Grid>
-
         <Box className={classes.buttonContainer}>
           <Button
             variant="contained"
@@ -246,7 +246,6 @@ const WritersDashboard = () => {
             New Pitch
           </Button>
         </Box>
-
         <Typography variant="h6" className={classes.sectionTitle}>
           My Pitches
         </Typography>
@@ -301,6 +300,20 @@ const WritersDashboard = () => {
             </Grid>
           ))}
         </Grid>
+        <Box className="mt-6">
+          <Typography variant="h6" className={classes.sectionTitle}>
+            Saved Outlets
+          </Typography>
+          {savedOutlets.length === 0 ? (
+            <Typography>No saved outlets yet.</Typography>
+          ) : (
+            <List>
+              {savedOutlets.map((outlet, index) => (
+                <ListItem key={index}>{outlet}</ListItem>
+              ))}
+            </List>
+          )}
+        </Box>
 
         <Box mt={4}>
           <Typography variant="h6" className={classes.sectionTitle}>
@@ -316,7 +329,6 @@ const WritersDashboard = () => {
             </CardContent>
           </Card>
         </Box>
-
         <Dialog
           open={reminderDialogOpen}
           onClose={() => setReminderDialogOpen(false)}

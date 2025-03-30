@@ -18,14 +18,16 @@ import {
   Menu,
   MenuItem,
   IconButton,
+  Pagination,
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { ExpandMore } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 // import { fetchResults } from "../../services/api";
 
-import { useSelector } from "react-redux";
-import { RootState } from "../../redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../../redux/store";
+import { saveOutlets } from "../../redux/slices/savePitchSlice";
 
 import Navbar from "../../components/Navbar/Nabvar";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
@@ -36,6 +38,7 @@ const Results = () => {
   const { classes } = useStyles();
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
 
   const results = useSelector((state: RootState) => state.pitch.results);
   // console.log("Results:", results);
@@ -50,8 +53,17 @@ const Results = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectAll, setSelectAll] = useState(false);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const outletsPerPage = 5;
+
   // Dropdown menu state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  // Calculate Pagination
+  const indexOfLastOutlet = currentPage * outletsPerPage;
+  const indexOfFirstOutlet = indexOfLastOutlet - outletsPerPage;
+  const currentOutlets = results.slice(indexOfFirstOutlet, indexOfLastOutlet);
+  const totalPages = Math.ceil(results.length / outletsPerPage);
 
   const handleOpenModal = (outletName: string) => {
     const outlet = results.find((o) => o.name === outletName);
@@ -107,6 +119,13 @@ const Results = () => {
         ? prev.filter((name) => name !== outletName)
         : [...prev, outletName]
     );
+  };
+
+  const handleSaveOutlets = () => {
+    if (selectedOutlets.length > 0) {
+      dispatch(saveOutlets(selectedOutlets));
+      navigate("/writers/dashboard"); // Redirect to Dashboard after saving
+    }
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -231,7 +250,7 @@ const Results = () => {
             {isMobile ? (
               // Mobile: Show stacked cards
               <Box className={classes.mobileList}>
-                {results.map((outlet, index) => (
+                {currentOutlets.map((outlet, index) => (
                   <Paper key={index} className={classes.mobileCard}>
                     <Box
                       display="flex"
@@ -315,7 +334,7 @@ const Results = () => {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {results.map((outlet, index) => (
+                    {currentOutlets.map((outlet, index) => (
                       <TableRow key={index}>
                         <TableCell>
                           <Checkbox
@@ -372,7 +391,7 @@ const Results = () => {
           </>
         )}
 
-        <Box className={classes.actionButtons}>
+        {/* <Box className={classes.actionButtons}>
           <Button
             variant="outlined"
             color="primary"
@@ -380,6 +399,29 @@ const Results = () => {
             onClick={handleExportCSV}
           >
             Export as CSV
+          </Button>
+        </Box> */}
+
+        <Box className={classes.pagination}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={(_, value) => setCurrentPage(value)}
+            color="primary"
+            boundaryCount={isMobile ? 1 : 2}
+            siblingCount={isMobile ? 1 : 1}
+            sx={{ fontSize: isMobile ? "0.75rem" : "1rem" }}
+          />
+        </Box>
+
+        <Box className={classes.actionButtons}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSaveOutlets}
+            disabled={selectedOutlets.length === 0}
+          >
+            Save to Dashboard
           </Button>
         </Box>
 

@@ -206,6 +206,22 @@ const styles = makeStyles()((theme: any) => ({
       alignItems: "stretch",
     },
   },
+  pagination: {
+    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(4),
+    // paddingBottom: theme.spacing(4),
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: theme.spacing(2),
+    flexWrap: "wrap",
+    [theme.breakpoints.down("sm")]: {
+      // margin: theme.spacing(2),
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+  },
 }));
 
 export default styles;
