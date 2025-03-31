@@ -55,8 +55,8 @@ const WritersDashboard = () => {
   // console.log("Pitches Sent, Matches Found", pitchesSent, matchesFound);
   console.log("Dashboard Result", dashboardResult);
 
-  const savedOutlets = useSelector(
-    (state: RootState) => state.savedOutlets.savedOutlets
+  const savedPitches = useSelector(
+    (state: RootState) => state.savedOutlets.savedPitches
   );
 
   useEffect(() => {
@@ -304,12 +304,21 @@ const WritersDashboard = () => {
           <Typography variant="h6" className={classes.sectionTitle}>
             Saved Outlets
           </Typography>
-          {savedOutlets.length === 0 ? (
+          {savedPitches.length === 0 ? (
             <Typography>No saved outlets yet.</Typography>
           ) : (
             <List>
-              {savedOutlets.map((outlet, index) => (
-                <ListItem key={index}>{outlet}</ListItem>
+              {savedPitches.map((pitch, pitchIndex) => (
+                <Box key={pitchIndex} mb={2}>
+                  <Typography variant="subtitle1" fontWeight="bold">
+                    Pitch: {pitch.description}
+                  </Typography>
+                  <List>
+                    {pitch.outlets.map((outlet, outletIndex) => (
+                      <ListItem key={outletIndex}>• {outlet}</ListItem>
+                    ))}
+                  </List>
+                </Box>
               ))}
             </List>
           )}

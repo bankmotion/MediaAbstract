@@ -46,6 +46,7 @@ const Results = () => {
   const results = useSelector((state: RootState) => state.pitch.results);
   // console.log("Results:", results);
   const status = useSelector((state: RootState) => state.pitch.status);
+  const abstract = useSelector((state: RootState) => state.pitch.abstract);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -133,7 +134,12 @@ const Results = () => {
   };
 
   const handleConfirmSave = () => {
-    dispatch(saveOutlets(selectedOutlets));
+    dispatch(
+      saveOutlets({
+        description: abstract,
+        outlets: selectedOutlets,
+      })
+    );
     // navigate("/writers/dashboard");
     setIsConfirmDialogOpen(false);
     setShowSuccessMessage(true);
