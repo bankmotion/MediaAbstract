@@ -47,7 +47,7 @@ const Onboarding = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowScrollButton(window.scrollY > 200);
+      setShowScrollButton(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -98,11 +98,11 @@ const Onboarding = () => {
     //}
   };
 
-  useEffect(() => {
-    if (location.state?.role) {
-      setRole(location.state.role);
-    }
-  }, [location.state]);
+  // useEffect(() => {
+  //   if (location.state?.role) {
+  //     setRole(location.state.role);
+  //   }
+  // }, [location.state]);
 
   useEffect(() => {
     window.scrollTo(0, 0);

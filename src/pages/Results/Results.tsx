@@ -22,6 +22,8 @@ import {
 } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { ExpandMore } from "@mui/icons-material";
+import { Snackbar, Alert } from "@mui/material";
+
 import { useLocation, useNavigate } from "react-router-dom";
 // import { fetchResults } from "../../services/api";
 
@@ -60,6 +62,7 @@ const Results = () => {
 
   // Dropdown menu state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   // Calculate Pagination
   const indexOfLastOutlet = currentPage * outletsPerPage;
@@ -131,7 +134,13 @@ const Results = () => {
 
   const handleConfirmSave = () => {
     dispatch(saveOutlets(selectedOutlets));
-    navigate("/writers/dashboard");
+    // navigate("/writers/dashboard");
+    setIsConfirmDialogOpen(false);
+    setShowSuccessMessage(true);
+  };
+
+  const handleCloseSuccess = () => {
+    setShowSuccessMessage(false);
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -452,6 +461,21 @@ const Results = () => {
         confirmText="Confirm"
         cancelText="Cancel"
       />
+
+      <Snackbar
+        open={showSuccessMessage}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          Outlets saved to Dashboard!
+        </Alert>
+      </Snackbar>
     </>
   );
 };
