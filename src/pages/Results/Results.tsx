@@ -31,6 +31,7 @@ import { saveOutlets } from "../../redux/slices/savePitchSlice";
 
 import Navbar from "../../components/Navbar/Nabvar";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
+import ConfirmationModal from "../../components/ConfirmationModal/ConfirmationModal";
 
 import useStyles from "./styles";
 
@@ -48,6 +49,7 @@ const Results = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [role, setRole] = useState("");
 
+  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedOutlets, setSelectedOutlets] = useState<string[]>([]);
   const [selectedOutlet, setSelectedOutlet] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -123,9 +125,13 @@ const Results = () => {
 
   const handleSaveOutlets = () => {
     if (selectedOutlets.length > 0) {
-      dispatch(saveOutlets(selectedOutlets));
-      navigate("/writers/dashboard"); // Redirect to Dashboard after saving
+      setIsConfirmDialogOpen(true);
     }
+  };
+
+  const handleConfirmSave = () => {
+    dispatch(saveOutlets(selectedOutlets));
+    navigate("/writers/dashboard");
   };
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -194,21 +200,6 @@ const Results = () => {
           <>
             {/* Mobile: Dropdown at the top */}
             {isMobile && (
-              // <Box display="flex" justifyContent="flex-end" mb={2}>
-              //   <IconButton onClick={handleMenuOpen}>
-              //     <MoreVert />
-              //   </IconButton>
-              //   <Menu
-              //     anchorEl={anchorEl}
-              //     open={Boolean(anchorEl)}
-              //     onClose={handleMenuClose}
-              //   >
-              //     <MenuItem onClick={handleSelectAll}>
-              //       {selectAll ? "Deselect All" : "Select All"}
-              //     </MenuItem>
-              //   </Menu>
-              // </Box>
-
               <Box sx={{ minWidth: "120px" }}>
                 <Button
                   variant="outlined"
@@ -450,6 +441,16 @@ const Results = () => {
         open={modalOpen}
         handleClose={handleCloseModal}
         outlet={selectedOutlet}
+      />
+
+      <ConfirmationModal
+        open={isConfirmDialogOpen}
+        onClose={() => setIsConfirmDialogOpen(false)}
+        onConfirm={handleConfirmSave}
+        title="Confirm Save"
+        description="Are you sure you want to save the selected outlets to your dashboard?"
+        confirmText="Confirm"
+        cancelText="Cancel"
       />
     </>
   );
