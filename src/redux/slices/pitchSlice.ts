@@ -45,6 +45,7 @@ const pitchSlice = createSlice({
       .addCase(fetchPitchResults.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.results = action.payload;
+        // console.log("result:", state.results);
       })
       .addCase(fetchPitchResults.rejected, (state, action) => {
         state.status = "failed";

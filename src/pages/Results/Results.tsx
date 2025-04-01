@@ -69,6 +69,7 @@ const Results = () => {
   const indexOfLastOutlet = currentPage * outletsPerPage;
   const indexOfFirstOutlet = indexOfLastOutlet - outletsPerPage;
   const currentOutlets = results.slice(indexOfFirstOutlet, indexOfLastOutlet);
+  // console.log("currentOutlets:", currentOutlets);
   const totalPages = Math.ceil(results.length / outletsPerPage);
 
   const handleOpenModal = (outletName: string) => {
@@ -268,27 +269,29 @@ const Results = () => {
                         onClick={() => handleOpenModal(outlet.name)}
                         style={{ cursor: "pointer", color: "#1976d2" }}
                       >
-                        {outlet.name}
+                        {outlet.outlet.name}
                       </Typography>
                       <Checkbox
                         size="small"
-                        checked={selectedOutlets.includes(outlet.name)}
-                        onChange={() => handleCheckboxChange(outlet.name)}
+                        checked={selectedOutlets.includes(outlet.outlet.name)}
+                        onChange={() =>
+                          handleCheckboxChange(outlet.outlet.name)
+                        }
                       />
                     </Box>
-                    {outlet.ai_partnered === "Yes" && (
+                    {outlet.outlet.ai_partnered === "Yes" && (
                       <Tooltip title="Cited by AI tools for extra reach." arrow>
                         <span className={classes.tooltip}>✓ AI Partnered</span>
                       </Tooltip>
                     )}
                     <Typography className={classes.guide}>
-                      Contact: {outlet.contact_email}
+                      Contact: {outlet.outlet.contact_email}
                     </Typography>
                     <Typography className={classes.score}>
                       {outlet.match_confidence}% Match
                     </Typography>
                     <a
-                      href={outlet.url}
+                      href={outlet.outlet.url}
                       target="_blank"
                       rel="noreferrer"
                       className="text-blue-600 underline"
@@ -344,8 +347,12 @@ const Results = () => {
                       <TableRow key={index}>
                         <TableCell>
                           <Checkbox
-                            checked={selectedOutlets.includes(outlet.name)}
-                            onChange={() => handleCheckboxChange(outlet.name)}
+                            checked={selectedOutlets.includes(
+                              outlet.outlet.name
+                            )}
+                            onChange={() =>
+                              handleCheckboxChange(outlet.outlet.name)
+                            }
                           />
                         </TableCell>
                         <TableCell>
@@ -356,11 +363,13 @@ const Results = () => {
                                 color: "#1976d2",
                                 textDecoration: "underline",
                               }}
-                              onClick={() => handleOpenModal(outlet.name)}
+                              onClick={() =>
+                                handleOpenModal(outlet.outlet.name)
+                              }
                             >
-                              {outlet.name}
+                              {outlet.outlet.name}
                             </Typography>
-                            {outlet.ai_partnered === "Yes" && (
+                            {outlet.outlet.ai_partnered === "Yes" && (
                               <Tooltip
                                 title="Cited by AI tools for extra reach."
                                 arrow
@@ -376,10 +385,10 @@ const Results = () => {
                             )}
                           </Box>
                         </TableCell>
-                        <TableCell>{outlet.contact_email}</TableCell>
+                        <TableCell>{outlet.outlet.contact_email}</TableCell>
                         <TableCell>
                           <a
-                            href={outlet.url}
+                            href={outlet.outlet.url}
                             target="_blank"
                             rel="noreferrer"
                             className="text-blue-600 underline"
