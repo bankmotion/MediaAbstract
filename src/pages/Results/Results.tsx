@@ -29,7 +29,10 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
-import { saveOutlets } from "../../redux/slices/savePitchSlice";
+import {
+  // saveOutlets,
+  saveSelectedOutlets,
+} from "../../redux/slices/savePitchSlice";
 
 import Navbar from "../../components/Navbar/Nabvar";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
@@ -135,8 +138,14 @@ const Results = () => {
   };
 
   const handleConfirmSave = () => {
+    // dispatch(
+    //   saveOutlets({
+    //     description: abstract,
+    //     outlets: selectedOutlets,
+    //   })
+    // );
     dispatch(
-      saveOutlets({
+      saveSelectedOutlets({
         description: abstract,
         outlets: selectedOutlets,
       })

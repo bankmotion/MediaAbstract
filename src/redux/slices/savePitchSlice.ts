@@ -1,58 +1,78 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { saveSelectedOutletsAPI } from "../../services/api";
+import { fetchSavedOutletsAPI } from "../../services/api";
 interface SavedPitch {
   description: string;
   outlets: string[];
 }
 interface PitchState {
-  results: any[];
-  savedPitches: SavedPitch[]; // Added saved outlets
-  status: "idle" | "loading" | "failed";
+  description: string;
+  outlets: string[];
+  results: SavedPitch[];
+  status: "idle" | "loading" | "succeeded" | "failed";
+  error: string | null;
 }
 
 const initialState: PitchState = {
+  description: "",
+  outlets: [],
   results: [],
-  savedPitches: [],
   status: "idle",
+  error: null,
 };
 
+export const saveSelectedOutlets = createAsyncThunk(
+  "pitch/saveSelectedOutlets",
+  async ({
+    description,
+    outlets,
+  }: {
+    description: string;
+    outlets: string[];
+  }) => {
+    const response = await saveSelectedOutletsAPI(description, outlets);
+    console.log("=response=", response.data);
+    return response.data;
+  }
+);
+
+export const fetchSavedOutlets = createAsyncThunk(
+  "savedOutlets/fetchSavedOutlets",
+  async () => {
+    return await fetchSavedOutletsAPI();
+  }
+);
+
 const savePitchSlice = createSlice({
-  name: "pitch",
+  name: "saveOutlets",
   initialState,
-  reducers: {
-    saveOutlets: (
-      state,
-      action: PayloadAction<{ description: string; outlets: string[] }>
-    ) => {
-      const existingPitchIndex = state.savedPitches.findIndex(
-        (pitch) => pitch.description === action.payload.description
-      );
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(saveSelectedOutlets.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(saveSelectedOutlets.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.results = action.payload;
+      })
+      .addCase(saveSelectedOutlets.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something went wrong";
+      })
 
-      if (existingPitchIndex >= 0) {
-        // Update existing pitch outlets
-        const existingOutlets = new Set(
-          state.savedPitches[existingPitchIndex].outlets
-        );
-        const newOutlets = action.payload.outlets.filter(
-          (outlet) => !existingOutlets.has(outlet)
-        );
-
-        if (newOutlets.length > 0) {
-          state.savedPitches[existingPitchIndex].outlets = [
-            ...state.savedPitches[existingPitchIndex].outlets,
-            ...newOutlets,
-          ];
-        }
-      } else {
-        // Add new pitch
-        state.savedPitches.push({
-          description: action.payload.description,
-          outlets: action.payload.outlets,
-        });
-      }
-    },
+      .addCase(fetchSavedOutlets.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchSavedOutlets.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.results = action.payload;
+      })
+      .addCase(fetchSavedOutlets.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something went wrong";
+      });
   },
 });
-
-export const { saveOutlets } = savePitchSlice.actions;
+// export const { saveOutlets } = savePitchSlice.actions;
 export default savePitchSlice.reducer;

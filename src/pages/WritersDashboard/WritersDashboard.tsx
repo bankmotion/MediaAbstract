@@ -22,13 +22,6 @@ import {
 } from "@mui/material";
 
 import { Chip, Tooltip, Link as MuiLink } from "@mui/material";
-import {
-  Timeline,
-  TimelineItem,
-  TimelineSeparator,
-  TimelineDot,
-  TimelineContent,
-} from "@mui/lab";
 import { useState } from "react";
 import {
   Logout,
@@ -46,21 +39,21 @@ import useStyles from "./styles";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchDashboardData } from "../../redux/slices/dashboardSlice";
+import { fetchSavedOutlets } from "../../redux/slices/savePitchSlice";
 
 const WritersDashboard = () => {
   const { classes } = useStyles();
 
   const dispatch = useDispatch<AppDispatch>();
   const dashboardResult = useSelector((state: RootState) => state.dashboard);
-  // console.log("Pitches Sent, Matches Found", pitchesSent, matchesFound);
-  console.log("Dashboard Result", dashboardResult);
+  const savedPitches =
+    useSelector((state: RootState) => state.savedOutlets.results) || [];
 
-  const savedPitches = useSelector(
-    (state: RootState) => state.savedOutlets.savedPitches
-  );
+  console.log("Saved Pitches: ", savedPitches);
 
   useEffect(() => {
     dispatch(fetchDashboardData());
+    dispatch(fetchSavedOutlets());
   }, [dispatch]);
 
   const navigate = useNavigate();
@@ -165,22 +158,6 @@ const WritersDashboard = () => {
           </Box>
         </Box>
         <Divider className={classes.divider} />
-        {/* <Box className={classes.nextStepsSection}>
-          <Typography variant="h6" className={classes.sectionTitle}>
-            Next Steps
-          </Typography>
-          <Typography>{nextStepsPrompt}</Typography>
-          <Box mt={2}>
-            <Button
-              variant="contained"
-              color="secondary"
-              size="large"
-              onClick={() => navigate("/onboarding")}
-            >
-              New Pitch
-            </Button>
-          </Box>
-        </Box> */}
         <Box mb={3} className={classes.nextStepsSection}>
           <Typography variant="h6" className={classes.sectionHeader}>
             Next Steps
@@ -191,17 +168,7 @@ const WritersDashboard = () => {
             </Typography>
           ))}
         </Box>
-        {/* <Box sx={{ textAlign: "center", my: 4 }} className={classes.buttonRow}>
-          <Button
-            variant="contained"
-            //color="primary"
-            size="large"
-            className={classes.newPitchBtn}
-            onClick={() => navigate("/onboarding")}
-          >
-            New Client Pitch
-          </Button>
-        </Box> */}
+
         <Grid container spacing={3} className={classes.statsSection}>
           <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
             <Card className={classes.statCard}>
@@ -304,7 +271,7 @@ const WritersDashboard = () => {
           <Typography variant="h6" className={classes.sectionTitle}>
             Saved Outlets
           </Typography>
-          {savedPitches.length === 0 ? (
+          {/* {savedPitches.length === 0 ? (
             <Typography>No saved outlets yet.</Typography>
           ) : (
             <List>
@@ -320,6 +287,28 @@ const WritersDashboard = () => {
                   </List>
                 </Box>
               ))}
+            </List>
+          )} */}
+
+          {Array.isArray(savedPitches) && savedPitches.length === 0 ? (
+            <Typography>No saved outlets yet.</Typography>
+          ) : (
+            <List>
+              {Array.isArray(savedPitches) &&
+                savedPitches.map((pitch, pitchIndex) => (
+                  <Box key={pitchIndex} mb={2}>
+                    <Typography variant="subtitle1" fontWeight="bold">
+                      Pitch: {pitch.description}{" "}
+                      {/* Use pitch_id instead of description */}
+                    </Typography>
+                    <List>
+                      {Array.isArray(pitch.outlets) &&
+                        pitch.outlets.map((outlet, outletIndex) => (
+                          <ListItem key={outletIndex}>• {outlet}</ListItem>
+                        ))}
+                    </List>
+                  </Box>
+                ))}
             </List>
           )}
         </Box>

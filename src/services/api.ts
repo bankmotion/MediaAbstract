@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const API_URL = "http://127.0.0.1:10000";
-const API_URL = "https://mediaabstract-backend.onrender.com";
+const API_URL = "http://127.0.0.1:10000";
+// const API_URL = "https://mediaabstract-backend.onrender.com";
 
 export const submitPitch = async (abstract: string, industry: string) => {
   try {
@@ -33,6 +33,24 @@ export const submitPitch = async (abstract: string, industry: string) => {
 
 export const fetchDashboardDataAPI = async () => {
   const response = await axios.get(`${API_URL}/get_dashboard_data`);
+  // console.log("----response:", response);
+  return response.data;
+};
+
+export const fetchSavedOutletsAPI = async () => {
+  const response = await axios.get(`${API_URL}/get_saved_outlets`);
   console.log("----response:", response);
+  return response.data;
+};
+
+export const saveSelectedOutletsAPI = async (
+  description: string,
+  outlets: string[]
+) => {
+  const response = await axios.post(`${API_URL}/save_selected_outlets`, {
+    description: description,
+    outlets: outlets,
+  });
+  console.log("=======response: ", response.data);
   return response.data;
 };
