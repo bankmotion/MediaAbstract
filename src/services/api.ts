@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// const API_URL = "http://127.0.0.1:10000";
-const API_URL = "https://mediaabstract-backend.onrender.com";
+const API_URL = "http://127.0.0.1:10000";
+// const API_URL = "https://mediaabstract-backend.onrender.com";
 
 export const submitPitch = async (abstract: string, industry: string) => {
   try {

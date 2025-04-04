@@ -14,7 +14,7 @@ import Navbar from "../../components/Navbar/Nabvar";
 // import { submitPitch } from "../../services/api";
 
 import { useDispatch } from "react-redux";
-import { AppDispatch, RootState } from "../../redux/store";
+import { AppDispatch } from "../../redux/store";
 import { setPitchData, fetchPitchResults } from "../../redux/slices/pitchSlice";
 
 import useStyles from "./styles";
@@ -35,12 +35,12 @@ const Onboarding = () => {
   const { classes } = useStyles();
 
   const navigate = useNavigate();
-  const location = useLocation();
+  // const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
 
   const [abstract, setAbstract] = useState("");
   const [industry, setIndustry] = useState("");
-  const [role, setRole] = useState("");
+  // const [role, setRole] = useState("");
   const [errors, setErrors] = useState({ abstract: false, industry: false });
 
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -68,11 +68,6 @@ const Onboarding = () => {
 
   const handleSubmit = async () => {
     if (!validateFields()) return;
-    // For MVP: Save to localStorage and simulate navigation
-    // localStorage.setItem("abstract", abstract);
-    // localStorage.setItem("industry", industry);
-    // const a = await submitPitch(abstract, industry);
-
     dispatch(setPitchData({ abstract, industry }));
     dispatch(fetchPitchResults({ abstract, industry }));
 

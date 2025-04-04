@@ -12,12 +12,25 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../../Navbar/Nabvar";
 import WelcomeModal from "../../../WelcomeModal/WelcomeModal";
 import useStyles from "./styles";
+import { createCheckSeesion } from "../../../../services/auth";
 
 const planOptions = [
   //{ label: "Writer - $15/month", value: "writer" },
-  { label: "Agency & Team - $75: 1 user, 5 matches", value: "agency75" },
-  { label: "Agency & Team - $150: 3 users, 15 matches", value: "agency150" },
-  { label: "Agency & Team - $250: unlimited, priority", value: "agency250" },
+  {
+    priceId: "1",
+    label: "Agency & Team - $75: 1 user, 5 matches",
+    value: "agency75",
+  },
+  {
+    priceId: "2",
+    label: "Agency & Team - $150: 3 users, 15 matches",
+    value: "agency150",
+  },
+  {
+    priceId: "3",
+    label: "Agency & Team - $250: unlimited, priority",
+    value: "agency250",
+  },
 ];
 
 const Signup = () => {
@@ -27,9 +40,34 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [plan, setPlan] = useState("");
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const handleSignup = () => {
-    setShowWelcomeModal(true);
+  const handleSignup = async () => {
+    //setShowWelcomeModal(true);
+    if (!email || !password || !plan) {
+      alert("Please fill in all fields before processing.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const selectedPlan = planOptions.find((opt) => opt.value === plan);
+      if (!selectedPlan) {
+        alert("Invalid plan selection");
+        return;
+      }
+
+      await createCheckSeesion(email, password, selectedPlan.priceId);
+    } catch (error) {
+      console.error("Signup error:", error);
+      if (error instanceof Error) {
+        alert(error.message);
+      } else {
+        alert("An unexpected error occurred.");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleContinue = () => {
@@ -103,7 +141,7 @@ const Signup = () => {
             onClick={handleSignup}
             className={classes.signupButton}
           >
-            Sign Up
+            {loading ? "Processing..." : "Sign Up & Pay"}
           </Button>
 
           <Typography className={classes.noteText}>

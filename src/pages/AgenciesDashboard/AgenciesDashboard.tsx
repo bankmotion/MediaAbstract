@@ -9,12 +9,7 @@ import {
   Grid,
   AppBar,
   Toolbar,
-  Chip,
-  Divider,
-  Stack,
-  Tooltip,
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
@@ -27,17 +22,10 @@ import {
   Logout,
   Assessment,
   Download,
-  Circle,
   CalendarToday,
   Close,
 } from "@mui/icons-material";
-import {
-  Timeline,
-  TimelineItem,
-  TimelineSeparator,
-  TimelineDot,
-  TimelineContent,
-} from "@mui/lab";
+
 import useStyles from "./styles";
 
 const AgenciesDashboard = () => {

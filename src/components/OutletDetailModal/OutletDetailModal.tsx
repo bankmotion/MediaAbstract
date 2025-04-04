@@ -9,7 +9,6 @@ import {
   Box,
   Divider,
   IconButton,
-  Link,
   Snackbar,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";

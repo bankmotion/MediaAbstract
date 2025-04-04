@@ -12,16 +12,15 @@ import {
   AppBar,
   Toolbar,
   Dialog,
-  DialogTitle,
   DialogContent,
   DialogActions,
   TextField,
   IconButton,
   List,
   ListItem,
+  Tooltip,
 } from "@mui/material";
 
-import { Chip, Tooltip, Link as MuiLink } from "@mui/material";
 import { useState } from "react";
 import {
   Logout,

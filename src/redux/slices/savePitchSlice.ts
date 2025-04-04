@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { saveSelectedOutletsAPI } from "../../services/api";
 import { fetchSavedOutletsAPI } from "../../services/api";
 interface SavedPitch {

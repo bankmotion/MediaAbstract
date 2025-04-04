@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { fetchDashboardDataAPI } from "../../services/api";
 interface DashboardState {
   pitchesSent: number;

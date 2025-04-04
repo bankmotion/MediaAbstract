@@ -40,9 +40,6 @@ const Home = () => {
       navigate("/agenciesintro");
     }
   };
-  const handleLogin = () => {
-    navigate("/onboarding"); // Redirect to dashboard after login
-  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
