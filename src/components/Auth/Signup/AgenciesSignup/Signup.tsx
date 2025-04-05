@@ -43,7 +43,7 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSignup = async () => {
-    //setShowWelcomeModal(true);
+    setShowWelcomeModal(true);
     if (!email || !password || !plan) {
       alert("Please fill in all fields before processing.");
       return;
