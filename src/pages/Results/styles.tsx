@@ -119,7 +119,7 @@ const styles = makeStyles()((theme: any) => ({
   },
 
   name: {
-    fontSize: "1.25rem",
+    fontSize: "1.1rem",
     fontWeight: 600,
     color: "#1a1a1a",
     marginBottom: theme.spacing(1),

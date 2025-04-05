@@ -194,6 +194,7 @@ const Results = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <>
       <Navbar />
@@ -371,9 +372,8 @@ const Results = () => {
                                 color: "#1976d2",
                                 textDecoration: "underline",
                               }}
-                              onClick={() =>
-                                handleOpenModal(outlet.outlet.name)
-                              }
+                              className={classes.name}
+                              onClick={() => handleOpenModal(outlet.name)}
                             >
                               {outlet.outlet.name}
                             </Typography>
