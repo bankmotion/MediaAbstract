@@ -203,28 +203,151 @@ const useStyles = makeStyles()((theme) => ({
       fontSize: "1rem",
     },
   },
-  // statIcon: {
-  //   fontSize: 36,
-  //   color: theme.palette.primary.main,
-  //   marginBottom: theme.spacing(1),
-  //   [theme.breakpoints.down("sm")]: {
-  //     fontSize: 30,
-  //   },
-  // },
-  // statNumber: {
-  //   fontSize: "2rem",
-  //   fontWeight: 600,
-  //   marginTop: theme.spacing(1),
-  //   [theme.breakpoints.down("sm")]: {
-  //     fontSize: "1.6rem",
-  //   },
-  // },
+  pitchStatus: {
+    width: 10,
+    height: 10,
+    borderRadius: "50%",
+    marginRight: 1,
+  },
   activityTimeline: {
-    paddingLeft: 0, // remove extra left padding if needed
+    paddingLeft: 0,
     marginTop: theme.spacing(2),
   },
   activityItem: {
     alignItems: "flex-start",
+  },
+  savedOutletsSection: {
+    marginTop: theme.spacing(4),
+  },
+  savedOutletsGrid: {
+    display: "grid",
+    paddingLeft: "15px",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: theme.spacing(4),
+    [theme.breakpoints.down("md")]: {
+      gridTemplateColumns: "repeat(2, 1fr)",
+    },
+    [theme.breakpoints.down("sm")]: {
+      display: "flex",
+      flexDirection: "column",
+      gridTemplateColumns: "100%",
+      gap: theme.spacing(2),
+      marginTop: "10px",
+    },
+  },
+  savedPitchCard: {
+    minHeight: "200px",
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+    transition: "transform 0.2s, box-shadow 0.2s",
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+    },
+    [theme.breakpoints.down("sm")]: {
+      minHeight: "0px",
+    },
+  },
+  savedPitchHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(2),
+    borderBottom: "1px solid rgba(0,0,0,0.08)",
+    cursor: "pointer",
+  },
+  savedPitchTitle: {
+    flex: 1,
+    fontWeight: 600,
+    fontSize: "1.1rem",
+    color: theme.palette.text.primary,
+  },
+  savedPitchIcon: {
+    color: theme.palette.primary.main,
+    marginRight: theme.spacing(1),
+  },
+  savedPitchDropdown: {
+    color: theme.palette.text.secondary,
+    transition: "transform 0.2s",
+    "&.expanded": {
+      transform: "rotate(180deg)",
+    },
+  },
+  savedOutletsList: {
+    padding: theme.spacing(1),
+    maxHeight: 0,
+    overflow: "hidden",
+    transition: "max-height 0.3s ease-out, padding 0.3s ease-out",
+    "&.expanded": {
+      maxHeight: "500px",
+      padding: theme.spacing(2),
+    },
+    "&.initial": {
+      maxHeight: "100px",
+      padding: theme.spacing(2),
+    },
+  },
+  savedOutletItem: {
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(1),
+    borderRadius: 8,
+    cursor: "pointer",
+    transition: "background-color 0.2s",
+    "&:hover": {
+      backgroundColor: "rgba(0,0,0,0.04)",
+    },
+  },
+  savedOutletName: {
+    color: theme.palette.primary.main,
+    textDecoration: "none",
+    "&:hover": {
+      textDecoration: "underline",
+      color: theme.palette.primary.dark,
+    },
+  },
+  emptyStateCard: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: theme.spacing(4),
+    backgroundColor: "#f8f9fa",
+    borderRadius: 12,
+    textAlign: "center",
+  },
+  emptyStateIcon: {
+    fontSize: 48,
+    color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(2),
+  },
+  emptyStateText: {
+    color: theme.palette.text.secondary,
+    marginBottom: theme.spacing(2),
+  },
+  moreButton: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: theme.spacing(1),
+    color: theme.palette.primary.main,
+    cursor: "pointer",
+    "&:hover": {
+      color: theme.palette.primary.dark,
+    },
+  },
+  moreButtonText: {
+    marginRight: theme.spacing(1),
+    fontSize: "0.9rem",
+  },
+  moreButtonIcon: {
+    transition: "transform 0.2s",
+    "&.expanded": {
+      transform: "rotate(180deg)",
+    },
   },
 }));
 
