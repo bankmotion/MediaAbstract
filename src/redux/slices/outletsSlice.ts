@@ -49,7 +49,6 @@ const outletsSlice = createSlice({
       .addCase(fetchAllOutlets.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.outlets = action.payload;
-        console.log("========**outlets:", state.outlets);
       })
       .addCase(fetchAllOutlets.rejected, (state, action) => {
         state.status = "failed";

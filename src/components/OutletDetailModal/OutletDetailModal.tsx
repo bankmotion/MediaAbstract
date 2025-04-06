@@ -28,7 +28,6 @@ const OutletDetailModal: React.FC<OutletDetailsModalProps> = ({
   handleClose,
   outlet,
 }) => {
-  console.log("*outlet", outlet);
   const { classes } = useStyles();
   const [snackbarOpen, setSnackbarOpen] = useState(false);
 

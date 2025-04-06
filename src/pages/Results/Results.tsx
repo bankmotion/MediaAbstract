@@ -76,7 +76,7 @@ const Results = () => {
 
   const handleOpenModal = (outletName: string) => {
     const outlet = results.find((o) => o.outlet.name === outletName);
-    console.log("Outlet", outlet);
+
     if (outlet) {
       setSelectedOutlet(outlet.outlet);
       setModalOpen(true);
@@ -137,12 +137,6 @@ const Results = () => {
   };
 
   const handleConfirmSave = () => {
-    // dispatch(
-    //   saveOutlets({
-    //     description: abstract,
-    //     outlets: selectedOutlets,
-    //   })
-    // );
     dispatch(
       saveSelectedOutlets({
         description: abstract,
@@ -236,7 +230,7 @@ const Results = () => {
                     margin: "0",
                     padding: "0,5",
                     marginBottom: "10px",
-                  }} // Ensure button width is fixed
+                  }}
                 >
                   Select
                 </Button>
@@ -249,7 +243,7 @@ const Results = () => {
                 >
                   <MenuItem
                     onClick={handleSelectAll}
-                    dense // Reduce height
+                    dense
                     sx={{
                       fontSize: "0.9rem",
                       paddingY: "0px",

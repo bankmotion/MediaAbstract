@@ -135,8 +135,7 @@ const styles = makeStyles()((theme: any) => ({
     backgroundColor: "#1976d2",
     color: "white",
     "&:hover": { backgroundColor: "#1565c0" },
-
-    display: "flex", // Add this to ensure visibility
+    display: "flex",
   },
 }));
 

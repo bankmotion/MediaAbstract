@@ -36,13 +36,13 @@ export const submitPitch = async (abstract: string, industry: string) => {
 
 export const fetchDashboardDataAPI = async () => {
   const response = await axios.get(`${API_URL}/get_dashboard_data`);
-  // console.log("----response:", response);
+
   return response.data;
 };
 
 export const fetchSavedOutletsAPI = async () => {
   const response = await axios.get(`${API_URL}/get_saved_outlets`);
-  console.log("----response:", response);
+
   return response.data;
 };
 
@@ -54,12 +54,12 @@ export const saveSelectedOutletsAPI = async (
     description: description,
     outlets: outlets,
   });
-  console.log("=======response: ", response.data);
+
   return response.data;
 };
 
 export const fetchAllOutletsAPI = async () => {
   const response = await axios.get(`${API_URL}/get_all_outlets`);
-  console.log("*response:", response);
+
   return response.data;
 };
