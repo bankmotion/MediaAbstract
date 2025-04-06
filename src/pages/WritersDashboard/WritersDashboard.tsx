@@ -41,6 +41,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchDashboardData } from "../../redux/slices/dashboardSlice";
 import { fetchSavedOutlets } from "../../redux/slices/savePitchSlice";
+import { fetchAllOutlets } from "../../redux/slices/outletsSlice";
+import { Outlet } from "../../redux/slices/outletsSlice";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -51,20 +53,20 @@ const WritersDashboard = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const dispatch = useDispatch<AppDispatch>();
+
+  const allOutlets = useSelector(
+    (state: RootState) => state.allOutlets.outlets
+  );
+  console.log("+++++**outlets:", allOutlets);
   const dashboardResult = useSelector((state: RootState) => state.dashboard);
   const savedPitches =
     useSelector((state: RootState) => state.savedOutlets.results) || [];
 
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedOutlet, setSelectedOutlet] = useState<any>(null);
+  const [selectedOutlet, setSelectedOutlet] = useState<Outlet | null>(null);
   const [expandedOutlets, setExpandedOutlets] = useState<number[]>([]);
 
   console.log("Saved Pitches: ", savedPitches);
-
-  useEffect(() => {
-    dispatch(fetchDashboardData());
-    dispatch(fetchSavedOutlets());
-  }, [dispatch]);
 
   const navigate = useNavigate();
 
@@ -124,15 +126,12 @@ const WritersDashboard = () => {
   };
 
   const handleOpenModal = (outletName: string) => {
-    const mockOutlet = {
-      name: outletName,
-      guidelines: "Guidelines for " + outletName,
-      pitch_tips: "Tips for pitching to " + outletName,
-      contact_email:
-        "contact@" + outletName.toLowerCase().replace(/\s+/g, "") + ".com",
-    };
-    setSelectedOutlet(mockOutlet);
-    setModalOpen(true);
+    const outlet = allOutlets.find((p) => p.name === outletName);
+    console.log("777Outlet", outlet);
+    if (outlet) {
+      setSelectedOutlet(outlet);
+      setModalOpen(true);
+    }
   };
 
   const handleCloseModal = () => {
@@ -143,6 +142,12 @@ const WritersDashboard = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchDashboardData());
+    dispatch(fetchSavedOutlets());
+    dispatch(fetchAllOutlets());
+  }, [dispatch]);
 
   return (
     <Box className={classes.wrapper}>

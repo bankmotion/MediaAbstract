@@ -3,8 +3,8 @@ import axios from "axios";
 // const API_URL = "http://127.0.0.1:10000";
 // const API_URL = "https://mediaabstract-backend.onrender.com";
 
-// const API_URL = "http://146.190.131.130:10000";
-const API_URL = "https://backend.writefor.co/";
+const API_URL = "http://146.190.131.130:10000";
+// const API_URL = "https://backend.writefor.co/";
 
 export const submitPitch = async (abstract: string, industry: string) => {
   try {
@@ -55,5 +55,11 @@ export const saveSelectedOutletsAPI = async (
     outlets: outlets,
   });
   console.log("=======response: ", response.data);
+  return response.data;
+};
+
+export const fetchAllOutletsAPI = async () => {
+  const response = await axios.get(`${API_URL}/get_all_outlets`);
+  console.log("*response:", response);
   return response.data;
 };

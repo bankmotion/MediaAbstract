@@ -4,6 +4,15 @@ import { fetchSavedOutletsAPI } from "../../services/api";
 interface SavedPitch {
   description: string;
   outlets: string[];
+  // outletDetails?: {
+  //   [key: string]: {
+  //     guidelines?: string;
+  //     pitch_tips?: string;
+  //     contact_email?: string;
+  //     url?: string;
+  //     match_confidence?: number;
+  //   };
+  // };
 }
 interface PitchState {
   description: string;

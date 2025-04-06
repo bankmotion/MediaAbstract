@@ -47,7 +47,7 @@ const Results = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const results = useSelector((state: RootState) => state.pitch.results);
-  // console.log("Results:", results);
+  console.log("Results:", results);
   const status = useSelector((state: RootState) => state.pitch.status);
   const abstract = useSelector((state: RootState) => state.pitch.abstract);
 
@@ -75,10 +75,10 @@ const Results = () => {
   const totalPages = Math.ceil(results.length / outletsPerPage);
 
   const handleOpenModal = (outletName: string) => {
-    const outlet = results.find((o) => o.name === outletName);
+    const outlet = results.find((o) => o.outlet.name === outletName);
     console.log("Outlet", outlet);
     if (outlet) {
-      setSelectedOutlet(outlet);
+      setSelectedOutlet(outlet.outlet);
       setModalOpen(true);
     }
   };
@@ -169,10 +169,10 @@ const Results = () => {
     if (selectAll) {
       setSelectedOutlets([]);
     } else {
-      setSelectedOutlets(results.map((outlet) => outlet.name));
+      setSelectedOutlets(results.map((outlet) => outlet.outlet.name));
     }
     setSelectAll(!selectAll);
-    handleMenuClose(); // Close menu after selection
+    handleMenuClose();
   };
 
   const handleGoToDashboard = () => {
@@ -244,8 +244,8 @@ const Results = () => {
                   anchorEl={anchorEl}
                   open={Boolean(anchorEl)}
                   onClose={handleMenuClose}
-                  MenuListProps={{ sx: { padding: 0 } }} // Remove extra padding
-                  sx={{ minWidth: "120px" }} // Ensure menu matches button width
+                  MenuListProps={{ sx: { padding: 0 } }}
+                  sx={{ minWidth: "120px" }}
                 >
                   <MenuItem
                     onClick={handleSelectAll}
@@ -275,7 +275,7 @@ const Results = () => {
                     >
                       <Typography
                         className={classes.name}
-                        onClick={() => handleOpenModal(outlet.name)}
+                        onClick={() => handleOpenModal(outlet.outlet.name)}
                         style={{ cursor: "pointer", color: "#1976d2" }}
                       >
                         {outlet.outlet.name}
@@ -373,7 +373,9 @@ const Results = () => {
                                 textDecoration: "underline",
                               }}
                               className={classes.name}
-                              onClick={() => handleOpenModal(outlet.name)}
+                              onClick={() =>
+                                handleOpenModal(outlet.outlet.name)
+                              }
                             >
                               {outlet.outlet.name}
                             </Typography>
