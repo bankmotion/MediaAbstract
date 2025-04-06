@@ -13,8 +13,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
 // import { submitPitch } from "../../services/api";
 
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "../../redux/store";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
 import { setPitchData, fetchPitchResults } from "../../redux/slices/pitchSlice";
 
 import useStyles from "./styles";
@@ -38,8 +38,14 @@ const Onboarding = () => {
   // const location = useLocation();
   const dispatch = useDispatch<AppDispatch>();
 
-  const [abstract, setAbstract] = useState("");
-  const [industry, setIndustry] = useState("");
+  // Get pitch data from Redux state
+  const { abstract: savedAbstract, industry: savedIndustry } = useSelector(
+    (state: RootState) => state.pitch
+  );
+
+  // Initialize state with saved values
+  const [abstract, setAbstract] = useState(savedAbstract || "");
+  const [industry, setIndustry] = useState(savedIndustry || "");
   // const [role, setRole] = useState("");
   const [errors, setErrors] = useState({ abstract: false, industry: false });
 
@@ -115,7 +121,7 @@ const Onboarding = () => {
         <TextField
           label="Describe Your Pitch Idea (1-2 sentences)"
           // placeholder="E.g., 'AI ethics in healthcare for startups' (1-2 sentences)"
-          placeholder="E.g., 'AI ethics in healthcare for startups' (1-2 sentences). Enter a description with keywords like ‘business’, ‘tech’, or ‘innovation’ for best results"
+          placeholder="E.g., 'AI ethics in healthcare for startups' (1-2 sentences). Enter a description with keywords like 'business', 'tech', or 'innovation' for best results"
           multiline
           rows={6}
           fullWidth

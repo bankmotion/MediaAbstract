@@ -170,13 +170,12 @@ const Results = () => {
   };
 
   const handleGoToDashboard = () => {
-    //if (role === "writers") {
-    //  navigate("/writers/dashboard");
-    //} else if (role === "agencies") {
     navigate("/writers/dashboard");
-    //} else {
-    //  navigate("/");
-    //}
+  };
+
+  const handlePitchAgain = () => {
+    // Navigate back to Onboarding with preserved data
+    navigate("/onboarding");
   };
 
   // useEffect(() => {
@@ -449,7 +448,7 @@ const Results = () => {
             variant="contained"
             color="primary"
             className={classes.exportcsvButton}
-            onClick={() => navigate("/onboarding")}
+            onClick={handlePitchAgain}
           >
             Pitch Again
           </Button>

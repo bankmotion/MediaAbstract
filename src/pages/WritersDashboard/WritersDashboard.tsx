@@ -57,7 +57,6 @@ const WritersDashboard = () => {
   const allOutlets = useSelector(
     (state: RootState) => state.allOutlets.outlets
   );
-  console.log("+++++**outlets:", allOutlets);
   const dashboardResult = useSelector((state: RootState) => state.dashboard);
   const savedPitches =
     useSelector((state: RootState) => state.savedOutlets.results) || [];
@@ -127,7 +126,6 @@ const WritersDashboard = () => {
 
   const handleOpenModal = (outletName: string) => {
     const outlet = allOutlets.find((p) => p.name === outletName);
-    console.log("777Outlet", outlet);
     if (outlet) {
       setSelectedOutlet(outlet);
       setModalOpen(true);
