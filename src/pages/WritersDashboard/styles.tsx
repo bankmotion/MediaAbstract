@@ -180,10 +180,11 @@ const useStyles = makeStyles()((theme) => ({
   },
   sectionTitle: {
     marginTop: theme.spacing(4),
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(4),
     fontWeight: 600,
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.2rem",
+      marginBottom: theme.spacing(2),
     },
   },
   pitchCard: {
@@ -236,7 +237,7 @@ const useStyles = makeStyles()((theme) => ({
     },
   },
   savedPitchCard: {
-    minHeight: "200px",
+    minHeight: "210px",
     backgroundColor: "#fff",
     borderRadius: 12,
     boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
@@ -332,7 +333,8 @@ const useStyles = makeStyles()((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
-    padding: theme.spacing(1),
+    padding: theme.spacing(1.5),
+    // margin: theme.spacing(1),
     color: theme.palette.primary.main,
     cursor: "pointer",
     "&:hover": {

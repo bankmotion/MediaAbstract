@@ -409,7 +409,7 @@ const WritersDashboard = () => {
           )}
         </Box>
 
-        <Box mt={4}>
+        {/* <Box mt={4}>
           <Typography variant="h6" className={classes.sectionTitle}>
             Activity
           </Typography>
@@ -422,7 +422,7 @@ const WritersDashboard = () => {
               ))}
             </CardContent>
           </Card>
-        </Box>
+        </Box> */}
         <Dialog
           open={reminderDialogOpen}
           onClose={() => setReminderDialogOpen(false)}
