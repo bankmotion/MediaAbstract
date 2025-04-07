@@ -51,11 +51,22 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   body: {
-    padding: theme.spacing(2, 2),
     display: "flex",
     flexDirection: "column",
-    marginBottom: "20px",
-    // maxWidth: "1000px",
+    alignItems: "center",
+    maxWidth: "1200px",
+    padding: theme.spacing(6, 2),
+    paddingTop: "80px",
+    margin: "0 auto",
+    textAlign: "center",
+    overflow: "hidden",
+    backgroundColor: "#f9f9f9",
+
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(4, 1),
+      margin: theme.spacing(1),
+      paddingTop: "40px",
+    },
   },
   bodyHeader: {
     display: "flex",
@@ -215,7 +226,20 @@ const useStyles = makeStyles()((theme) => ({
     marginTop: theme.spacing(2),
   },
   activityItem: {
+    display: "flex",
     alignItems: "flex-start",
+    gap: theme.spacing(1.5),
+    padding: theme.spacing(1.5),
+    borderRadius: "8px",
+    transition: "all 0.2s ease",
+    cursor: "pointer",
+    marginBottom: theme.spacing(1),
+    border: "1px solid transparent",
+    "&:hover": {
+      backgroundColor: "rgba(25, 118, 210, 0.04)",
+      border: "1px solid rgba(25, 118, 210, 0.1)",
+      transform: "translateX(4px)",
+    },
   },
   savedOutletsSection: {
     marginTop: theme.spacing(4),
@@ -349,6 +373,122 @@ const useStyles = makeStyles()((theme) => ({
     transition: "transform 0.2s",
     "&.expanded": {
       transform: "rotate(180deg)",
+    },
+  },
+
+  dashboardLayout: {
+    display: "grid",
+    gridTemplateColumns: "1fr 300px",
+    gap: theme.spacing(3),
+    width: "100%",
+    alignItems: "start",
+    [theme.breakpoints.down("md")]: {
+      gridTemplateColumns: "1fr",
+    },
+  },
+
+  mainContent: {
+    width: "100%",
+  },
+
+  activitySidebar: {
+    position: "sticky",
+    top: "80px",
+    backgroundColor: "#fff",
+    borderRadius: "16px",
+    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
+    overflow: "hidden",
+    transition: "all 0.3s ease",
+    border: "1px solid rgba(0,0,0,0.05)",
+    "&:hover": {
+      boxShadow: "0 6px 24px rgba(0,0,0,0.12)",
+    },
+    [theme.breakpoints.down("md")]: {
+      position: "relative",
+      top: 0,
+      marginBottom: theme.spacing(4),
+      order: -1, // This will move it to the top on mobile
+    },
+  },
+
+  activityHeader: {
+    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+    color: "#fff",
+    padding: theme.spacing(2.5, 2),
+    display: "flex",
+    alignItems: "center",
+    gap: theme.spacing(1.5),
+    borderBottom: "1px solid rgba(255,255,255,0.1)",
+  },
+
+  activityContent: {
+    padding: theme.spacing(2),
+    maxHeight: "calc(100vh - 200px)",
+    overflowY: "auto",
+    "&::-webkit-scrollbar": {
+      width: "6px",
+    },
+    "&::-webkit-scrollbar-track": {
+      background: "#f1f1f1",
+      borderRadius: "3px",
+    },
+    "&::-webkit-scrollbar-thumb": {
+      background: "#888",
+      borderRadius: "3px",
+      "&:hover": {
+        background: "#666",
+      },
+    },
+    [theme.breakpoints.down("md")]: {
+      maxHeight: "300px",
+    },
+    [theme.breakpoints.down("sm")]: {
+      maxHeight: "280px",
+    },
+  },
+
+  activityIcon: {
+    color: theme.palette.primary.main,
+    backgroundColor: "rgba(25, 118, 210, 0.08)",
+    padding: theme.spacing(1),
+    borderRadius: "10px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    transition: "all 0.2s ease",
+    "& svg": {
+      fontSize: "1.2rem",
+    },
+    "&:hover": {
+      backgroundColor: "rgba(25, 118, 210, 0.12)",
+      transform: "scale(1.05)",
+    },
+  },
+
+  activityText: {
+    flex: 1,
+    "& .action": {
+      fontWeight: 500,
+      color: theme.palette.text.primary,
+      marginBottom: theme.spacing(0.5),
+    },
+    "& .timestamp": {
+      color: theme.palette.text.secondary,
+      fontSize: "0.85rem",
+      display: "flex",
+      alignItems: "center",
+      gap: theme.spacing(0.5),
+    },
+  },
+
+  noActivity: {
+    padding: theme.spacing(4),
+    textAlign: "center",
+    color: theme.palette.text.secondary,
+    "& svg": {
+      fontSize: "2.5rem",
+      marginBottom: theme.spacing(1),
+      color: theme.palette.primary.light,
     },
   },
 }));
