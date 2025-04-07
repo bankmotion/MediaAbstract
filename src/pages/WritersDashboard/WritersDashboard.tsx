@@ -314,45 +314,49 @@ const WritersDashboard = () => {
               ))}
             </Box>
 
-            <Grid container spacing={3} className={classes.statsSection}>
-              <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
+            <Box className={classes.statsSection}>
+              <Box className={classes.statGrid}>
                 <Card className={classes.statCard}>
                   <CardContent>
-                    <Send className={classes.statIcon} />
-                    <Typography variant="h6">Pitches Sent</Typography>
-                    <Typography
-                      variant="h4"
-                      color="primary"
-                      className={classes.statNumber}
-                    >
+                    <Box className={classes.statIcon}>
+                      <Send />
+                    </Box>
+                    <Typography variant="h4" className={classes.statNumber}>
                       {dashboardResult.pitchesSent}
                     </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-              <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
-                <Card className={classes.statCard}>
-                  <CardContent>
-                    <CheckCircle className={classes.statIcon} />
-                    <Typography variant="h6">Matches Found</Typography>
-                    <Typography
-                      variant="h4"
-                      color="primary"
-                      className={classes.statNumber}
-                    >
-                      {dashboardResult.matchesFound}
+                    <Typography variant="h6" className={classes.statLabel}>
+                      Pitches Sent
                     </Typography>
                   </CardContent>
                 </Card>
-              </Grid>
-            </Grid>
+              </Box>
+              <Box className={classes.statGrid}>
+                <Card className={classes.statCard}>
+                  <CardContent>
+                    <Box className={classes.statIcon}>
+                      <CheckCircle />
+                    </Box>
+                    <Typography variant="h4" className={classes.statNumber}>
+                      {dashboardResult.matchesFound}
+                    </Typography>
+                    <Typography variant="h6" className={classes.statLabel}>
+                      Matches Found
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Box>
+            </Box>
 
             <Box className={classes.buttonContainer}>
+              <Typography variant="h6" className={classes.sectionTitle}>
+                <EditNoteIcon />
+                My Pitches
+              </Typography>
               <Button
                 variant="contained"
                 color="primary"
                 size="large"
-                className={classes.actionButton}
+                className={classes.pitchActionButton}
                 startIcon={<AddCircleOutlineIcon />}
                 onClick={() => navigate("/onboarding")}
               >
@@ -360,55 +364,76 @@ const WritersDashboard = () => {
               </Button>
             </Box>
 
-            <Typography variant="h6" className={classes.sectionTitle}>
-              My Pitches
-            </Typography>
-            <Grid container spacing={2}>
+            <Grid
+              container
+              spacing={3}
+              sx={{
+                display: "grid",
+                gridTemplateColumns: {
+                  xs: "1fr",
+                  sm: "1fr 1fr",
+                  md: "1fr 1fr 1fr",
+                },
+                gap: 3,
+              }}
+            >
               {pitches.map((pitch) => (
-                <Grid item xs={12} sm={6} md={4} key={pitch.id}>
+                <Grid item key={pitch.id}>
                   <Card className={classes.pitchCard}>
-                    <CardContent>
-                      <Box
-                        display="flex"
-                        justifyContent="space-between"
-                        alignItems="center"
-                      >
+                    <CardContent className={classes.pitchCardContent}>
+                      <Box className={classes.pitchHeader}>
                         <Typography className={classes.pitchTitle}>
                           {pitch.title}
                         </Typography>
-                        <Tooltip title={pitch.status}>
-                          <Box display="flex" alignItems="center">
-                            <Box
-                              sx={{
-                                backgroundColor:
-                                  pitch.status === "Matched" ? "green" : "blue",
-                              }}
-                              className={classes.pitchStatus}
-                            />
-                            <Typography variant="body2" color="textSecondary">
-                              {pitch.status}
-                            </Typography>
-                          </Box>
-                        </Tooltip>
-                      </Box>{" "}
-                      <Typography variant="body2">
-                        Matches: {pitch.matches.join(", ")} |{" "}
-                        <Button
-                          size="small"
-                          onClick={() => navigate("/results")}
+                        <Box
+                          className={`${
+                            classes.pitchStatus
+                          } ${pitch.status.toLowerCase()}`}
                         >
-                          See Matches
-                        </Button>
-                      </Typography>
-                      <Typography variant="body2">
-                        Follow-Up: {pitch.followUp} |{" "}
-                        <Button
-                          size="small"
-                          onClick={() => handleOpenReminderDialog(pitch.id)}
-                        >
-                          Set Reminder
-                        </Button>
-                      </Typography>
+                          <Box
+                            className={`${
+                              classes.pitchStatusDot
+                            } ${pitch.status.toLowerCase()}`}
+                          />
+                          {pitch.status}
+                        </Box>
+                      </Box>
+                      <Box className={classes.pitchMatches}>
+                        <Box className={classes.matchList}>
+                          {pitch.matches.map((match, index) => (
+                            <Box key={index} className={classes.matchItem}>
+                              <Typography variant="body2">
+                                {match.split(" (")[0]}
+                                <Typography
+                                  component="span"
+                                  className={classes.matchScore}
+                                >
+                                  {" "}
+                                  ({match.split("(")[1]}
+                                </Typography>
+                              </Typography>
+                            </Box>
+                          ))}
+                        </Box>
+                        <Box className={classes.pitchActions}>
+                          <Button
+                            variant="text"
+                            size="small"
+                            className={`${classes.pitchActionButton} primary`}
+                            onClick={() => navigate("/results")}
+                          >
+                            See Matches
+                          </Button>
+                          <Button
+                            variant="text"
+                            size="small"
+                            className={`${classes.pitchActionButton} secondary`}
+                            onClick={() => handleOpenReminderDialog(pitch.id)}
+                          >
+                            Set Reminder
+                          </Button>
+                        </Box>
+                      </Box>
                     </CardContent>
                   </Card>
                 </Grid>
@@ -434,7 +459,7 @@ const WritersDashboard = () => {
                     color="primary"
                     startIcon={<AddCircleOutlineIcon />}
                     onClick={() => navigate("/onboarding")}
-                    className={classes.actionButton}
+                    className={classes.pitchActionButton}
                   >
                     Create New Pitch
                   </Button>
