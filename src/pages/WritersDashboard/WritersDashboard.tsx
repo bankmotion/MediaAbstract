@@ -48,6 +48,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import MenuIcon from "@mui/icons-material/Menu";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import DescriptionIcon from "@mui/icons-material/Description";
 
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
@@ -441,116 +442,90 @@ const WritersDashboard = () => {
             </Grid>
 
             <Box className={classes.savedOutletsSection}>
-              <Typography variant="h6" className={classes.sectionTitle}>
+              <Typography variant="h5" className={classes.sectionTitle}>
                 Saved Outlets
               </Typography>
-              {Array.isArray(savedPitches) && savedPitches.length === 0 ? (
-                <Card className={classes.emptyStateCard}>
-                  <Inbox className={classes.emptyStateIcon} />
-                  <Typography
-                    variant="body1"
-                    className={classes.emptyStateText}
-                  >
-                    No saved outlets yet. Start by pitching your ideas to find
-                    matching outlets!
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<AddCircleOutlineIcon />}
-                    onClick={() => navigate("/onboarding")}
-                    className={classes.pitchActionButton}
-                  >
-                    Create New Pitch
-                  </Button>
-                </Card>
-              ) : (
-                <Grid
-                  item
-                  container
-                  spacing={2}
-                  className={classes.savedOutletsGrid}
-                >
-                  {Array.isArray(savedPitches) &&
-                    savedPitches.map((pitch, pitchIndex) => (
-                      <Grid key={pitchIndex}>
-                        <Card className={classes.savedPitchCard}>
-                          <Box
-                            className={classes.savedPitchHeader}
-                            onClick={() =>
-                              isMobile && handleToggleOutlets(pitchIndex)
-                            }
-                          >
-                            <Info className={classes.savedPitchIcon} />
-                            <Typography className={classes.savedPitchTitle}>
-                              {pitch.description}
-                            </Typography>
-                            {isMobile && (
-                              <ExpandMore
-                                className={`${classes.savedPitchDropdown} ${
-                                  expandedOutlets.includes(pitchIndex)
-                                    ? "expanded"
-                                    : ""
-                                }`}
-                              />
-                            )}
-                          </Box>
-                          <Box
-                            className={`${classes.savedOutletsList} ${
-                              !isMobile || expandedOutlets.includes(pitchIndex)
-                                ? expandedOutlets.includes(pitchIndex)
-                                  ? "expanded"
-                                  : "initial"
+              <Box className={classes.savedOutletsGrid}>
+                {savedPitches.map((pitch, pitchIndex) => (
+                  <Box key={pitchIndex} className={classes.savedPitchCard}>
+                    <Box
+                      className={classes.savedPitchHeader}
+                      onClick={() =>
+                        isMobile && handleToggleOutlets(pitchIndex)
+                      }
+                    >
+                      <DescriptionIcon className={classes.savedPitchIcon} />
+                      <Typography className={classes.savedPitchTitle}>
+                        {pitch.description}
+                      </Typography>
+                      {isMobile && (
+                        <KeyboardArrowDownIcon
+                          className={`${classes.savedPitchDropdown} ${
+                            expandedOutlets.includes(pitchIndex)
+                              ? "expanded"
+                              : ""
+                          }`}
+                        />
+                      )}
+                    </Box>
+                    <Box
+                      className={`${classes.savedOutletsList} ${
+                        !isMobile || expandedOutlets.includes(pitchIndex)
+                          ? "expanded"
+                          : ""
+                      }`}
+                    >
+                      {Array.isArray(pitch.outlets) &&
+                        pitch.outlets
+                          .slice(
+                            0,
+                            isMobile || expandedOutlets.includes(pitchIndex)
+                              ? pitch.outlets.length
+                              : 2
+                          )
+                          .map((outlet, outletIndex) => (
+                            <Box
+                              key={outletIndex}
+                              className={classes.savedOutletItem}
+                              onClick={() => handleOpenModal(outlet)}
+                            >
+                              <Typography className={classes.savedOutletName}>
+                                {outlet}
+                              </Typography>
+                            </Box>
+                          ))}
+                      {!isMobile && pitch.outlets.length > 2 && (
+                        <Box
+                          className={classes.moreButton}
+                          onClick={() => handleToggleOutlets(pitchIndex)}
+                        >
+                          <Typography className={classes.moreButtonText}>
+                            {expandedOutlets.includes(pitchIndex)
+                              ? "Show Less"
+                              : `Show ${pitch.outlets.length - 2} More`}
+                          </Typography>
+                          <KeyboardArrowDownIcon
+                            className={`${classes.moreButtonIcon} ${
+                              expandedOutlets.includes(pitchIndex)
+                                ? "expanded"
                                 : ""
                             }`}
-                          >
-                            {Array.isArray(pitch.outlets) &&
-                              pitch.outlets
-                                .slice(
-                                  0,
-                                  isMobile ||
-                                    expandedOutlets.includes(pitchIndex)
-                                    ? pitch.outlets.length
-                                    : 2
-                                )
-                                .map((outlet, outletIndex) => (
-                                  <Box
-                                    key={outletIndex}
-                                    className={classes.savedOutletItem}
-                                    onClick={() => handleOpenModal(outlet)}
-                                  >
-                                    <Typography
-                                      className={classes.savedOutletName}
-                                    >
-                                      {outlet}
-                                    </Typography>
-                                  </Box>
-                                ))}
-                            {!isMobile && pitch.outlets.length > 2 && (
-                              <Box
-                                className={classes.moreButton}
-                                onClick={() => handleToggleOutlets(pitchIndex)}
-                              >
-                                <Typography className={classes.moreButtonText}>
-                                  {expandedOutlets.includes(pitchIndex)
-                                    ? "Show Less"
-                                    : `Show ${pitch.outlets.length - 2} More`}
-                                </Typography>
-                                <KeyboardArrowDown
-                                  className={`${classes.moreButtonIcon} ${
-                                    expandedOutlets.includes(pitchIndex)
-                                      ? "expanded"
-                                      : ""
-                                  }`}
-                                />
-                              </Box>
-                            )}
-                          </Box>
-                        </Card>
-                      </Grid>
-                    ))}
-                </Grid>
-              )}
+                          />
+                        </Box>
+                      )}
+                    </Box>
+                  </Box>
+                ))}
+                {savedPitches.length === 0 && (
+                  <Box className={classes.emptyStateCard}>
+                    <DescriptionIcon className={classes.emptyStateIcon} />
+                    <Typography variant="h6" className={classes.emptyStateText}>
+                      No saved outlets yet. Start by saving some outlets to your
+                      pitches!
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
             </Box>
           </Box>
 
