@@ -43,6 +43,11 @@ import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import SearchIcon from "@mui/icons-material/Search";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import MenuIcon from "@mui/icons-material/Menu";
+import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
@@ -250,12 +255,34 @@ const WritersDashboard = () => {
       <Box className={classes.body}>
         <Box className={classes.bodyHeader}>
           <Box className={classes.userInfo}>
-            <Avatar className={classes.avatar}>
+            <Avatar
+              className={classes.avatar}
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+              alt="User Avatar"
+            >
               <PersonIcon />
             </Avatar>
             <Typography className={classes.welcomeText}>
-              Welcome, Jane
+              Welcome back, Jane
             </Typography>
+          </Box>
+          <Box className={classes.userStats}>
+            <Box className={classes.statItem}>
+              <Typography className={classes.statValue}>
+                {dashboardResult.pitchesSent}
+              </Typography>
+              <Typography className={classes.statLabel}>
+                Pitches Sent
+              </Typography>
+            </Box>
+            <Box className={classes.statItem}>
+              <Typography className={classes.statValue}>
+                {dashboardResult.matchesFound}
+              </Typography>
+              <Typography className={classes.statLabel}>
+                Matches Found
+              </Typography>
+            </Box>
           </Box>
         </Box>
         <Divider className={classes.divider} />
