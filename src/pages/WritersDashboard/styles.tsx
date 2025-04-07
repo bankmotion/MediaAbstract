@@ -4,8 +4,8 @@ import { makeStyles } from "tss-react/mui";
 const useStyles = makeStyles()((theme) => ({
   wrapper: {
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    // flexDirection: "column",
+    // minHeight: "100vh",
     background: "linear-gradient(to right, #fdfbfb, #ebedee)",
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(10),
@@ -18,9 +18,12 @@ const useStyles = makeStyles()((theme) => ({
     display: "flex",
     height: "60px",
     position: "fixed",
-    top: "0",
+    top: 0,
+    left: 0,
+    right: 0,
     background: "#fff",
-    zIndex: 1000,
+    zIndex: 1200,
+    boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
   },
   toolbar: {
     display: "flex",
@@ -105,19 +108,17 @@ const useStyles = makeStyles()((theme) => ({
   body: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center",
+    width: "100%",
     maxWidth: "1200px",
-    padding: theme.spacing(6, 2),
-    paddingTop: "80px",
     margin: "0 auto",
-    textAlign: "center",
-    overflow: "hidden",
+    padding: theme.spacing(3, 2),
+    paddingTop: "80px",
     backgroundColor: "#f9f9f9",
-
+    position: "relative",
+    minHeight: "calc(100vh - 60px)",
     [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(4, 1),
-      margin: theme.spacing(1),
-      paddingTop: "40px",
+      padding: theme.spacing(2, 1),
+      paddingTop: "76px",
     },
   },
   bodyHeader: {
@@ -541,8 +542,11 @@ const useStyles = makeStyles()((theme) => ({
     gap: theme.spacing(3),
     width: "100%",
     alignItems: "start",
+    position: "relative",
+    minHeight: "calc(100vh - 140px)",
     [theme.breakpoints.down("md")]: {
       gridTemplateColumns: "1fr",
+      minHeight: "auto",
     },
   },
 
@@ -553,20 +557,25 @@ const useStyles = makeStyles()((theme) => ({
   activitySidebar: {
     position: "sticky",
     top: "80px",
+    height: "calc(100vh - 140px)",
     backgroundColor: "#fff",
     borderRadius: "16px",
     boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
     overflow: "hidden",
     transition: "all 0.3s ease",
     border: "1px solid rgba(0,0,0,0.05)",
+    display: "flex",
+    flexDirection: "column",
+    alignSelf: "flex-start",
     "&:hover": {
       boxShadow: "0 6px 24px rgba(0,0,0,0.12)",
     },
     [theme.breakpoints.down("md")]: {
       position: "relative",
       top: 0,
-      marginBottom: theme.spacing(4),
-      order: -1, // This will move it to the top on mobile
+      height: "auto",
+      marginBottom: theme.spacing(3),
+      order: -1,
     },
   },
 
@@ -578,12 +587,19 @@ const useStyles = makeStyles()((theme) => ({
     alignItems: "center",
     gap: theme.spacing(1.5),
     borderBottom: "1px solid rgba(255,255,255,0.1)",
+    position: "sticky",
+    top: 0,
+    zIndex: 1,
+    [theme.breakpoints.down("md")]: {
+      position: "relative",
+    },
   },
 
   activityContent: {
     padding: theme.spacing(2),
-    maxHeight: "calc(100vh - 200px)",
+    flex: 1,
     overflowY: "auto",
+    height: "calc(100vh - 240px)",
     "&::-webkit-scrollbar": {
       width: "6px",
     },
@@ -599,10 +615,12 @@ const useStyles = makeStyles()((theme) => ({
       },
     },
     [theme.breakpoints.down("md")]: {
+      height: "auto",
       maxHeight: "300px",
     },
     [theme.breakpoints.down("sm")]: {
-      maxHeight: "280px",
+      maxHeight: "270px",
+      padding: theme.spacing(1.5),
     },
   },
 
