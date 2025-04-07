@@ -39,6 +39,10 @@ import {
 } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import SearchIcon from "@mui/icons-material/Search";
 
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
@@ -134,9 +138,23 @@ const WritersDashboard = () => {
     },
   ]);
 
-  const nextStepsPrompt = [
-    "Follow up on 'AI for Healthcare' with Forbes",
-    "Submit another pitch!",
+  const nextStepsData = [
+    {
+      id: 1,
+      icon: <EditNoteIcon />,
+      title: "Create Your First Pitch",
+      description:
+        "Start by crafting a compelling pitch that showcases your story idea.",
+      action: "/create-pitch",
+    },
+    {
+      id: 2,
+      icon: <SearchIcon />,
+      title: "Discover Media Outlets",
+      description:
+        "Find the perfect outlets that match your story's theme and audience.",
+      action: "/outlets",
+    },
   ];
 
   const handleOpenReminderDialog = (pitchId: number) => {
@@ -244,14 +262,28 @@ const WritersDashboard = () => {
 
         <Box className={classes.dashboardLayout}>
           <Box className={classes.mainContent}>
-            <Box mb={3} className={classes.nextStepsSection}>
-              <Typography variant="h6" className={classes.sectionHeader}>
+            <Box className={classes.nextStepsSection}>
+              <Typography className={classes.sectionHeader}>
+                <LightbulbOutlinedIcon />
                 Next Steps
               </Typography>
-              {nextStepsPrompt.map((step, i) => (
-                <Typography key={i} variant="body1">
-                  • {step}
-                </Typography>
+              {nextStepsData.map((step) => (
+                <Box
+                  key={step.id}
+                  className={classes.nextStepItem}
+                  onClick={() => navigate(step.action)}
+                >
+                  <Box className={classes.nextStepIcon}>{step.icon}</Box>
+                  <Box className={classes.nextStepContent}>
+                    <Typography className={classes.nextStepTitle}>
+                      {step.title}
+                    </Typography>
+                    <Typography className={classes.nextStepDescription}>
+                      {step.description}
+                    </Typography>
+                  </Box>
+                  <ArrowForwardIcon className={classes.nextStepArrow} />
+                </Box>
               ))}
             </Box>
 

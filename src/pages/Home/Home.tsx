@@ -72,7 +72,7 @@ const Home = () => {
               startIcon={<Login />}
               color="primary"
               variant="outlined"
-              onClick={() => navigate("/agencies/dashboard")}
+              onClick={() => navigate("/writers/dashboard")}
               sx={{ fontWeight: 500 }}
               className={classes.loginButton}
             >
