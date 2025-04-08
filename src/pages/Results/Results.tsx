@@ -25,14 +25,10 @@ import { MoreVert, ExpandMore, ExpandLess, Info } from "@mui/icons-material";
 import { Snackbar, Alert } from "@mui/material";
 
 import { useLocation, useNavigate } from "react-router-dom";
-// import { fetchResults } from "../../services/api";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";
-import {
-  // saveOutlets,
-  saveSelectedOutlets,
-} from "../../redux/slices/savePitchSlice";
+import { saveSelectedOutlets } from "../../redux/slices/savePitchSlice";
 
 import Navbar from "../../components/Navbar/Nabvar";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
@@ -42,7 +38,6 @@ import useStyles from "./styles";
 
 const Results = () => {
   const { classes } = useStyles();
-  // const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
 
@@ -53,7 +48,6 @@ const Results = () => {
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-  // const [role, setRole] = useState("");
 
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedOutlets, setSelectedOutlets] = useState<string[]>([]);
@@ -147,7 +141,7 @@ const Results = () => {
         outlets: selectedOutlets,
       })
     );
-    // navigate("/writers/dashboard");
+
     setIsConfirmDialogOpen(false);
     setShowSuccessMessage(true);
   };
@@ -178,7 +172,6 @@ const Results = () => {
   };
 
   const handlePitchAgain = () => {
-    // Navigate back to Onboarding with preserved data
     navigate("/onboarding");
   };
 
@@ -188,12 +181,6 @@ const Results = () => {
       [outletName]: !prev[outletName],
     }));
   };
-
-  // useEffect(() => {
-  //   if (location.state?.role) {
-  //     setRole(location.state.role);
-  //   }
-  // }, [location.state]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -309,7 +296,12 @@ const Results = () => {
                       rel="noreferrer"
                       className="text-blue-600 underline"
                     >
-                      View Pitch Link
+                      <Tooltip
+                        title="View submission guidelines for this outlet"
+                        arrow
+                      >
+                        <span>View Pitch Link</span>
+                      </Tooltip>
                     </a>
 
                     {/* Match Explanation for Mobile */}
@@ -423,14 +415,19 @@ const Results = () => {
                           </TableCell>
                           <TableCell>{outlet.outlet.contact_email}</TableCell>
                           <TableCell className={classes.pitchLinkCell}>
-                            <a
-                              href={outlet.outlet.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              style={{ color: theme.palette.primary.main }}
+                            <Tooltip
+                              title="View submission guidelines for this outlet"
+                              arrow
                             >
-                              View Pitch Link
-                            </a>
+                              <a
+                                href={outlet.outlet.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ color: theme.palette.primary.main }}
+                              >
+                                View Pitch Link
+                              </a>
+                            </Tooltip>
                           </TableCell>
                           <TableCell>
                             {outlet.match_confidence}% Match
