@@ -21,7 +21,13 @@ import {
   Pagination,
   Collapse,
 } from "@mui/material";
-import { MoreVert, ExpandMore, ExpandLess, Info } from "@mui/icons-material";
+import {
+  MoreVert,
+  ExpandMore,
+  ExpandLess,
+  Info,
+  HelpOutline,
+} from "@mui/icons-material";
 import { Snackbar, Alert } from "@mui/material";
 
 import { useLocation, useNavigate } from "react-router-dom";
@@ -289,6 +295,26 @@ const Results = () => {
                     </Typography>
                     <Typography className={classes.score}>
                       {outlet.match_confidence}% Match
+                      <Tooltip
+                        title={
+                          <Box>
+                            <Typography
+                              variant="body2"
+                              sx={{ fontWeight: 600, mb: 1 }}
+                            >
+                              Why This Match?
+                            </Typography>
+                            <Typography variant="body2">
+                              {outlet.match_explanation ||
+                                "No match explanation available"}
+                            </Typography>
+                          </Box>
+                        }
+                        arrow
+                        classes={{ tooltip: classes.matchExplanationTooltip }}
+                      >
+                        <HelpOutline className={classes.matchExplanationIcon} />
+                      </Tooltip>
                     </Typography>
                     <a
                       href={outlet.outlet.url}
@@ -303,32 +329,6 @@ const Results = () => {
                         <span>View Pitch Link</span>
                       </Tooltip>
                     </a>
-
-                    {/* Match Explanation for Mobile */}
-                    <Box mt={2}>
-                      <Button
-                        size="small"
-                        endIcon={
-                          expandedOutlets[outlet.outlet.name] ? (
-                            <ExpandLess />
-                          ) : (
-                            <ExpandMore />
-                          )
-                        }
-                        onClick={() => handleExpandClick(outlet.outlet.name)}
-                        className={classes.matchDetailsButton}
-                      >
-                        Match Explanation
-                      </Button>
-                      <Collapse in={expandedOutlets[outlet.outlet.name]}>
-                        <Box className={classes.matchExplanation}>
-                          <Typography variant="body2" color="text.secondary">
-                            {outlet.match_explanation ||
-                              "No match explanation available"}
-                          </Typography>
-                        </Box>
-                      </Collapse>
-                    </Box>
                   </Paper>
                 ))}
               </Box>
@@ -372,111 +372,76 @@ const Results = () => {
                       <TableCell className={classes.tableCell}>
                         <strong>Match Confidence</strong>
                       </TableCell>
-                      <TableCell
-                        className={`${classes.tableCell} ${classes.matchDetailsHeader}`}
-                      >
-                        <strong>
-                          <Info sx={{ fontSize: 20 }} />
-                          Match Explanation
-                        </strong>
-                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {currentOutlets.map((outlet, index) => (
-                      <React.Fragment key={index}>
-                        <TableRow
-                          className={
-                            expandedOutlets[outlet.outlet.name]
-                              ? classes.expandedRow
-                              : ""
-                          }
-                        >
-                          <TableCell>
-                            <Checkbox
-                              checked={selectedOutlets.includes(
-                                outlet.outlet.name
-                              )}
-                              onChange={() =>
-                                handleCheckboxChange(outlet.outlet.name)
-                              }
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Typography
-                              variant="body2"
-                              style={{ cursor: "pointer" }}
-                              onClick={() =>
-                                handleOpenModal(outlet.outlet.name)
-                              }
+                      <TableRow key={index}>
+                        <TableCell>
+                          <Checkbox
+                            checked={selectedOutlets.includes(
+                              outlet.outlet.name
+                            )}
+                            onChange={() =>
+                              handleCheckboxChange(outlet.outlet.name)
+                            }
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Typography
+                            variant="body2"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => handleOpenModal(outlet.outlet.name)}
+                          >
+                            {outlet.outlet.name}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>{outlet.outlet.contact_email}</TableCell>
+                        <TableCell>
+                          <Tooltip
+                            title="View submission guidelines for this outlet"
+                            arrow
+                          >
+                            <a
+                              href={outlet.outlet.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              style={{ color: theme.palette.primary.main }}
                             >
-                              {outlet.outlet.name}
-                            </Typography>
-                          </TableCell>
-                          <TableCell>{outlet.outlet.contact_email}</TableCell>
-                          <TableCell className={classes.pitchLinkCell}>
-                            <Tooltip
-                              title="View submission guidelines for this outlet"
-                              arrow
-                            >
-                              <a
-                                href={outlet.outlet.url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                style={{ color: theme.palette.primary.main }}
-                              >
-                                View Pitch Link
-                              </a>
-                            </Tooltip>
-                          </TableCell>
-                          <TableCell>
+                              View Pitch Link
+                            </a>
+                          </Tooltip>
+                        </TableCell>
+                        <TableCell>
+                          <Box display="flex" alignItems="center">
                             {outlet.match_confidence}% Match
-                          </TableCell>
-                          <TableCell
-                            className={`${classes.matchDetailsCell} ${classes.matchDetailsColumn}`}
-                          >
-                            <Button
-                              size="small"
-                              endIcon={
-                                expandedOutlets[outlet.outlet.name] ? (
-                                  <ExpandLess />
-                                ) : (
-                                  <ExpandMore />
-                                )
+                            <Tooltip
+                              title={
+                                <Box>
+                                  <Typography
+                                    variant="body2"
+                                    sx={{ fontWeight: 600, mb: 1 }}
+                                  >
+                                    Why This Match?
+                                  </Typography>
+                                  <Typography variant="body2">
+                                    {outlet.match_explanation ||
+                                      "No match explanation available"}
+                                  </Typography>
+                                </Box>
                               }
-                              onClick={() =>
-                                handleExpandClick(outlet.outlet.name)
-                              }
-                              className={classes.matchDetailsButton}
+                              arrow
+                              classes={{
+                                tooltip: classes.matchExplanationTooltip,
+                              }}
                             >
-                              {expandedOutlets[outlet.outlet.name]
-                                ? "Hide Explanation"
-                                : "View Explanation"}
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell
-                            colSpan={6}
-                            style={{ padding: 0, border: 0 }}
-                          >
-                            <Collapse in={expandedOutlets[outlet.outlet.name]}>
-                              <Box
-                                className={`${classes.matchExplanation} ${
-                                  expandedOutlets[outlet.outlet.name]
-                                    ? classes.expandedMatch
-                                    : ""
-                                }`}
-                              >
-                                <Typography variant="body2">
-                                  {outlet.match_explanation ||
-                                    "No match explanation available"}
-                                </Typography>
-                              </Box>
-                            </Collapse>
-                          </TableCell>
-                        </TableRow>
-                      </React.Fragment>
+                              <HelpOutline
+                                className={classes.matchExplanationIcon}
+                              />
+                            </Tooltip>
+                          </Box>
+                        </TableCell>
+                      </TableRow>
                     ))}
                   </TableBody>
                 </Table>
@@ -484,17 +449,6 @@ const Results = () => {
             )}
           </>
         )}
-
-        {/* <Box className={classes.actionButtons}>
-          <Button
-            variant="outlined"
-            color="primary"
-            className={classes.exportcsvButton}
-            onClick={handleExportCSV}
-          >
-            Export as CSV
-          </Button>
-        </Box> */}
 
         <Box className={classes.pagination}>
           <Pagination

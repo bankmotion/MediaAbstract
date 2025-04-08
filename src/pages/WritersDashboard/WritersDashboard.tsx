@@ -442,8 +442,8 @@ const WritersDashboard = () => {
             </Grid>
 
             <Box className={classes.savedOutletsSection}>
-              <Typography variant="h5" className={classes.sectionTitle}>
-                Saved Outlets
+              <Typography variant="h5" className={classes.savedOutletsTitle}>
+                Outlets You've Saved for Future Pitches
               </Typography>
               <Box className={classes.savedOutletsGrid}>
                 {savedPitches.map((pitch, pitchIndex) => (

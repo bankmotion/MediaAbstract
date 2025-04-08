@@ -272,20 +272,16 @@ const useStyles = makeStyles()((theme) => ({
       opacity: 1,
     },
   },
-  sectionHeader: {
+  sectionTitle: {
     fontSize: "1.5rem",
     fontWeight: 600,
     marginBottom: theme.spacing(3),
+    color: theme.palette.text.primary,
     display: "flex",
     alignItems: "center",
-    gap: theme.spacing(1.5),
-    color: theme.palette.text.primary,
-    "& svg": {
-      color: theme.palette.primary.main,
-      fontSize: "1.8rem",
-    },
+    gap: theme.spacing(1),
     [theme.breakpoints.down("sm")]: {
-      fontSize: "1.25rem",
+      fontSize: "1.2rem",
       marginBottom: theme.spacing(2),
     },
   },
@@ -363,21 +359,6 @@ const useStyles = makeStyles()((theme) => ({
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
       gap: theme.spacing(2),
-    },
-  },
-  sectionTitle: {
-    fontWeight: 600,
-    fontSize: "1.5rem",
-    color: theme.palette.text.primary,
-    display: "flex",
-    alignItems: "center",
-    gap: theme.spacing(1.5),
-    margin: 20,
-    "& svg": {
-      color: theme.palette.primary.main,
-    },
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "1.25rem",
     },
   },
   pitchCard: {
@@ -841,6 +822,29 @@ const useStyles = makeStyles()((theme) => ({
       "&:hover": {
         background: "rgba(0, 0, 0, 0.1)",
       },
+    },
+  },
+  savedOutletsTitle: {
+    fontSize: "1.5rem",
+    fontWeight: 600,
+    marginBottom: theme.spacing(3),
+    color: theme.palette.text.primary,
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.0rem",
+      marginBottom: theme.spacing(2),
+    },
+  },
+  sectionHeader: {
+    fontSize: "1.5rem",
+    fontWeight: 600,
+    marginBottom: theme.spacing(3),
+    color: theme.palette.text.primary,
+    display: "flex",
+    alignItems: "center",
+    gap: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.2rem",
+      marginBottom: theme.spacing(2),
     },
   },
 }));
