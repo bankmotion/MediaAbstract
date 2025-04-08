@@ -57,6 +57,47 @@ const styles = makeStyles()((theme: any) => ({
     },
   },
 
+  pitchFieldContainer: {
+    position: "relative",
+    width: "100%",
+    marginBottom: theme.spacing(2),
+  },
+
+  tipsButton: {
+    position: "absolute",
+    right: 0,
+    top: -30,
+    color: theme.palette.primary.main,
+    fontSize: "0.875rem",
+    fontWeight: 500,
+    textTransform: "none",
+    padding: theme.spacing(0.5, 1),
+    "&:hover": {
+      backgroundColor: "rgba(25, 118, 210, 0.04)",
+    },
+  },
+
+  tipsTooltip: {
+    backgroundColor: "#fff",
+    color: "rgba(0, 0, 0, 0.87)",
+    fontSize: "0.875rem",
+    maxWidth: 300,
+    padding: theme.spacing(2),
+    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+    borderRadius: "8px",
+    "& .MuiTooltip-arrow": {
+      color: "#fff",
+    },
+  },
+
+  tipsList: {
+    margin: 0,
+    paddingLeft: theme.spacing(2),
+    "& li": {
+      marginBottom: theme.spacing(1),
+    },
+  },
+
   inputLabel: {
     fontSize: "1rem",
     [theme.breakpoints.down("sm")]: {
@@ -114,10 +155,11 @@ const styles = makeStyles()((theme: any) => ({
   },
   stepDescription: {
     fontSize: "1rem",
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(2.5),
     color: "#555",
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.95rem",
+      marginBottom: theme.spacing(3.5),
     },
   },
   refineLink: {
