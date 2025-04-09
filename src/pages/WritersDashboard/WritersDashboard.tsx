@@ -17,6 +17,9 @@ import {
   TextField,
   IconButton,
   Tooltip,
+  Fab,
+  useScrollTrigger,
+  Zoom,
 } from "@mui/material";
 
 import { useState } from "react";
@@ -49,6 +52,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
 import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import DescriptionIcon from "@mui/icons-material/Description";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
@@ -80,6 +84,7 @@ const WritersDashboard = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedOutlet, setSelectedOutlet] = useState<Outlet | null>(null);
   const [expandedOutlets, setExpandedOutlets] = useState<number[]>([]);
+  const [showScrollTop, setShowScrollTop] = useState(false);
 
   console.log("Saved Pitches: ", savedPitches);
 
@@ -144,24 +149,44 @@ const WritersDashboard = () => {
     },
   ]);
 
-  const nextStepsData = [
-    {
-      id: 1,
-      icon: <EditNoteIcon />,
-      title: "Create Your First Pitch",
-      description:
-        "Start by crafting a compelling pitch that showcases your story idea.",
-      action: "/create-pitch",
-    },
-    {
-      id: 2,
-      icon: <SearchIcon />,
-      title: "Discover Media Outlets",
-      description:
-        "Find the perfect outlets that match your story's theme and audience.",
-      action: "/outlets",
-    },
-  ];
+  const nextStepsData =
+    dashboardResult.pitchesSent === 0
+      ? [
+          {
+            id: 1,
+            icon: <EditNoteIcon />,
+            title: "Create Your First Pitch",
+            description:
+              "Start by crafting a compelling pitch that showcases your story idea.",
+            action: "/create-pitch",
+          },
+          {
+            id: 2,
+            icon: <SearchIcon />,
+            title: "Discover Media Outlets",
+            description:
+              "Find the perfect outlets that match your story's theme and audience.",
+            action: "/outlets",
+          },
+        ]
+      : [
+          {
+            id: 1,
+            icon: <EditNoteIcon />,
+            title: "Create a New Pitch",
+            description:
+              "Craft another compelling pitch to expand your outreach.",
+            action: "/create-pitch",
+          },
+          {
+            id: 2,
+            icon: <DescriptionIcon />,
+            title: "Review Saved Outlets",
+            description:
+              "Check your saved outlets and find new opportunities for your pitches.",
+            action: "/saved-outlets",
+          },
+        ];
 
   const handleOpenReminderDialog = (pitchId: number) => {
     setSelectedPitchId(pitchId);
@@ -205,6 +230,26 @@ const WritersDashboard = () => {
     setSelectedOutlet(null);
     setModalOpen(false);
   };
+
+  const handleScroll = () => {
+    if (window.scrollY > 300) {
+      setShowScrollTop(true);
+    } else {
+      setShowScrollTop(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -268,101 +313,113 @@ const WritersDashboard = () => {
             </Typography>
           </Box>
           <Box className={classes.userStats}>
-            <Box className={classes.statItem}>
-              <Typography className={classes.statValue}>
-                {dashboardResult.pitchesSent}
-              </Typography>
-              <Typography className={classes.statLabel}>
-                Pitches Sent
-              </Typography>
-            </Box>
-            <Box className={classes.statItem}>
-              <Typography className={classes.statValue}>
-                {dashboardResult.matchesFound}
-              </Typography>
-              <Typography className={classes.statLabel}>
-                Matches Found
-              </Typography>
-            </Box>
+            {isMobile ? (
+              <>
+                <Box sx={{ display: "flex", gap: 2, width: "100%" }}>
+                  <Box className={classes.statItem}>
+                    <Typography className={classes.statValue}>
+                      {dashboardResult.pitchesSent}
+                    </Typography>
+                    <Typography className={classes.statLabel}>
+                      Pitches Sent
+                    </Typography>
+                  </Box>
+                  <Box className={classes.statItem}>
+                    <Typography className={classes.statValue}>
+                      {dashboardResult.matchesFound}
+                    </Typography>
+                    <Typography className={classes.statLabel}>
+                      Matches Found
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  className={classes.newPitchButton}
+                  startIcon={<AddCircleOutlineIcon />}
+                  onClick={() => navigate("/onboarding")}
+                >
+                  New Pitch
+                </Button>
+              </>
+            ) : (
+              <>
+                <Box className={classes.statItem}>
+                  <Typography className={classes.statValue}>
+                    {dashboardResult.pitchesSent}
+                  </Typography>
+                  <Typography className={classes.statLabel}>
+                    Pitches Sent
+                  </Typography>
+                </Box>
+                <Box className={classes.statItem}>
+                  <Typography className={classes.statValue}>
+                    {dashboardResult.matchesFound}
+                  </Typography>
+                  <Typography className={classes.statLabel}>
+                    Matches Found
+                  </Typography>
+                </Box>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  className={classes.newPitchButton}
+                  startIcon={<AddCircleOutlineIcon />}
+                  onClick={() => navigate("/onboarding")}
+                >
+                  New Pitch
+                </Button>
+              </>
+            )}
           </Box>
         </Box>
         <Divider className={classes.divider} />
 
         <Box className={classes.dashboardLayout}>
           <Box className={classes.mainContent}>
-            <Box className={classes.nextStepsSection}>
-              <Typography className={classes.sectionHeader}>
-                <LightbulbOutlinedIcon />
-                Next Steps
-              </Typography>
-              {nextStepsData.map((step) => (
-                <Box
-                  key={step.id}
-                  className={classes.nextStepItem}
-                  onClick={() => navigate(step.action)}
-                >
-                  <Box className={classes.nextStepIcon}>{step.icon}</Box>
-                  <Box className={classes.nextStepContent}>
-                    <Typography className={classes.nextStepTitle}>
-                      {step.title}
-                    </Typography>
-                    <Typography className={classes.nextStepDescription}>
-                      {step.description}
-                    </Typography>
-                  </Box>
-                  <ArrowForwardIcon className={classes.nextStepArrow} />
+            {!isMobile && (
+              <Box className={classes.statsSection}>
+                <Box className={classes.statGrid}>
+                  <Card className={classes.statCard}>
+                    <CardContent>
+                      <Box className={classes.statIcon}>
+                        <Send />
+                      </Box>
+                      <Typography variant="h4" className={classes.statNumber}>
+                        {dashboardResult.pitchesSent}
+                      </Typography>
+                      <Typography variant="h6" className={classes.statLabel}>
+                        Pitches Sent
+                      </Typography>
+                    </CardContent>
+                  </Card>
                 </Box>
-              ))}
-            </Box>
-
-            <Box className={classes.statsSection}>
-              <Box className={classes.statGrid}>
-                <Card className={classes.statCard}>
-                  <CardContent>
-                    <Box className={classes.statIcon}>
-                      <Send />
-                    </Box>
-                    <Typography variant="h4" className={classes.statNumber}>
-                      {dashboardResult.pitchesSent}
-                    </Typography>
-                    <Typography variant="h6" className={classes.statLabel}>
-                      Pitches Sent
-                    </Typography>
-                  </CardContent>
-                </Card>
+                <Box className={classes.statGrid}>
+                  <Card className={classes.statCard}>
+                    <CardContent>
+                      <Box className={classes.statIcon}>
+                        <CheckCircle />
+                      </Box>
+                      <Typography variant="h4" className={classes.statNumber}>
+                        {dashboardResult.matchesFound}
+                      </Typography>
+                      <Typography variant="h6" className={classes.statLabel}>
+                        Matches Found
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Box>
               </Box>
-              <Box className={classes.statGrid}>
-                <Card className={classes.statCard}>
-                  <CardContent>
-                    <Box className={classes.statIcon}>
-                      <CheckCircle />
-                    </Box>
-                    <Typography variant="h4" className={classes.statNumber}>
-                      {dashboardResult.matchesFound}
-                    </Typography>
-                    <Typography variant="h6" className={classes.statLabel}>
-                      Matches Found
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Box>
-            </Box>
+            )}
 
             <Box className={classes.buttonContainer}>
               <Typography variant="h6" className={classes.sectionTitle}>
                 <EditNoteIcon />
                 My Pitches
               </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                size="large"
-                className={classes.pitchActionButton}
-                startIcon={<AddCircleOutlineIcon />}
-                onClick={() => navigate("/onboarding")}
-              >
-                New Pitch
-              </Button>
             </Box>
 
             <Grid
@@ -532,6 +589,31 @@ const WritersDashboard = () => {
                 )}
               </Box>
             </Box>
+
+            <Box className={classes.nextStepsSection}>
+              <Typography className={classes.sectionHeader}>
+                <LightbulbOutlinedIcon />
+                Next Steps
+              </Typography>
+              {nextStepsData.map((step) => (
+                <Box
+                  key={step.id}
+                  className={classes.nextStepItem}
+                  onClick={() => navigate(step.action)}
+                >
+                  <Box className={classes.nextStepIcon}>{step.icon}</Box>
+                  <Box className={classes.nextStepContent}>
+                    <Typography className={classes.nextStepTitle}>
+                      {step.title}
+                    </Typography>
+                    <Typography className={classes.nextStepDescription}>
+                      {step.description}
+                    </Typography>
+                  </Box>
+                  <ArrowForwardIcon className={classes.nextStepArrow} />
+                </Box>
+              ))}
+            </Box>
           </Box>
 
           {/* Activity Sidebar */}
@@ -675,6 +757,23 @@ const WritersDashboard = () => {
         handleClose={handleCloseModal}
         outlet={selectedOutlet}
       />
+      {isMobile && (
+        <Zoom in={showScrollTop}>
+          <Fab
+            color="primary"
+            size="medium"
+            onClick={scrollToTop}
+            sx={{
+              position: "fixed",
+              bottom: 60,
+              right: 40,
+              zIndex: 1000,
+            }}
+          >
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </Zoom>
+      )}
     </Box>
   );
 };

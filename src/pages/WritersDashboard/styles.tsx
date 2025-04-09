@@ -187,6 +187,7 @@ const useStyles = makeStyles()((theme) => ({
     margin: `${theme.spacing(2)} 0`,
   },
   nextStepsSection: {
+    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(4),
     backgroundColor: "#ffffff",
     padding: theme.spacing(3),
@@ -706,6 +707,7 @@ const useStyles = makeStyles()((theme) => ({
     alignItems: "start",
     position: "relative",
     minHeight: "calc(100vh - 140px)",
+    marginTop: theme.spacing(2),
     [theme.breakpoints.down("md")]: {
       gridTemplateColumns: "1fr",
       minHeight: "auto",
@@ -839,6 +841,9 @@ const useStyles = makeStyles()((theme) => ({
     [theme.breakpoints.down("sm")]: {
       marginTop: theme.spacing(2),
       gap: theme.spacing(2),
+      flexDirection: "column",
+      alignItems: "stretch",
+      width: "100%",
     },
   },
   statItem: {
@@ -854,6 +859,10 @@ const useStyles = makeStyles()((theme) => ({
       transform: "translateY(-2px)",
       boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
       backgroundColor: "#fff",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      padding: theme.spacing(1.5),
     },
   },
   statValue: {
@@ -906,6 +915,36 @@ const useStyles = makeStyles()((theme) => ({
     fontSize: "0.875rem",
     color: theme.palette.text.secondary,
     margin: theme.spacing(2),
+  },
+  newPitchButton: {
+    padding: theme.spacing(1, 2),
+    borderRadius: "12px",
+    textTransform: "none",
+    fontWeight: 600,
+    fontSize: "0.95rem",
+    boxShadow: "0 4px 12px rgba(25, 118, 210, 0.2)",
+    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
+    color: "#fff",
+    transition: "all 0.3s ease",
+    height: "fit-content",
+    alignSelf: "center",
+    "&:hover": {
+      boxShadow: "0 6px 16px rgba(25, 118, 210, 0.3)",
+      transform: "translateY(-2px)",
+      background: `linear-gradient(135deg, ${theme.palette.primary.dark} 0%, ${theme.palette.primary.main} 100%)`,
+    },
+    "& .MuiButton-startIcon": {
+      marginRight: theme.spacing(0.5),
+      "& svg": {
+        fontSize: "1.25rem",
+      },
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      marginTop: theme.spacing(2),
+      padding: theme.spacing(1.25, 2),
+      fontSize: "0.9rem",
+    },
   },
 }));
 
