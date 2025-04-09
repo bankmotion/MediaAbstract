@@ -344,6 +344,15 @@ const styles = makeStyles()((theme: Theme) => ({
       opacity: 0.8,
     },
   },
+
+  tableOutletName: {
+    cursor: "pointer",
+    color: theme.palette.primary.main,
+    textDecoration: "underline",
+    "&:hover": {
+      color: theme.palette.primary.dark,
+    },
+  },
 }));
 
 export default styles;

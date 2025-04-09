@@ -4,6 +4,7 @@ import { fetchSavedOutletsAPI } from "../../services/api";
 interface SavedPitch {
   description: string;
   outlets: string[];
+  selected_date: string;
   // outletDetails?: {
   //   [key: string]: {
   //     guidelines?: string;
@@ -17,6 +18,7 @@ interface SavedPitch {
 interface PitchState {
   description: string;
   outlets: string[];
+  selected_date: string;
   results: SavedPitch[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
@@ -25,6 +27,7 @@ interface PitchState {
 const initialState: PitchState = {
   description: "",
   outlets: [],
+  selected_date: "",
   results: [],
   status: "idle",
   error: null,

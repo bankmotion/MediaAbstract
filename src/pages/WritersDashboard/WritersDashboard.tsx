@@ -494,6 +494,7 @@ const WritersDashboard = () => {
                               </Typography>
                             </Box>
                           ))}
+
                       {!isMobile && pitch.outlets.length > 2 && (
                         <Box
                           className={classes.moreButton}
@@ -514,6 +515,10 @@ const WritersDashboard = () => {
                         </Box>
                       )}
                     </Box>
+                    <Typography className={classes.savedDate}>
+                      Saved on:{" "}
+                      {new Date(pitch.selected_date).toLocaleDateString()}
+                    </Typography>
                   </Box>
                 ))}
                 {savedPitches.length === 0 && (

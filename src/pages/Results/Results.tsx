@@ -390,7 +390,7 @@ const Results = () => {
                         <TableCell>
                           <Typography
                             variant="body2"
-                            style={{ cursor: "pointer" }}
+                            className={classes.tableOutletName}
                             onClick={() => handleOpenModal(outlet.outlet.name)}
                           >
                             {outlet.outlet.name}

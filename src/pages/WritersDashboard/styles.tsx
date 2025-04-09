@@ -371,18 +371,30 @@ const useStyles = makeStyles()((theme) => ({
     overflow: "hidden",
     display: "flex",
     flexDirection: "column",
+    position: "relative",
     "&:hover": {
       transform: "translateY(-4px)",
       boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
       borderColor: "rgba(25, 118, 210, 0.2)",
     },
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "4px",
+      background: "linear-gradient(90deg, #1976d2, #64b5f6)",
+    },
   },
   pitchCardContent: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(2.5),
     height: "100%",
     display: "flex",
     flexDirection: "column",
     gap: theme.spacing(2),
+    position: "relative",
+    zIndex: 1,
   },
   pitchHeader: {
     display: "flex",
@@ -390,6 +402,7 @@ const useStyles = makeStyles()((theme) => ({
     alignItems: "flex-start",
     gap: theme.spacing(1),
     minHeight: "48px",
+    position: "relative",
   },
   pitchTitle: {
     fontWeight: 600,
@@ -403,6 +416,7 @@ const useStyles = makeStyles()((theme) => ({
     WebkitLineClamp: 2,
     WebkitBoxOrient: "vertical",
     minWidth: 0,
+    lineHeight: 1.4,
   },
   pitchStatus: {
     display: "flex",
@@ -414,6 +428,16 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 500,
     whiteSpace: "nowrap",
     flexShrink: 0,
+    background: "rgba(25, 118, 210, 0.08)",
+    color: theme.palette.primary.main,
+    "&.submitted": {
+      background: "rgba(25, 118, 210, 0.08)",
+      color: theme.palette.primary.main,
+    },
+    "&.matched": {
+      background: "rgba(76, 175, 80, 0.08)",
+      color: "#4caf50",
+    },
   },
   pitchStatusDot: {
     width: "8px",
@@ -430,11 +454,14 @@ const useStyles = makeStyles()((theme) => ({
     marginTop: "auto",
     paddingTop: theme.spacing(2),
     borderTop: "1px solid rgba(0,0,0,0.08)",
+    background: "rgba(25, 118, 210, 0.02)",
+    borderRadius: "8px",
+    padding: theme.spacing(1.5),
   },
   matchList: {
     display: "flex",
     flexDirection: "column",
-    gap: theme.spacing(1),
+    gap: theme.spacing(1.5),
     marginBottom: theme.spacing(2),
   },
   matchItem: {
@@ -446,10 +473,22 @@ const useStyles = makeStyles()((theme) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
+    padding: theme.spacing(0.5, 1),
+    borderRadius: "6px",
+    background: "rgba(255, 255, 255, 0.5)",
+    transition: "all 0.2s ease",
+    "&:hover": {
+      background: "rgba(255, 255, 255, 0.8)",
+      transform: "translateX(4px)",
+    },
   },
   matchScore: {
     fontWeight: 600,
     color: theme.palette.primary.main,
+    background: "rgba(25, 118, 210, 0.1)",
+    padding: theme.spacing(0.25, 0.75),
+    borderRadius: "4px",
+    marginLeft: theme.spacing(0.5),
   },
   pitchActions: {
     display: "flex",
@@ -458,6 +497,27 @@ const useStyles = makeStyles()((theme) => ({
     "& button": {
       flex: 1,
       minWidth: "100px",
+      borderRadius: "8px",
+      textTransform: "none",
+      fontWeight: 500,
+      padding: theme.spacing(0.75, 1.5),
+      transition: "all 0.2s ease",
+      "&.primary": {
+        background: "rgba(25, 118, 210, 0.1)",
+        color: theme.palette.primary.main,
+        "&:hover": {
+          background: "rgba(25, 118, 210, 0.2)",
+          transform: "translateY(-2px)",
+        },
+      },
+      "&.secondary": {
+        background: "rgba(0, 0, 0, 0.05)",
+        color: theme.palette.text.secondary,
+        "&:hover": {
+          background: "rgba(0, 0, 0, 0.1)",
+          transform: "translateY(-2px)",
+        },
+      },
     },
   },
   activityTimeline: {
@@ -835,17 +895,17 @@ const useStyles = makeStyles()((theme) => ({
     },
   },
   sectionHeader: {
-    fontSize: "1.5rem",
-    fontWeight: 600,
-    marginBottom: theme.spacing(3),
-    color: theme.palette.text.primary,
     display: "flex",
     alignItems: "center",
     gap: theme.spacing(1),
-    [theme.breakpoints.down("sm")]: {
-      fontSize: "1.2rem",
-      marginBottom: theme.spacing(2),
-    },
+    marginBottom: theme.spacing(2),
+    fontWeight: 600,
+  },
+
+  savedDate: {
+    fontSize: "0.875rem",
+    color: theme.palette.text.secondary,
+    margin: theme.spacing(2),
   },
 }));
 
