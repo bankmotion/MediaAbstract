@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   AppBar,
   Toolbar,
@@ -21,11 +21,13 @@ import {
   Login,
 } from "@mui/icons-material";
 import useStyles from "./styles";
+import AboutModal from "../../components/AboutModal/AboutModal";
 
 const Home = () => {
   const { classes } = useStyles();
 
   const [tab, setTab] = React.useState(0);
+  const [showAboutModal, setShowAboutModal] = useState(false);
 
   const navigate = useNavigate();
 
@@ -43,9 +45,15 @@ const Home = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    // Show about modal on every page load
+    setShowAboutModal(true);
   }, []);
   return (
     <Box className={classes.wrapper}>
+      <AboutModal
+        open={showAboutModal}
+        onClose={() => setShowAboutModal(false)}
+      />
       <AppBar
         position="static"
         color="transparent"

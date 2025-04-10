@@ -362,6 +362,12 @@ const useStyles = makeStyles()((theme) => ({
       gap: theme.spacing(2),
     },
   },
+  pitchGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+    gap: theme.spacing(3),
+    marginTop: theme.spacing(2),
+  },
   pitchCard: {
     height: "100%",
     background: "#fff",
