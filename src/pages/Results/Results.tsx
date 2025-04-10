@@ -286,9 +286,16 @@ const Results = () => {
                       />
                     </Box>
                     {outlet.outlet.ai_partnered === "Yes" && (
-                      <Tooltip title="Cited by AI tools for extra reach." arrow>
+                      <Box display="flex" alignItems="center" gap={0.5}>
                         <span className={classes.tooltip}>✓ AI Partnered</span>
-                      </Tooltip>
+                        <Tooltip
+                          title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."
+                          arrow
+                          classes={{ tooltip: classes.matchExplanationTooltip }}
+                        >
+                          <Info className={classes.matchExplanationIcon} />
+                        </Tooltip>
+                      </Box>
                     )}
                     <Typography className={classes.guide}>
                       Contact: {outlet.outlet.contact_email}
@@ -372,6 +379,9 @@ const Results = () => {
                       <TableCell className={classes.tableCell}>
                         <strong>Match Confidence</strong>
                       </TableCell>
+                      <TableCell className={classes.tableCell}>
+                        <strong>AI Partnered</strong>
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -440,6 +450,26 @@ const Results = () => {
                               />
                             </Tooltip>
                           </Box>
+                        </TableCell>
+                        <TableCell>
+                          {outlet.outlet.ai_partnered === "Yes" && (
+                            <Box display="flex" alignItems="center" gap={0.5}>
+                              <span className={classes.tooltip}>
+                                ✓ AI Partnered
+                              </span>
+                              <Tooltip
+                                title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."
+                                arrow
+                                classes={{
+                                  tooltip: classes.matchExplanationTooltip,
+                                }}
+                              >
+                                <Info
+                                  className={classes.matchExplanationIcon}
+                                />
+                              </Tooltip>
+                            </Box>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))}

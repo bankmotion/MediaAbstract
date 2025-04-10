@@ -78,6 +78,29 @@ const useStyles = makeStyles()((theme) => ({
       padding: theme.spacing(1.5),
     },
   },
+  matchExplanationTooltip: {
+    backgroundColor: "#f5faff",
+    color: "#1a1a1a",
+    border: "1px solid rgba(25, 118, 210, 0.1)",
+    borderRadius: 8,
+    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+    padding: theme.spacing(2),
+    maxWidth: 300,
+    "& p": {
+      margin: 0,
+      lineHeight: 1.6,
+      fontSize: "0.95rem",
+    },
+  },
+  matchExplanationIcon: {
+    color: theme.palette.primary.main,
+    cursor: "pointer",
+    fontSize: "1.1rem",
+    verticalAlign: "middle",
+    "&:hover": {
+      opacity: 0.8,
+    },
+  },
 }));
 
 export default useStyles;

@@ -10,6 +10,7 @@ import {
   Divider,
   IconButton,
   Snackbar,
+  Tooltip,
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import InfoIcon from "@mui/icons-material/Info";
@@ -72,6 +73,27 @@ const OutletDetailModal: React.FC<OutletDetailsModalProps> = ({
         <Typography className={classes.text}>
           {outlet.pitch_tips || "No tips available."}
         </Typography>
+        <Divider className={classes.divider} />
+
+        {/* AI Partnered Status */}
+        <Box className={classes.section}>
+          <InfoIcon className={classes.iconBlue} />
+          <Typography variant="h6" className={classes.sectionTitle}>
+            AI Partnered Status:
+          </Typography>
+        </Box>
+        <Box display="flex" alignItems="center" gap={1}>
+          <Typography className={classes.text}>
+            {outlet.ai_partnered || "Unknown"}
+          </Typography>
+          <Tooltip
+            title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."
+            arrow
+            classes={{ tooltip: classes.matchExplanationTooltip }}
+          >
+            <InfoIcon className={classes.matchExplanationIcon} />
+          </Tooltip>
+        </Box>
         <Divider className={classes.divider} />
 
         {/* Editor Contact */}
