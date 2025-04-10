@@ -10,7 +10,6 @@ import {
   useTheme,
   Fade,
   Zoom,
-  Avatar,
   Divider,
   Chip,
 } from "@mui/material";
@@ -20,7 +19,6 @@ import {
   AutoAwesome,
   ConnectWithoutContact,
   Star,
-  EmojiEvents,
   TrendingUp,
 } from "@mui/icons-material";
 import useStyles from "./styles";

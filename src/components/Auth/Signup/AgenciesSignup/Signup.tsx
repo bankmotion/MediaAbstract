@@ -12,24 +12,26 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../../Navbar/Nabvar";
 import WelcomeModal from "../../../WelcomeModal/WelcomeModal";
 import useStyles from "./styles";
-import { createCheckSeesion } from "../../../../services/auth";
+import { createCheckSession } from "../../../../services/auth";
 
 const planOptions = [
-  //{ label: "Writer - $15/month", value: "writer" },
   {
-    priceId: "1",
+    priceId: "basic",
     label: "Agency & Team - $75: 1 user, 5 matches",
-    value: "agency75",
+    value: "basic",
+    checkoutUrl: "https://buy.stripe.com/test_dR6bMfbrQ5uZ4sUeUU",
   },
   {
-    priceId: "2",
+    priceId: "team",
     label: "Agency & Team - $150: 3 users, 15 matches",
-    value: "agency150",
+    value: "team",
+    checkoutUrl: "https://buy.stripe.com/test_dR66rV9jI2iN6B27st",
   },
   {
-    priceId: "3",
+    priceId: "enterprise",
     label: "Agency & Team - $250: unlimited, priority",
-    value: "agency250",
+    value: "enterprise",
+    checkoutUrl: "https://buy.stripe.com/test_cN2bMfcvU1eJ0cE4gi",
   },
 ];
 
@@ -41,42 +43,41 @@ const Signup = () => {
   const [plan, setPlan] = useState("");
   const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSignup = async () => {
-    setShowWelcomeModal(true);
+    // setShowWelcomeModal(true);
     if (!email || !password || !plan) {
-      alert("Please fill in all fields before processing.");
+      setError("Please fill in all fields");
       return;
     }
 
     try {
       setLoading(true);
+      setError(null);
       const selectedPlan = planOptions.find((opt) => opt.value === plan);
       if (!selectedPlan) {
-        alert("Invalid plan selection");
+        setError("Invalid plan selection");
         return;
       }
 
-      await createCheckSeesion(email, password, selectedPlan.priceId);
-    } catch (error) {
-      console.error("Signup error:", error);
-      if (error instanceof Error) {
-        alert(error.message);
-      } else {
-        alert("An unexpected error occurred.");
-      }
+      // Store user data in localStorage before redirecting
+      localStorage.setItem(
+        "signup_data",
+        JSON.stringify({
+          email,
+          password,
+          plan: selectedPlan.value,
+        })
+      );
+
+      // Redirect to Stripe checkout
+      window.location.href = selectedPlan.checkoutUrl;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleContinue = () => {
-    setShowWelcomeModal(false);
-    navigate("/onboarding", { state: { role: "agencies" } });
-  };
-
-  const handleCloseModal = () => {
-    setShowWelcomeModal(false);
   };
 
   return (
@@ -87,6 +88,11 @@ const Signup = () => {
           <Typography variant="h5" className={classes.title}>
             Sign Up
           </Typography>
+          {error && (
+            <Typography color="error" className={classes.error}>
+              {error}
+            </Typography>
+          )}
           <TextField
             label="Email Address"
             type="email"
@@ -116,7 +122,7 @@ const Signup = () => {
                 key={opt.value}
                 value={opt.value}
                 sx={{
-                  whiteSpace: "normal", // Allows wrapping
+                  whiteSpace: "normal",
                   fontSize: {
                     xs: "0.8rem",
                     sm: "0.95rem",
@@ -124,8 +130,8 @@ const Signup = () => {
                   lineHeight: 1.4,
                   paddingY: 1,
                   "&:hover": {
-                    backgroundColor: "#f0f4ff", // light blue or any preferred tone
-                    transform: "scale(1.015)", // subtle zoom
+                    backgroundColor: "#f0f4ff",
+                    transform: "scale(1.015)",
                     fontWeight: 500,
                   },
                 }}
@@ -140,6 +146,7 @@ const Signup = () => {
             fullWidth
             onClick={handleSignup}
             className={classes.signupButton}
+            disabled={loading}
           >
             {loading ? "Processing..." : "Sign Up & Pay"}
           </Button>
@@ -158,11 +165,11 @@ const Signup = () => {
         </Paper>
       </Box>
 
-      <WelcomeModal
+      {/* <WelcomeModal
         open={showWelcomeModal}
         onClose={handleCloseModal}
         onContinue={handleContinue}
-      />
+      /> */}
     </>
   );
 };

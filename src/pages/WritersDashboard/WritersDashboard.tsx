@@ -29,10 +29,6 @@ import {
   CheckCircle,
   CalendarToday,
   Close,
-  Info,
-  ExpandMore,
-  Inbox,
-  KeyboardArrowDown,
   History as HistoryIcon,
   Send as SendIcon,
   Edit as EditIcon,
@@ -46,11 +42,7 @@ import LightbulbOutlinedIcon from "@mui/icons-material/LightbulbOutlined";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import MenuIcon from "@mui/icons-material/Menu";
-import EmojiEventsIcon from "@mui/icons-material/EmojiEvents";
-import TrendingUpIcon from "@mui/icons-material/TrendingUp";
 import DescriptionIcon from "@mui/icons-material/Description";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 

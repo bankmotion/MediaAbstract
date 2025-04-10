@@ -14,10 +14,12 @@ import WelcomeModal from "../../../WelcomeModal/WelcomeModal";
 import useStyles from "./styles";
 
 const planOptions = [
-  { label: "Writer - $15/month", value: "writer" },
-  // { label: "Agency&Team - $75: 1 user, 5 matches", value: "agency75" },
-  // { label: "Agency&Team - $150: 3 users, 15 matches", value: "agency150" },
-  // { label: "Agency&Team - $250: unlimited, priority", value: "agency250" },
+  {
+    priceId: "writer",
+    label: "Writer - $15/month",
+    value: "writer",
+    checkoutUrl: "https://buy.stripe.com/test_cN2dUneE2g9D5wY6or",
+  },
 ];
 
 const Signup = () => {
@@ -26,21 +28,53 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [plan, setPlan] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  // const [showWelcomeModal, setShowWelcomeModal] = useState(false);
 
-  const handleSignup = () => {
-    setShowWelcomeModal(true);
+  const handleSignup = async () => {
+    // setShowWelcomeModal(true);
+    if (!email || !password || !plan) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+      const selectedPlan = planOptions.find((opt) => opt.value === plan);
+      if (!selectedPlan) {
+        setError("Invalid plan selection");
+        return;
+      }
+
+      // Store user data in localStorage before redirecting
+      // localStorage.setItem(
+      //   "signup_data",
+      //   JSON.stringify({
+      //     email,
+      //     password,
+      //     plan: selectedPlan.value,
+      //   })
+      // );
+
+      // Redirect to Stripe checkout
+      window.location.href = selectedPlan.checkoutUrl;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
   };
+  // const handleContinue = () => {
+  //   setShowWelcomeModal(false);
+  //   navigate("/onboarding", { state: { role: "writers" } });
+  // };
 
-  const handleContinue = () => {
-    setShowWelcomeModal(false);
-    navigate("/onboarding", { state: { role: "writers" } });
-  };
-
-  const handleCloseModal = () => {
-    setShowWelcomeModal(false);
-  };
+  // const handleCloseModal = () => {
+  //   setShowWelcomeModal(false);
+  // };
 
   return (
     <>
@@ -50,6 +84,11 @@ const Signup = () => {
           <Typography variant="h5" className={classes.title}>
             Sign Up
           </Typography>
+          {error && (
+            <Typography color="error" className={classes.error}>
+              {error}
+            </Typography>
+          )}
           <TextField
             label="Email Address"
             type="email"
@@ -103,8 +142,9 @@ const Signup = () => {
             fullWidth
             onClick={handleSignup}
             className={classes.signupButton}
+            disabled={loading}
           >
-            Sign Up
+            {loading ? "Processing..." : "Sign Up & Pay"}
           </Button>
 
           <Typography className={classes.noteText}>
@@ -120,12 +160,12 @@ const Signup = () => {
           </Typography>
         </Paper>
       </Box>
-
+      {/* 
       <WelcomeModal
         open={showWelcomeModal}
         onClose={handleCloseModal}
         onContinue={handleContinue}
-      />
+      /> */}
     </>
   );
 };

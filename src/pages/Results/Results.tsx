@@ -19,18 +19,11 @@ import {
   MenuItem,
   IconButton,
   Pagination,
-  Collapse,
 } from "@mui/material";
-import {
-  MoreVert,
-  ExpandMore,
-  ExpandLess,
-  Info,
-  HelpOutline,
-} from "@mui/icons-material";
+import { MoreVert, ExpandMore, Info, HelpOutline } from "@mui/icons-material";
 import { Snackbar, Alert } from "@mui/material";
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../../redux/store";

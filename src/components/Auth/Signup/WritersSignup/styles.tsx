@@ -90,6 +90,15 @@ const styles = makeStyles()((theme: any) => ({
   //     color: "#0056b3",
   //   },
   // },
+  error: {
+    color: "#d32f2f",
+    marginBottom: theme.spacing(2),
+    textAlign: "center",
+    fontSize: "0.9rem",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.85rem",
+    },
+  },
 }));
 
 export default styles;

@@ -11,39 +11,43 @@ if (!stripePublicKey) {
 
 const stripePromise = loadStripe(stripePublicKey);
 
-// const API_URL = "http://127.0.0.1:10000";
+const API_URL = "http://127.0.0.1:10000";
 // const API_URL = "https://mediaabstract-backend.onrender.com";
 
-const API_URL = "https://backend.writefor.co/";
+// const API_URL = process.env.REACT_APP_API_URL;
 
-export const createCheckSeesion = async (
+export const createCheckSession = async (
   email: string,
   password: string,
-  planId: string
+  priceId: string
 ) => {
-  if (!email || !password || !planId) {
-    throw new Error("❌ Missing required fields: email, password, or plan.");
-  }
-
   try {
-    const response = await axios.post(`${API_URL}/signup`, {
+    const response = await axios.post(`${API_URL}/create-checkout-session`, {
       email,
       password,
-      planId,
+      planType: priceId,
     });
 
-    if (!response.data.sessionId) {
-      throw new Error("⚠️ Error: Missing session ID in response.");
+    if (response.data.url) {
+      // Redirect to Stripe Checkout using the URL from the backend
+      window.location.href = response.data.url;
+    } else {
+      throw new Error("No checkout URL found in response");
     }
-
-    const stripe = await stripePromise;
-    if (!stripe) {
-      throw new Error("❌ Stripe initialization failed.");
-    }
-
-    await stripe.redirectToCheckout({ sessionId: response.data.sessionId });
   } catch (error) {
-    console.error("Payment Error:", error);
-    throw new Error("Failed to initiate checkout session.");
+    console.error("Error creating checkout session:", error);
+    throw error;
+  }
+};
+
+export const verifyPayment = async (sessionId: string) => {
+  try {
+    const response = await axios.post(`${API_URL}/verify`, {
+      sessionId,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error verifying payment:", error);
+    throw error;
   }
 };

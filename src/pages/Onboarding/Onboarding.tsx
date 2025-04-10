@@ -12,7 +12,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { KeyboardArrowUp, LightbulbOutlined } from "@mui/icons-material";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
 import ClearPitchDialog from "../../components/ClearPitchDialog/ClearPitchDialog";
 import TipsDialog from "../../components/TipsDialog/TipsDialog";
