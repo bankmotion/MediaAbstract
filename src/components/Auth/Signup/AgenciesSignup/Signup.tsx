@@ -17,19 +17,19 @@ import { createCheckSession } from "../../../../services/auth";
 const planOptions = [
   {
     priceId: "basic",
-    label: "Agency & Team - $75: 1 user, 5 matches",
+    label: "Agency & Team - $50: 1 user, 5 matches",
     value: "basic",
     checkoutUrl: "https://buy.stripe.com/test_dR6bMfbrQ5uZ4sUeUU",
   },
   {
     priceId: "team",
-    label: "Agency & Team - $150: 3 users, 15 matches",
+    label: "Agency & Team - $120: 3 users, 15 matches",
     value: "team",
     checkoutUrl: "https://buy.stripe.com/test_dR66rV9jI2iN6B27st",
   },
   {
     priceId: "enterprise",
-    label: "Agency & Team - $250: unlimited, priority",
+    label: "Agency & Team - $200: unlimited, priority",
     value: "enterprise",
     checkoutUrl: "https://buy.stripe.com/test_cN2bMfcvU1eJ0cE4gi",
   },
