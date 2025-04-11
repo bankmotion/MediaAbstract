@@ -22,6 +22,7 @@ import {
 } from "@mui/icons-material";
 import useStyles from "./styles";
 import AboutModal from "../../components/AboutModal/AboutModal";
+import Cookies from "js-cookie";
 
 const Home = () => {
   const { classes } = useStyles();
@@ -45,8 +46,10 @@ const Home = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    // Show about modal on every page load
-    setShowAboutModal(true);
+    // Only show about modal if cookie is not set
+    if (!Cookies.get("aboutModalShown")) {
+      setShowAboutModal(true);
+    }
   }, []);
   return (
     <Box className={classes.wrapper}>
@@ -157,7 +160,7 @@ const Home = () => {
               <CardContent className={classes.howCardContent}>
                 <Description className={classes.howIcon} />
                 <Typography variant="h6" className={classes.howTitle}>
-                  2. Submit Your Content Idea (Bylines, Op-Eds, Articles)
+                  2. Create a Pitch
                 </Typography>
                 <Typography className={classes.howText}>
                   Enter your pitch concept and preferences in our smart form.

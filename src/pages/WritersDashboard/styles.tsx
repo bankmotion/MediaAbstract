@@ -952,6 +952,61 @@ const useStyles = makeStyles()((theme) => ({
       fontSize: "0.9rem",
     },
   },
+
+  createPitchContainer: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: theme.spacing(4),
+    marginBottom: theme.spacing(4),
+    position: "relative",
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: "-20px",
+      left: "50%",
+      transform: "translateX(-50%)",
+      width: "80%",
+      height: "1px",
+      background: "linear-gradient(90deg, transparent, #007BFF, transparent)",
+    },
+  },
+
+  createPitchButton: {
+    padding: theme.spacing(1.5, 4),
+    fontSize: "1.1rem",
+    fontWeight: 600,
+    borderRadius: 12,
+    textTransform: "none",
+    background: "linear-gradient(45deg, #007BFF 30%, #00C6FF 90%)",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    color: "#ffffff",
+    position: "relative",
+    overflow: "hidden",
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      background:
+        "linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent)",
+      transform: "translateX(-100%)",
+      transition: "transform 0.6s ease",
+    },
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)",
+      background: "linear-gradient(45deg, #0069d9 30%, #00b3ff 90%)",
+      "&::before": {
+        transform: "translateX(100%)",
+      },
+    },
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(1, 3),
+      fontSize: "1rem",
+    },
+  },
 }));
 
 export default useStyles;

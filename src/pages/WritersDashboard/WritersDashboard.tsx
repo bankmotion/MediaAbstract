@@ -77,6 +77,7 @@ const WritersDashboard = () => {
   const [selectedOutlet, setSelectedOutlet] = useState<Outlet | null>(null);
   const [expandedOutlets, setExpandedOutlets] = useState<number[]>([]);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showScrollToSaved, setShowScrollToSaved] = useState(false);
 
   console.log("Saved Pitches: ", savedPitches);
 
@@ -179,7 +180,7 @@ const WritersDashboard = () => {
             title: "Create Your First Pitch",
             description:
               "Start by crafting a compelling pitch that showcases your story idea.",
-            action: "/create-pitch",
+            action: "/onboarding",
           },
           {
             id: 2,
@@ -187,7 +188,7 @@ const WritersDashboard = () => {
             title: "Discover Media Outlets",
             description:
               "Find the perfect outlets that match your story's theme and audience.",
-            action: "/outlets",
+            action: "/onboarding",
           },
         ]
       : [
@@ -197,7 +198,7 @@ const WritersDashboard = () => {
             title: "Create a New Pitch",
             description:
               "Craft another compelling pitch to expand your outreach.",
-            action: "/create-pitch",
+            action: "/onboarding",
           },
           {
             id: 2,
@@ -205,9 +206,28 @@ const WritersDashboard = () => {
             title: "Review Saved Outlets",
             description:
               "Check your saved outlets and find new opportunities for your pitches.",
-            action: "/saved-outlets",
+            action: "#my-pitches",
           },
         ];
+
+  const handleNextStepClick = (action: string) => {
+    if (action.startsWith("#")) {
+      const element = document.getElementById(action.substring(1));
+      if (element) {
+        const headerOffset = 100; // Adjust this value based on your header height
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - headerOffset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    } else {
+      navigate(action);
+    }
+  };
 
   const handleOpenReminderDialog = (pitchId: number) => {
     setSelectedPitchId(pitchId);
@@ -258,6 +278,12 @@ const WritersDashboard = () => {
     } else {
       setShowScrollTop(false);
     }
+
+    const savedOutletsElement = document.getElementById("saved-outlets");
+    if (savedOutletsElement) {
+      const rect = savedOutletsElement.getBoundingClientRect();
+      setShowScrollToSaved(rect.top < 0);
+    }
   };
 
   const scrollToTop = () => {
@@ -265,6 +291,13 @@ const WritersDashboard = () => {
       top: 0,
       behavior: "smooth",
     });
+  };
+
+  const scrollToSavedOutlets = () => {
+    const element = document.getElementById("saved-outlets");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   useEffect(() => {
@@ -436,7 +469,7 @@ const WritersDashboard = () => {
               </Box>
             )}
 
-            <Box className={classes.buttonContainer}>
+            <Box id="my-pitches" className={classes.buttonContainer}>
               <Typography variant="h6" className={classes.sectionTitle}>
                 <EditNoteIcon />
                 My Pitches
@@ -608,7 +641,7 @@ const WritersDashboard = () => {
                 <Box
                   key={step.id}
                   className={classes.nextStepItem}
-                  onClick={() => navigate(step.action)}
+                  onClick={() => handleNextStepClick(step.action)}
                 >
                   <Box className={classes.nextStepIcon}>{step.icon}</Box>
                   <Box className={classes.nextStepContent}>
@@ -622,6 +655,18 @@ const WritersDashboard = () => {
                   <ArrowForwardIcon className={classes.nextStepArrow} />
                 </Box>
               ))}
+            </Box>
+
+            <Box className={classes.createPitchContainer}>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.createPitchButton}
+                onClick={() => navigate("/onboarding")}
+                startIcon={<AddCircleOutlineIcon />}
+              >
+                Create a New Pitch
+              </Button>
             </Box>
           </Box>
 
@@ -767,21 +812,38 @@ const WritersDashboard = () => {
         outlet={selectedOutlet}
       />
       {isMobile && (
-        <Zoom in={showScrollTop}>
-          <Fab
-            color="primary"
-            size="medium"
-            onClick={scrollToTop}
-            sx={{
-              position: "fixed",
-              bottom: 60,
-              right: 40,
-              zIndex: 1000,
-            }}
-          >
-            <KeyboardArrowUpIcon />
-          </Fab>
-        </Zoom>
+        <>
+          <Zoom in={showScrollTop}>
+            <Fab
+              color="primary"
+              size="medium"
+              onClick={scrollToTop}
+              sx={{
+                position: "fixed",
+                bottom: 60,
+                right: 40,
+                zIndex: 1000,
+              }}
+            >
+              <KeyboardArrowUpIcon />
+            </Fab>
+          </Zoom>
+          <Zoom in={showScrollToSaved}>
+            <Fab
+              color="secondary"
+              size="medium"
+              onClick={scrollToSavedOutlets}
+              sx={{
+                position: "fixed",
+                bottom: 60,
+                right: 100,
+                zIndex: 1000,
+              }}
+            >
+              <DescriptionIcon />
+            </Fab>
+          </Zoom>
+        </>
       )}
     </Box>
   );

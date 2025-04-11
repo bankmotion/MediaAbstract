@@ -12,6 +12,8 @@ import {
   Zoom,
   Divider,
   Chip,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 import {
   Close as CloseIcon,
@@ -22,6 +24,7 @@ import {
   TrendingUp,
 } from "@mui/icons-material";
 import useStyles from "./styles";
+import Cookies from "js-cookie";
 
 interface AboutModalProps {
   open: boolean;
@@ -32,11 +35,20 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
   const { classes } = useStyles();
   const theme = useTheme();
   const [hoveredSection, setHoveredSection] = useState<number | null>(null);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
+
+  const handleClose = () => {
+    if (dontShowAgain) {
+      // Set cookie to expire in 30 days
+      Cookies.set("aboutModalShown", "true", { expires: 30 });
+    }
+    onClose();
+  };
 
   return (
     <Dialog
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       maxWidth="md"
       fullWidth
       PaperProps={{
@@ -73,7 +85,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
         </Box>
         <IconButton
           aria-label="close"
-          onClick={onClose}
+          onClick={handleClose}
           className={classes.closeButton}
         >
           <CloseIcon />
@@ -99,8 +111,10 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               </Typography>
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
-                WriteFor.co helps PR professionals pitch smarter with AI,
-                matching your ideas to the right outlets.
+                WriteFor.co helps PR professionals, content creators, and
+                businesses pitch smarter with AI, matching your ideas to the
+                right outlets. We're launching with 100 vetted outlets to match
+                your pitches to the right publications.
               </Typography>
             </Box>
           </Zoom>
@@ -123,9 +137,9 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               </Typography>
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
-                Founded by Mike Lizun, a PR veteran with over 25 years of
-                experience, WriteFor.co combines industry expertise with
-                cutting-edge AI to streamline your pitching process.
+                Founded by Mike Lizun, a PR veteran with 26 years of experience,
+                WriteFor.co combines industry expertise with cutting-edge AI to
+                streamline your pitching process.
               </Typography>
             </Box>
           </Zoom>
@@ -155,11 +169,28 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
           </Zoom>
 
           <Box className={classes.ctaContainer}>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={dontShowAgain}
+                  onChange={(e) => setDontShowAgain(e.target.checked)}
+                  color="primary"
+                />
+              }
+              label="Don't show this again"
+              sx={{
+                marginBottom: 2,
+                "& .MuiFormControlLabel-label": {
+                  fontSize: "0.9rem",
+                  color: theme.palette.text.secondary,
+                },
+              }}
+            />
             <Button
               variant="contained"
               color="primary"
               className={classes.ctaButton}
-              onClick={onClose}
+              onClick={handleClose}
               startIcon={<RocketLaunch />}
             >
               Get Started
