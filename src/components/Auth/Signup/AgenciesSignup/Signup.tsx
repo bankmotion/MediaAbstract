@@ -19,19 +19,19 @@ const planOptions = [
     priceId: "basic",
     label: "Agency & Team - $50: 1 user, 5 matches",
     value: "basic",
-    checkoutUrl: "https://buy.stripe.com/test_dR6bMfbrQ5uZ4sUeUU",
+    checkoutUrl: "https://buy.stripe.com/test_fZe17B67waPjaRi4gk",
   },
   {
     priceId: "team",
     label: "Agency & Team - $120: 3 users, 15 matches",
     value: "team",
-    checkoutUrl: "https://buy.stripe.com/test_dR66rV9jI2iN6B27st",
+    checkoutUrl: "https://buy.stripe.com/test_5kA4jN1Rg5uZbVmfZ3",
   },
   {
     priceId: "enterprise",
     label: "Agency & Team - $200: unlimited, priority",
     value: "enterprise",
-    checkoutUrl: "https://buy.stripe.com/test_cN2bMfcvU1eJ0cE4gi",
+    checkoutUrl: "https://buy.stripe.com/test_8wMdUn9jI6z3cZq7sy",
   },
 ];
 
