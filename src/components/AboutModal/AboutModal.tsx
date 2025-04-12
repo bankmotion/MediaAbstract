@@ -162,8 +162,9 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               </Typography>
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
-                Join our early beta to help shape the future of smarter pitching
-                and better media connections—your feedback matters!
+                Join our early beta to help shape the future of smarter, more
+                targeted pitching and better media connections—your feedback
+                matters!
               </Typography>
             </Box>
           </Zoom>

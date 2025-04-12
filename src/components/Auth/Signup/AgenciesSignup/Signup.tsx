@@ -148,7 +148,7 @@ const Signup = () => {
             className={classes.signupButton}
             disabled={loading}
           >
-            {loading ? "Processing..." : "Sign Up & Pay"}
+            {loading ? "Processing..." : "Sign Up"}
           </Button>
 
           <Typography className={classes.noteText}>
