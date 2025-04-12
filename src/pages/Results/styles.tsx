@@ -6,7 +6,7 @@ const styles = makeStyles()((theme: Theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    maxWidth: "1000px",
+    maxWidth: "1200px",
     // width: "100%",
     padding: theme.spacing(6, 2),
     paddingTop: "80px",

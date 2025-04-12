@@ -67,9 +67,9 @@ const Results = () => {
   const currentOutlets = results.slice(indexOfFirstOutlet, indexOfLastOutlet);
   const totalPages = Math.ceil(results.length / outletsPerPage);
 
-  const [expandedOutlets, setExpandedOutlets] = useState<{
-    [key: string]: boolean;
-  }>({});
+  // const [expandedOutlets, setExpandedOutlets] = useState<{
+  //   [key: string]: boolean;
+  // }>({});
 
   const handleOpenModal = (outletName: string) => {
     const outlet = results.find((o) => o.outlet.name === outletName);
@@ -174,12 +174,12 @@ const Results = () => {
     navigate("/onboarding");
   };
 
-  const handleExpandClick = (outletName: string) => {
-    setExpandedOutlets((prev) => ({
-      ...prev,
-      [outletName]: !prev[outletName],
-    }));
-  };
+  // const handleExpandClick = (outletName: string) => {
+  //   setExpandedOutlets((prev) => ({
+  //     ...prev,
+  //     [outletName]: !prev[outletName],
+  //   }));
+  // };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -278,9 +278,25 @@ const Results = () => {
                         }
                       />
                     </Box>
-                    {outlet.outlet.ai_partnered === "Yes" && (
+                    {outlet.outlet.ai_partnered === "Yes" ? (
                       <Box display="flex" alignItems="center" gap={0.5}>
                         <span className={classes.tooltip}>✓ AI Partnered</span>
+                        <Tooltip
+                          title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."
+                          arrow
+                          classes={{ tooltip: classes.matchExplanationTooltip }}
+                        >
+                          <Info className={classes.matchExplanationIcon} />
+                        </Tooltip>
+                      </Box>
+                    ) : (
+                      <Box display="flex" alignItems="center" gap={0.5}>
+                        <span
+                          className={classes.tooltip}
+                          style={{ color: "#666" }}
+                        >
+                          Unknown
+                        </span>
                         <Tooltip
                           title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."
                           arrow
@@ -445,10 +461,30 @@ const Results = () => {
                           </Box>
                         </TableCell>
                         <TableCell>
-                          {outlet.outlet.ai_partnered === "Yes" && (
+                          {outlet.outlet.ai_partnered === "Yes" ? (
                             <Box display="flex" alignItems="center" gap={0.5}>
                               <span className={classes.tooltip}>
                                 ✓ AI Partnered
+                              </span>
+                              <Tooltip
+                                title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."
+                                arrow
+                                classes={{
+                                  tooltip: classes.matchExplanationTooltip,
+                                }}
+                              >
+                                <Info
+                                  className={classes.matchExplanationIcon}
+                                />
+                              </Tooltip>
+                            </Box>
+                          ) : (
+                            <Box display="flex" alignItems="center" gap={0.5}>
+                              <span
+                                className={classes.tooltip}
+                                style={{ color: "#666" }}
+                              >
+                                Unknown
                               </span>
                               <Tooltip
                                 title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."

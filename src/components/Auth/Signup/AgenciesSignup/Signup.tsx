@@ -10,9 +10,9 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../Navbar/Nabvar";
-import WelcomeModal from "../../../WelcomeModal/WelcomeModal";
+// import WelcomeModal from "../../../WelcomeModal/WelcomeModal";
 import useStyles from "./styles";
-import { createCheckSession } from "../../../../services/auth";
+// import { createCheckSession } from "../../../../services/auth";
 
 const planOptions = [
   {
@@ -41,7 +41,7 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [plan, setPlan] = useState("");
-  const [showWelcomeModal, setShowWelcomeModal] = useState(false);
+  // const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

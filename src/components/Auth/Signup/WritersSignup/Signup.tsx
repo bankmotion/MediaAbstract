@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../Navbar/Nabvar";
-import WelcomeModal from "../../../WelcomeModal/WelcomeModal";
+// import WelcomeModal from "../../../WelcomeModal/WelcomeModal";
 import useStyles from "./styles";
 
 const planOptions = [
