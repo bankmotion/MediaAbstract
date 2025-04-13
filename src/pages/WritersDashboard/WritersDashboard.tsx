@@ -68,6 +68,7 @@ const WritersDashboard = () => {
     (state: RootState) => state.allOutlets.outlets
   );
   const dashboardResult = useSelector((state: RootState) => state.dashboard);
+  console.log("Dashboard Result: ", dashboardResult);
   const savedPitches =
     useSelector((state: RootState) => state.savedOutlets.results) || [];
 
@@ -475,7 +476,7 @@ const WritersDashboard = () => {
             </Box>
 
             <Grid container spacing={3} className={classes.pitchGrid}>
-              {pitches.map((pitch) => (
+              {dashboardResult.myPitches.map((pitch) => (
                 <Grid item key={pitch.id}>
                   <Card className={classes.pitchCard}>
                     <CardContent className={classes.pitchCardContent}>
@@ -498,20 +499,18 @@ const WritersDashboard = () => {
                       </Box>
                       <Box className={classes.pitchMatches}>
                         <Box className={classes.matchList}>
-                          {pitch.matches.map((match, index) => (
-                            <Box key={index} className={classes.matchItem}>
-                              <Typography variant="body2">
-                                {match.split(" (")[0]}
-                                <Typography
-                                  component="span"
-                                  className={classes.matchScore}
-                                >
-                                  {" "}
-                                  ({match.split("(")[1]}
+                          {pitch.matched_outlets
+                            .slice(0, 3)
+                            .map((matched_outet: any) => (
+                              <Box className={classes.matchItem}>
+                                <Typography variant="body2">
+                                  {matched_outet.name}
                                 </Typography>
-                              </Typography>
-                            </Box>
-                          ))}
+                                <Typography variant="body2">
+                                  {matched_outet.match_percentage}
+                                </Typography>
+                              </Box>
+                            ))}
                         </Box>
                         <Box className={classes.pitchActions}>
                           <Button

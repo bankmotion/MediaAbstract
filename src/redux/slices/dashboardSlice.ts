@@ -5,6 +5,7 @@ interface DashboardState {
   matchesFound: number;
   myPitches: any[];
   loading: boolean;
+  matches_outlets: any[];
 }
 
 const initialState: DashboardState = {
@@ -12,6 +13,7 @@ const initialState: DashboardState = {
   matchesFound: 0,
   myPitches: [],
   loading: false,
+  matches_outlets: [],
 };
 
 // Fetch dashboard data from backend
@@ -36,6 +38,7 @@ const dashboardSlice = createSlice({
         state.pitchesSent = action.payload.pitches_sent;
         state.matchesFound = action.payload.matches_found;
         state.myPitches = action.payload.my_pitches;
+        state.matches_outlets = action.payload.my_pitches.matches_outlets;
 
         state.loading = false;
 
