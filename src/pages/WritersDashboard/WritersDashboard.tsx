@@ -56,6 +56,7 @@ import { Outlet } from "../../redux/slices/outletsSlice";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import MatchesModal from "../../components/MatchesModal/MatchesModal";
 
 const WritersDashboard = () => {
   const { classes } = useStyles();
@@ -86,51 +87,54 @@ const WritersDashboard = () => {
   const [selectedPitchId, setSelectedPitchId] = useState<number | null>(null);
   const [reminderDate, setReminderDate] = useState("");
 
-  const pitches = [
-    {
-      id: 1,
-      title: "AI for Healthcare: The Next Frontier",
-      status: "Submitted",
-      matches: ["Forbes (85%)", "Wired (78%)", "TechCrunch (72%)"],
-      followUp: "2025-03-27",
-    },
-    {
-      id: 2,
-      title: "ClimateTech Trends: 2025 Outlook",
-      status: "Matched",
-      matches: ["TechCrunch (92%)", "The Verge (88%)", "Fast Company (81%)"],
-      followUp: "2025-03-30",
-    },
-    {
-      id: 3,
-      title: "The Future of Remote Work in 2025",
-      status: "Submitted",
-      matches: [
-        "Harvard Business Review (89%)",
-        "Inc. (76%)",
-        "Entrepreneur (71%)",
-      ],
-      followUp: "2025-04-02",
-    },
-    {
-      id: 4,
-      title: "Blockchain in Supply Chain Management",
-      status: "Matched",
-      matches: ["MIT Technology Review (91%)", "ZDNet (83%)", "CoinDesk (79%)"],
-      followUp: "2025-04-05",
-    },
-    {
-      id: 5,
-      title: "Sustainable Fashion: The New Normal",
-      status: "Submitted",
-      matches: [
-        "Vogue Business (87%)",
-        "Business of Fashion (82%)",
-        "Fashionista (75%)",
-      ],
-      followUp: "2025-04-08",
-    },
-  ];
+  const [matchesModalOpen, setMatchesModalOpen] = useState(false);
+  const [selectedPitch, setSelectedPitch] = useState<any>(null);
+
+  // const pitches = [
+  //   {
+  //     id: 1,
+  //     title: "AI for Healthcare: The Next Frontier",
+  //     status: "Submitted",
+  //     matches: ["Forbes (85%)", "Wired (78%)", "TechCrunch (72%)"],
+  //     followUp: "2025-03-27",
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "ClimateTech Trends: 2025 Outlook",
+  //     status: "Matched",
+  //     matches: ["TechCrunch (92%)", "The Verge (88%)", "Fast Company (81%)"],
+  //     followUp: "2025-03-30",
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "The Future of Remote Work in 2025",
+  //     status: "Submitted",
+  //     matches: [
+  //       "Harvard Business Review (89%)",
+  //       "Inc. (76%)",
+  //       "Entrepreneur (71%)",
+  //     ],
+  //     followUp: "2025-04-02",
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Blockchain in Supply Chain Management",
+  //     status: "Matched",
+  //     matches: ["MIT Technology Review (91%)", "ZDNet (83%)", "CoinDesk (79%)"],
+  //     followUp: "2025-04-05",
+  //   },
+  //   {
+  //     id: 5,
+  //     title: "Sustainable Fashion: The New Normal",
+  //     status: "Submitted",
+  //     matches: [
+  //       "Vogue Business (87%)",
+  //       "Business of Fashion (82%)",
+  //       "Fashionista (75%)",
+  //     ],
+  //     followUp: "2025-04-08",
+  //   },
+  // ];
 
   const [activityLog, setActivityLog] = useState([
     {
@@ -297,6 +301,16 @@ const WritersDashboard = () => {
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  const handleOpenMatchesModal = (pitch: any) => {
+    setSelectedPitch(pitch);
+    setMatchesModalOpen(true);
+  };
+
+  const handleCloseMatchesModal = () => {
+    setSelectedPitch(null);
+    setMatchesModalOpen(false);
   };
 
   useEffect(() => {
@@ -517,7 +531,7 @@ const WritersDashboard = () => {
                             variant="text"
                             size="small"
                             className={`${classes.pitchActionButton} primary`}
-                            onClick={() => navigate("/results")}
+                            onClick={() => handleOpenMatchesModal(pitch)}
                           >
                             See Matches
                           </Button>
@@ -842,6 +856,12 @@ const WritersDashboard = () => {
           </Zoom>
         </>
       )}
+      <MatchesModal
+        open={matchesModalOpen}
+        handleClose={handleCloseMatchesModal}
+        matches={selectedPitch?.matched_outlets || []}
+        pitchTitle={selectedPitch?.title || ""}
+      />
     </Box>
   );
 };
