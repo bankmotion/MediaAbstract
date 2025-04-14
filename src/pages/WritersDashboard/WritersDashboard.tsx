@@ -260,8 +260,15 @@ const WritersDashboard = () => {
   };
 
   const handleOpenMatchesModal = (pitch: any) => {
-    setSelectedPitch(pitch);
-    setMatchesModalOpen(true);
+    // setSelectedPitch(pitch);
+    // setMatchesModalOpen(true);
+    navigate("/matches", {
+      state: {
+        pitchTitle: pitch.title,
+        matches: pitch.matched_outlets,
+        pitchId: pitch.id,
+      },
+    });
   };
 
   const handleCloseMatchesModal = () => {
@@ -832,12 +839,12 @@ const WritersDashboard = () => {
           </Zoom>
         </>
       )}
-      <MatchesModal
+      {/* <MatchesModal
         open={matchesModalOpen}
         handleClose={handleCloseMatchesModal}
         matches={selectedPitch?.matched_outlets || []}
         pitchTitle={selectedPitch?.title || ""}
-      />
+      /> */}
     </Box>
   );
 };
