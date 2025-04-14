@@ -34,6 +34,22 @@ export const submitPitch = async (abstract: string, industry: string) => {
   }
 };
 
+export const updatePitchSubmissionStatus = async (
+  pitchId: string,
+  outletName: string
+) => {
+  try {
+    const response = await axios.put(`${API_URL}/update_pitch_status`, {
+      pitchId,
+      outletName,
+      status: "Submitted",
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const fetchDashboardDataAPI = async () => {
   const response = await axios.get(`${API_URL}/get_dashboard_data`);
 

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { submitPitch } from "../../services/api";
+import { submitPitch, updatePitchSubmissionStatus } from "../../services/api";
 
 interface PitchState {
   abstract: string;
@@ -25,6 +25,14 @@ export const fetchPitchResults = createAsyncThunk(
   }
 );
 
+export const updatePitchStatus = createAsyncThunk(
+  "pitch/updatePitchStatus",
+  async ({ pitchId, outletName }: { pitchId: string; outletName: string }) => {
+    const response = await updatePitchSubmissionStatus(pitchId, outletName);
+    return response;
+  }
+);
+
 const pitchSlice = createSlice({
   name: "pitch",
   initialState,
@@ -45,11 +53,21 @@ const pitchSlice = createSlice({
       .addCase(fetchPitchResults.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.results = action.payload;
-        // console.log("result:", state.results);
       })
       .addCase(fetchPitchResults.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Something went wrong";
+      })
+      .addCase(updatePitchStatus.fulfilled, (state, action) => {
+        if (action.payload.success) {
+          // Update the local state to reflect the status change
+          const outletIndex = state.results.findIndex(
+            (result) => result.outlet.name === action.meta.arg.outletName
+          );
+          if (outletIndex !== -1) {
+            state.results[outletIndex].status = "Submitted";
+          }
+        }
       });
   },
 });

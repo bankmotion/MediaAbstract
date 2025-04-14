@@ -53,6 +53,7 @@ const MatchesModal: React.FC<MatchesModalProps> = ({
   matches,
   pitchTitle,
 }) => {
+  console.log("matches:", matches);
   const { classes } = useStyles();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));

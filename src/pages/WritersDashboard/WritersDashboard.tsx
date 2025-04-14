@@ -18,6 +18,7 @@ import {
   IconButton,
   Fab,
   Zoom,
+  Tooltip,
 } from "@mui/material";
 
 import { useState } from "react";
@@ -33,6 +34,7 @@ import {
   Download as DownloadIcon,
   AccessTime as AccessTimeIcon,
   NotificationsNone as NotificationIcon,
+  Info,
 } from "@mui/icons-material";
 import PersonIcon from "@mui/icons-material/Person";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
@@ -89,52 +91,6 @@ const WritersDashboard = () => {
 
   const [matchesModalOpen, setMatchesModalOpen] = useState(false);
   const [selectedPitch, setSelectedPitch] = useState<any>(null);
-
-  // const pitches = [
-  //   {
-  //     id: 1,
-  //     title: "AI for Healthcare: The Next Frontier",
-  //     status: "Submitted",
-  //     matches: ["Forbes (85%)", "Wired (78%)", "TechCrunch (72%)"],
-  //     followUp: "2025-03-27",
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "ClimateTech Trends: 2025 Outlook",
-  //     status: "Matched",
-  //     matches: ["TechCrunch (92%)", "The Verge (88%)", "Fast Company (81%)"],
-  //     followUp: "2025-03-30",
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "The Future of Remote Work in 2025",
-  //     status: "Submitted",
-  //     matches: [
-  //       "Harvard Business Review (89%)",
-  //       "Inc. (76%)",
-  //       "Entrepreneur (71%)",
-  //     ],
-  //     followUp: "2025-04-02",
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Blockchain in Supply Chain Management",
-  //     status: "Matched",
-  //     matches: ["MIT Technology Review (91%)", "ZDNet (83%)", "CoinDesk (79%)"],
-  //     followUp: "2025-04-05",
-  //   },
-  //   {
-  //     id: 5,
-  //     title: "Sustainable Fashion: The New Normal",
-  //     status: "Submitted",
-  //     matches: [
-  //       "Vogue Business (87%)",
-  //       "Business of Fashion (82%)",
-  //       "Fashionista (75%)",
-  //     ],
-  //     followUp: "2025-04-08",
-  //   },
-  // ];
 
   const [activityLog, setActivityLog] = useState([
     {
@@ -509,6 +465,26 @@ const WritersDashboard = () => {
                             } ${pitch.status.toLowerCase()}`}
                           />
                           {pitch.status}
+                          {pitch.status === "Matched" && (
+                            <Tooltip
+                              title="This pitch has been matched to outlets. Review matches and submit to update the status."
+                              arrow
+                              placement="top"
+                            >
+                              <Info
+                                sx={{
+                                  fontSize: "16px",
+                                  ml: 0.5,
+                                  cursor: "help",
+                                  color: "inherit",
+                                  opacity: 0.8,
+                                  "&:hover": {
+                                    opacity: 1,
+                                  },
+                                }}
+                              />
+                            </Tooltip>
+                          )}
                         </Box>
                       </Box>
                       <Box className={classes.pitchMatches}>
