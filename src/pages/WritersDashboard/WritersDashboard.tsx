@@ -58,7 +58,7 @@ import { Outlet } from "../../redux/slices/outletsSlice";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import MatchesModal from "../../components/MatchesModal/MatchesModal";
+// import MatchesModal from "../../components/MatchesModal/MatchesModal";
 
 const WritersDashboard = () => {
   const { classes } = useStyles();
@@ -89,8 +89,8 @@ const WritersDashboard = () => {
   const [selectedPitchId, setSelectedPitchId] = useState<number | null>(null);
   const [reminderDate, setReminderDate] = useState("");
 
-  const [matchesModalOpen, setMatchesModalOpen] = useState(false);
-  const [selectedPitch, setSelectedPitch] = useState<any>(null);
+  // const [matchesModalOpen, setMatchesModalOpen] = useState(false);
+  // const [selectedPitch, setSelectedPitch] = useState<any>(null);
 
   const [activityLog, setActivityLog] = useState([
     {
@@ -173,7 +173,7 @@ const WritersDashboard = () => {
     if (action.startsWith("#")) {
       const element = document.getElementById(action.substring(1));
       if (element) {
-        const headerOffset = 100; // Adjust this value based on your header height
+        const headerOffset = 100;
         const elementPosition = element.getBoundingClientRect().top;
         const offsetPosition =
           elementPosition + window.pageYOffset - headerOffset;
@@ -271,10 +271,10 @@ const WritersDashboard = () => {
     });
   };
 
-  const handleCloseMatchesModal = () => {
-    setSelectedPitch(null);
-    setMatchesModalOpen(false);
-  };
+  // const handleCloseMatchesModal = () => {
+  //   setSelectedPitch(null);
+  //   setMatchesModalOpen(false);
+  // };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);

@@ -60,7 +60,6 @@ const pitchSlice = createSlice({
       })
       .addCase(updatePitchStatus.fulfilled, (state, action) => {
         if (action.payload.success) {
-          // Update the local state to reflect the status change
           const outletIndex = state.results.findIndex(
             (result) => result.outlet.name === action.meta.arg.outletName
           );

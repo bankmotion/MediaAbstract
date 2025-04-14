@@ -40,18 +40,16 @@ const Onboarding = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
-  // const location = useLocation();
+
   const dispatch = useDispatch<AppDispatch>();
 
-  // Get pitch data from Redux state
   const { abstract: savedAbstract, industry: savedIndustry } = useSelector(
     (state: RootState) => state.pitch
   );
 
-  // Initialize state with saved values
   const [abstract, setAbstract] = useState(savedAbstract || "");
   const [industry, setIndustry] = useState(savedIndustry || "");
-  // const [role, setRole] = useState("");
+
   const [errors, setErrors] = useState({ abstract: false, industry: false });
 
   const [showScrollButton, setShowScrollButton] = useState(false);
@@ -84,11 +82,6 @@ const Onboarding = () => {
     dispatch(setPitchData({ abstract, industry }));
     dispatch(fetchPitchResults({ abstract, industry }));
 
-    // if (role === "writers") {
-    //   navigate("/results", { state: { role: "writers" } });
-    // } else if (role === "agencies") {
-    //   navigate("/results", { state: { role: "agencies" } });
-    // }
     navigate("/results");
   };
 

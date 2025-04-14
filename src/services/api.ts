@@ -26,7 +26,6 @@ export const submitPitch = async (abstract: string, industry: string) => {
     const data = await response.json();
     console.log("Pitch submitted successfully:", data);
 
-    // Expecting the backend to return matched outlets inside the response
     return data.matched_outlets || [];
   } catch (error) {
     console.error("Error in submitPitch", error);

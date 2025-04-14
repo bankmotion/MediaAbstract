@@ -5,15 +5,6 @@ interface SavedPitch {
   description: string;
   outlets: string[];
   selected_date: string;
-  // outletDetails?: {
-  //   [key: string]: {
-  //     guidelines?: string;
-  //     pitch_tips?: string;
-  //     contact_email?: string;
-  //     url?: string;
-  //     match_confidence?: number;
-  //   };
-  // };
 }
 interface PitchState {
   description: string;
@@ -43,7 +34,6 @@ export const saveSelectedOutlets = createAsyncThunk(
     outlets: string[];
   }) => {
     const response = await saveSelectedOutletsAPI(description, outlets);
-    console.log("=response=", response.data);
     return response.data;
   }
 );
@@ -86,5 +76,5 @@ const savePitchSlice = createSlice({
       });
   },
 });
-// export const { saveOutlets } = savePitchSlice.actions;
+
 export default savePitchSlice.reducer;

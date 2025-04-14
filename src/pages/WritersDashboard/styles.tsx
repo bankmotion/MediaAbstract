@@ -4,8 +4,6 @@ import { makeStyles } from "tss-react/mui";
 const useStyles = makeStyles()((theme) => ({
   wrapper: {
     display: "flex",
-    // flexDirection: "column",
-    // minHeight: "100vh",
     background: "linear-gradient(to right, #fdfbfb, #ebedee)",
     paddingTop: theme.spacing(8),
     paddingBottom: theme.spacing(10),

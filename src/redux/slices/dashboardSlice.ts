@@ -16,7 +16,6 @@ const initialState: DashboardState = {
   matches_outlets: [],
 };
 
-// Fetch dashboard data from backend
 export const fetchDashboardData = createAsyncThunk(
   "dashboard/fetchDashboardData",
 

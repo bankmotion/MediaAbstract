@@ -2,11 +2,12 @@ import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()((theme) => ({
   root: {
-    padding: theme.spacing(3),
+    padding: theme.spacing(5),
     maxWidth: 1200,
     margin: "0 auto",
+
     [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2),
+      padding: theme.spacing(3, 2),
     },
   },
   header: {
@@ -54,6 +55,9 @@ const useStyles = makeStyles()((theme) => ({
   searchInput: {
     width: "100%",
     maxWidth: 400,
+    "& .MuiOutlinedInput-root": {
+      height: 40,
+    },
     [theme.breakpoints.down("sm")]: {
       "& .MuiOutlinedInput-root": {
         height: 40,

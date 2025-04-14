@@ -62,7 +62,6 @@ const Results = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const outletsPerPage = 5;
 
-  // Dropdown menu state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
@@ -171,12 +170,8 @@ const Results = () => {
           })
         ).unwrap();
 
-        // Show success message
         setShowSuccessMessage(true);
-
-        // Add to activity log or handle success as needed
       } catch (error) {
-        // Handle error - maybe show an error message
         console.error("Failed to update pitch status:", error);
       }
     }
@@ -215,7 +210,6 @@ const Results = () => {
           </Box>
         ) : (
           <>
-            {/* Mobile: Dropdown at the top */}
             {isMobile && (
               <Box sx={{ minWidth: "120px" }}>
                 <Button
