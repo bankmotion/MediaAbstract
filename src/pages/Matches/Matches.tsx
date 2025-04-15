@@ -46,6 +46,7 @@ import { Outlet } from "../../redux/slices/outletsSlice";
 
 import useStyles from "./styles";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
+import SubmissionDialog from "../../components/SubmissionDialog/SubmissionDialog";
 
 interface Match {
   name: string;
@@ -74,9 +75,7 @@ const Matches: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [submissionDialogOpen, setSubmissionDialogOpen] = useState(false);
-  const [selectedOutletForSubmission, setSelectedOutletForSubmission] =
-    useState<Match | null>(null);
-  const [emailContent, setEmailContent] = useState("");
+
   const [selectAll, setSelectAll] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -89,6 +88,8 @@ const Matches: React.FC = () => {
     url: string;
     pitchId: string;
   } | null>(null);
+
+  const [showNotYetMessage, setShowNotYetMessage] = useState(false);
 
   const outletsPerPage = isMobile ? 3 : 5;
   const indexOfLastOutlet = currentPage * outletsPerPage;
@@ -146,7 +147,14 @@ const Matches: React.FC = () => {
 
   const handleCloseSubmissionDialog = () => {
     setSubmissionDialogOpen(false);
-    setSelectedOutletForSubmission(null);
+  };
+
+  const handleNotYetClick = () => {
+    setShowNotYetMessage(true);
+    setTimeout(() => {
+      setSubmissionDialogOpen(false);
+      setShowNotYetMessage(false);
+    }, 2000);
   };
 
   const handleOpenModal = (outletName: string) => {
@@ -556,19 +564,6 @@ const Matches: React.FC = () => {
           />
         </Box>
       )}
-      {/* 
-      <Box className={classes.actionButtons}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() =>
-            handleOpenSubmissionDialog(selectedOutletForSubmission!)
-          }
-          disabled={selectedOutlets.length === 0}
-        >
-          Submit Selected Pitches
-        </Button>
-      </Box> */}
 
       <OutletDetailModal
         open={modalOpen}
@@ -590,49 +585,12 @@ const Matches: React.FC = () => {
           Submitted!
         </Alert>
       </Snackbar>
-      <Dialog
+
+      <SubmissionDialog
         open={submissionDialogOpen}
         onClose={handleCloseSubmissionDialog}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{
-          sx: {
-            borderRadius: 2,
-            padding: 2,
-          },
-        }}
-      >
-        <DialogTitle sx={{ pb: 1 }}>
-          <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
-            Ready to Submit?
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            Are you ready to submit your pitch to{" "}
-            {selectedOutletForSubmission?.name}?
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            You'll be directed to their submission page.
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button
-            onClick={handleCloseSubmissionDialog}
-            variant="text"
-            sx={{ fontWeight: 500 }}
-          >
-            Not Yet
-          </Button>
-          <Button
-            onClick={handleSubmissionConfirm}
-            variant="contained"
-            sx={{ fontWeight: 600 }}
-          >
-            Yes, Continue
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={handleSubmissionConfirm}
+      />
     </Box>
   );
 };

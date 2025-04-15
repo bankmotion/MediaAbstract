@@ -37,6 +37,7 @@ import { updatePitchStatus } from "../../redux/slices/pitchSlice";
 import Navbar from "../../components/Navbar/Nabvar";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
 import ConfirmationModal from "../../components/ConfirmationModal/ConfirmationModal";
+import SubmissionDialog from "../../components/SubmissionDialog/SubmissionDialog";
 
 import useStyles from "./styles";
 
@@ -604,49 +605,11 @@ const Results = () => {
         </Alert>
       </Snackbar>
 
-      <Dialog
+      <SubmissionDialog
         open={submissionDialogOpen}
         onClose={() => setSubmissionDialogOpen(false)}
-        maxWidth="xs"
-        fullWidth
-        PaperProps={{
-          sx: {
-            borderRadius: 2,
-            padding: 2,
-          },
-        }}
-      >
-        <DialogTitle sx={{ pb: 1 }}>
-          <Typography variant="h6" component="div" sx={{ fontWeight: 600 }}>
-            Ready to Submit?
-          </Typography>
-        </DialogTitle>
-        <DialogContent>
-          <Typography variant="body1">
-            Are you ready to submit your pitch to{" "}
-            {selectedSubmissionOutlet?.name}?
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            You'll be directed to their submission page.
-          </Typography>
-        </DialogContent>
-        <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Button
-            onClick={() => setSubmissionDialogOpen(false)}
-            variant="text"
-            sx={{ fontWeight: 500 }}
-          >
-            Not Yet
-          </Button>
-          <Button
-            onClick={handleSubmissionConfirm}
-            variant="contained"
-            sx={{ fontWeight: 600 }}
-          >
-            Yes, Continue
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={handleSubmissionConfirm}
+      />
     </>
   );
 };
