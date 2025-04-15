@@ -3,7 +3,7 @@ import { Routes, Route } from "react-router-dom";
 // import logo from "./logo.svg";
 import Home from "./pages/Home/Home";
 import Onboarding from "./pages/Onboarding/Onboarding";
-import Footer from "./components/Tabs/Footer/Footer";
+import Footer from "./components/Footer/Footer";
 import Results from "./pages/Results/Results";
 import Terms from "./pages/Terms/Terms";
 import Login from "./components/Auth/Login/Login";
