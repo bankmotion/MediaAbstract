@@ -18,10 +18,6 @@ import {
   MenuItem,
   IconButton,
   Pagination,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
   TextField,
   InputAdornment,
 } from "@mui/material";
@@ -89,8 +85,6 @@ const Matches: React.FC = () => {
     pitchId: string;
   } | null>(null);
 
-  const [showNotYetMessage, setShowNotYetMessage] = useState(false);
-
   const outletsPerPage = isMobile ? 3 : 5;
   const indexOfLastOutlet = currentPage * outletsPerPage;
   const indexOfFirstOutlet = indexOfLastOutlet - outletsPerPage;
@@ -147,14 +141,6 @@ const Matches: React.FC = () => {
 
   const handleCloseSubmissionDialog = () => {
     setSubmissionDialogOpen(false);
-  };
-
-  const handleNotYetClick = () => {
-    setShowNotYetMessage(true);
-    setTimeout(() => {
-      setSubmissionDialogOpen(false);
-      setShowNotYetMessage(false);
-    }, 2000);
   };
 
   const handleOpenModal = (outletName: string) => {

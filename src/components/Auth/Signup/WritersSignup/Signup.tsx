@@ -10,7 +10,6 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../Navbar/Nabvar";
-// import WelcomeModal from "../../../WelcomeModal/WelcomeModal";
 import useStyles from "./styles";
 
 const planOptions = [
@@ -31,10 +30,7 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // const [showWelcomeModal, setShowWelcomeModal] = useState(false);
-
   const handleSignup = async () => {
-    // setShowWelcomeModal(true);
     if (!email || !password || !plan) {
       setError("Please fill in all fields");
       return;
@@ -43,23 +39,24 @@ const Signup = () => {
     try {
       setLoading(true);
       setError(null);
+
+      // Store registration data in localStorage
+      const registrationData = {
+        email,
+        password,
+        plan_type: plan,
+      };
+      localStorage.setItem(
+        "pendingRegistration",
+        JSON.stringify(registrationData)
+      );
+
+      // Redirect to Stripe
       const selectedPlan = planOptions.find((opt) => opt.value === plan);
       if (!selectedPlan) {
-        setError("Invalid plan selection");
-        return;
+        throw new Error("Invalid plan selection");
       }
 
-      // Store user data in localStorage before redirecting
-      // localStorage.setItem(
-      //   "signup_data",
-      //   JSON.stringify({
-      //     email,
-      //     password,
-      //     plan: selectedPlan.value,
-      //   })
-      // );
-
-      // Redirect to Stripe checkout
       window.location.href = selectedPlan.checkoutUrl;
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -67,14 +64,6 @@ const Signup = () => {
       setLoading(false);
     }
   };
-  // const handleContinue = () => {
-  //   setShowWelcomeModal(false);
-  //   navigate("/onboarding", { state: { role: "writers" } });
-  // };
-
-  // const handleCloseModal = () => {
-  //   setShowWelcomeModal(false);
-  // };
 
   return (
     <>
@@ -118,7 +107,7 @@ const Signup = () => {
                 key={opt.value}
                 value={opt.value}
                 sx={{
-                  whiteSpace: "normal", // Allows wrapping
+                  whiteSpace: "normal",
                   fontSize: {
                     xs: "0.85rem",
                     sm: "0.95rem",
@@ -126,8 +115,8 @@ const Signup = () => {
                   lineHeight: 1.4,
                   paddingY: 1,
                   "&:hover": {
-                    backgroundColor: "#f0f4ff", // light blue or any preferred tone
-                    transform: "scale(1.015)", // subtle zoom
+                    backgroundColor: "#f0f4ff",
+                    transform: "scale(1.015)",
                     fontWeight: 500,
                   },
                 }}
@@ -160,12 +149,6 @@ const Signup = () => {
           </Typography>
         </Paper>
       </Box>
-      {/* 
-      <WelcomeModal
-        open={showWelcomeModal}
-        onClose={handleCloseModal}
-        onContinue={handleContinue}
-      /> */}
     </>
   );
 };
