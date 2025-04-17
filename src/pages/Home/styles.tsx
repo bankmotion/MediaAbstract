@@ -211,6 +211,17 @@ const useStyles = makeStyles()((theme) => ({
       fontSize: "0.95rem",
     },
   },
+
+  scrollToTopButton: {
+    position: "fixed",
+    bottom: theme.spacing(8),
+    right: theme.spacing(4),
+    zIndex: 1000,
+    backgroundColor: "#1976d2",
+    color: "white",
+    "&:hover": { backgroundColor: "#1565c0" },
+    display: "flex",
+  },
 }));
 
 export default useStyles;

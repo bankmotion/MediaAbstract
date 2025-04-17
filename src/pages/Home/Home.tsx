@@ -10,6 +10,8 @@ import {
   Grid,
   Card,
   CardContent,
+  Fab,
+  Zoom,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import {
@@ -19,16 +21,24 @@ import {
   Description,
   Verified,
   Login,
+  KeyboardArrowUp,
+  KeyboardArrowDown,
 } from "@mui/icons-material";
 import useStyles from "./styles";
 import AboutModal from "../../components/AboutModal/AboutModal";
 import Cookies from "js-cookie";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Home = () => {
   const { classes } = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   const [tab, setTab] = React.useState(0);
   const [showAboutModal, setShowAboutModal] = useState(false);
+  const [showScrollButton, setShowScrollButton] = useState(false);
+  const [showScrollToSaved, setShowScrollToSaved] = useState(false);
 
   const navigate = useNavigate();
 
@@ -44,6 +54,36 @@ const Home = () => {
     }
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const scrollToSavedOutlets = () => {
+    const element = document.getElementById("saved-outlets");
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const handleScroll = () => {
+    if (window.scrollY > 300) {
+      setShowScrollButton(true);
+    } else {
+      setShowScrollButton(false);
+    }
+
+    const savedOutletsElement = document.getElementById("saved-outlets");
+    if (savedOutletsElement) {
+      const rect = savedOutletsElement.getBoundingClientRect();
+      setShowScrollToSaved(rect.top < 0);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     // Only show about modal if cookie is not set
@@ -52,18 +92,30 @@ const Home = () => {
     }
   }, []);
   return (
-    <Box className={classes.wrapper}>
+    <Box className={classes.wrapper} sx={{ pt: isMobile ? "56px" : "64px" }}>
       <AboutModal
         open={showAboutModal}
         onClose={() => setShowAboutModal(false)}
       />
       <AppBar
-        position="static"
+        position="fixed"
         color="transparent"
         elevation={0}
         className={classes.appbar}
+        sx={{
+          zIndex: theme.zIndex.drawer + 1,
+          backgroundColor: "white",
+          borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+          height: isMobile ? "56px" : "64px",
+        }}
       >
-        <Toolbar className={classes.toolbar}>
+        <Toolbar
+          className={classes.toolbar}
+          sx={{
+            minHeight: isMobile ? "56px" : "64px",
+            height: isMobile ? "56px" : "64px",
+          }}
+        >
           <Button
             onClick={() => navigate("/")}
             className={classes.logoButton}
@@ -184,6 +236,41 @@ const Home = () => {
           </Grid>
         </Grid>
       </Box>
+
+      {isMobile && (
+        <>
+          <Zoom in={showScrollButton}>
+            <Fab
+              color="primary"
+              size="medium"
+              onClick={scrollToTop}
+              sx={{
+                position: "fixed",
+                bottom: 60,
+                right: 40,
+                zIndex: 1000,
+              }}
+            >
+              <KeyboardArrowUp />
+            </Fab>
+          </Zoom>
+          <Zoom in={showScrollToSaved}>
+            <Fab
+              color="secondary"
+              size="medium"
+              onClick={scrollToSavedOutlets}
+              sx={{
+                position: "fixed",
+                bottom: 60,
+                right: 100,
+                zIndex: 1000,
+              }}
+            >
+              <Description />
+            </Fab>
+          </Zoom>
+        </>
+      )}
     </Box>
   );
 };
