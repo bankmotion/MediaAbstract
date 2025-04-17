@@ -338,7 +338,7 @@ const Matches: React.FC = () => {
                   Contact: {outlet.email}
                 </Typography>
                 <Typography className={classes.score}>
-                  {outlet.match_percentage}% Match
+                  {outlet.match_percentage} Match
                   <Tooltip
                     title={
                       <Box>
@@ -477,7 +477,7 @@ const Matches: React.FC = () => {
                   </TableCell>
                   <TableCell>
                     <Box display="flex" alignItems="center">
-                      {outlet.match_percentage}% Match
+                      {outlet.match_percentage} Match
                       <Tooltip
                         title={
                           <Box>

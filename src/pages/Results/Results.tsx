@@ -303,7 +303,7 @@ const Results = () => {
                       Contact: {outlet.outlet.contact_email}
                     </Typography>
                     <Typography className={classes.score}>
-                      {outlet.match_confidence}% Match
+                      {outlet.match_confidence} Match
                       <Tooltip
                         title={
                           <Box>
