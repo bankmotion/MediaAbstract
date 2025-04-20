@@ -103,7 +103,7 @@ const AgenciesIntro = () => {
                     tabIndex={0}
                   >
                     <Typography className={classes.planPrice}>
-                      $75/month
+                      $50/month
                     </Typography>
                   </Box>
                   <Typography className={classes.planDesc}>
@@ -130,7 +130,7 @@ const AgenciesIntro = () => {
                     tabIndex={0}
                   >
                     <Typography className={classes.planPrice}>
-                      $150/month
+                      $120/month
                     </Typography>
                   </Box>
                   <Typography className={classes.planDesc}>
@@ -158,7 +158,7 @@ const AgenciesIntro = () => {
                     tabIndex={0}
                   >
                     <Typography className={classes.planPrice}>
-                      $250/month
+                      $200/month
                     </Typography>
                   </Box>
                   <Typography className={classes.planDesc}>
