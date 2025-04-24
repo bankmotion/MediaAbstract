@@ -45,6 +45,13 @@ const useStyles = makeStyles()((theme) => ({
     alignItems: "center",
     gap: theme.spacing(2),
   },
+  profileButton: {
+    textTransform: "none",
+    fontWeight: 600,
+    "&:hover": {
+      backgroundColor: "rgba(25, 118, 210, 0.05)",
+    },
+  },
   userProfile: {
     display: "flex",
     alignItems: "center",

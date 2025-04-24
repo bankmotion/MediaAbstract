@@ -314,7 +314,17 @@ const WritersDashboard = () => {
             </Typography>
           </Button>
 
-          <>
+          <Box className={classes.headerActions}>
+            <Button
+              startIcon={<PersonIcon />}
+              color="primary"
+              variant="text"
+              onClick={() => navigate("/profile")}
+              sx={{ fontWeight: 500 }}
+              className={classes.profileButton}
+            >
+              Profile
+            </Button>
             <Button
               startIcon={<Logout />}
               color="primary"
@@ -325,7 +335,7 @@ const WritersDashboard = () => {
             >
               LogOut
             </Button>
-          </>
+          </Box>
         </Toolbar>
       </AppBar>
       <Box className={classes.body}>
