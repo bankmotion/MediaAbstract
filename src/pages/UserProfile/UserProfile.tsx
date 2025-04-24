@@ -23,9 +23,7 @@ import {
   Save as SaveIcon,
   Cancel as CancelIcon,
   Person as PersonIcon,
-  Email as EmailIcon,
   CardMembership as SubscriptionIcon,
-  Notifications as NotificationsIcon,
   ArrowBack as ArrowBackIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
