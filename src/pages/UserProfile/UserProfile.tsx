@@ -13,60 +13,55 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Switch,
-  FormControlLabel,
-  Alert,
-  Snackbar,
+  Chip,
+  Grid,
+  useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import {
   Edit as EditIcon,
   Save as SaveIcon,
   Cancel as CancelIcon,
   Person as PersonIcon,
+  Email as EmailIcon,
   CardMembership as SubscriptionIcon,
   ArrowBack as ArrowBackIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 
-interface UserProfileData {
-  name: string;
-  email: string;
-  subscriptionStatus: "free" | "premium" | "enterprise";
-  subscriptionEndDate: string;
-  notificationsEnabled: boolean;
-}
-
 const UserProfile = () => {
   const { classes } = useStyles();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
 
-  // Mock data - will be replaced with actual data from Supabase
-  const [profileData, setProfileData] = useState<UserProfileData>({
+  // Mock user data - replace with actual data from Supabase
+  const [userData, setUserData] = useState({
     name: "Jane Doe",
     email: "jane.doe@example.com",
-    subscriptionStatus: "premium",
-    subscriptionEndDate: "2024-12-31",
-    notificationsEnabled: true,
+    subscription: {
+      status: "active",
+      plan: "Professional",
+      nextBillingDate: "2024-04-21",
+    },
+    avatar:
+      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
   });
 
   const [isEditing, setIsEditing] = useState(false);
-  const [editedData, setEditedData] = useState<UserProfileData>(profileData);
-  const [showUpgradeDialog, setShowUpgradeDialog] = useState(false);
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [editedData, setEditedData] = useState(userData);
+  const [subscriptionDialogOpen, setSubscriptionDialogOpen] = useState(false);
 
   const handleEdit = () => {
-    setEditedData(profileData);
+    setEditedData(userData);
     setIsEditing(true);
   };
 
   const handleSave = () => {
-    // Here we'll add the API call to update the profile
-    setProfileData(editedData);
+    setUserData(editedData);
     setIsEditing(false);
-    setSnackbarMessage("Profile updated successfully!");
-    setShowSnackbar(true);
+    // TODO: Add API call to update user data in Supabase
   };
 
   const handleCancel = () => {
@@ -74,290 +69,232 @@ const UserProfile = () => {
   };
 
   const handleInputChange =
-    (field: keyof UserProfileData) =>
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setEditedData({
         ...editedData,
         [field]: event.target.value,
       });
     };
 
-  const handleNotificationToggle = () => {
-    setEditedData({
-      ...editedData,
-      notificationsEnabled: !editedData.notificationsEnabled,
-    });
+  const handleSubscriptionDialog = () => {
+    setSubscriptionDialogOpen(true);
+  };
+
+  const handleCloseSubscriptionDialog = () => {
+    setSubscriptionDialogOpen(false);
   };
 
   const handleUpgradeSubscription = () => {
-    setShowUpgradeDialog(true);
+    // TODO: Implement subscription upgrade logic
+    handleCloseSubscriptionDialog();
   };
 
-  const handleCloseUpgradeDialog = () => {
-    setShowUpgradeDialog(false);
-  };
-
-  const getSubscriptionColor = (status: string) => {
-    switch (status) {
-      case "premium":
-        return "#4caf50";
-      case "enterprise":
-        return "#1976d2";
-      default:
-        return "#757575";
-    }
+  const handleCancelSubscription = () => {
+    // TODO: Implement subscription cancellation logic
+    handleCloseSubscriptionDialog();
   };
 
   return (
     <Box className={classes.wrapper}>
       <Box className={classes.header}>
-        <Box className={classes.headerLeft}>
-          <IconButton
-            onClick={() => navigate(-1)}
-            className={classes.backButton}
-            size="large"
-          >
-            <ArrowBackIcon />
-          </IconButton>
-          <Typography variant="h4" className={classes.title}>
-            User Profile
-          </Typography>
-        </Box>
         <Button
-          variant="outlined"
-          startIcon={<EditIcon />}
-          onClick={handleEdit}
-          className={classes.editButton}
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate("/dashboard")}
+          className={classes.backButton}
         >
-          Edit Profile
+          Back to Dashboard
         </Button>
+        <Typography variant="h4" className={classes.pageTitle}>
+          User Profile
+        </Typography>
       </Box>
 
-      <Box className={classes.content}>
-        <Card className={classes.profileCard}>
-          <CardContent>
-            <Box className={classes.avatarSection}>
-              <Avatar
-                src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-                alt="User Avatar"
-                className={classes.avatar}
-              >
-                <PersonIcon />
-              </Avatar>
-              {isEditing ? (
-                <Box className={classes.editActions}>
+      <Grid container spacing={3} className={classes.content}>
+        <Grid item xs={12} md={4}>
+          <Card className={classes.profileCard}>
+            <CardContent className={classes.profileCardContent}>
+              <Box className={classes.avatarContainer}>
+                <Avatar
+                  src={userData.avatar}
+                  alt={userData.name}
+                  className={classes.avatar}
+                >
+                  <PersonIcon />
+                </Avatar>
+                {!isEditing && (
                   <IconButton
-                    color="primary"
-                    onClick={handleSave}
-                    className={classes.actionButton}
+                    className={classes.editAvatarButton}
+                    onClick={handleEdit}
                   >
-                    <SaveIcon />
+                    <EditIcon />
                   </IconButton>
-                  <IconButton
-                    color="error"
-                    onClick={handleCancel}
-                    className={classes.actionButton}
-                  >
-                    <CancelIcon />
-                  </IconButton>
-                </Box>
-              ) : null}
-            </Box>
-
-            <Box className={classes.profileInfo}>
-              <Box className={classes.infoSection}>
-                <Typography variant="subtitle2" className={classes.label}>
-                  Full Name
-                </Typography>
-                {isEditing ? (
-                  <TextField
-                    fullWidth
-                    value={editedData.name}
-                    onChange={handleInputChange("name")}
-                    variant="outlined"
-                    size="small"
-                  />
-                ) : (
-                  <Typography variant="body1" className={classes.value}>
-                    {profileData.name}
-                  </Typography>
                 )}
               </Box>
+              <Typography variant="h5" className={classes.userName}>
+                {userData.name}
+              </Typography>
+              <Typography variant="body1" className={classes.userEmail}>
+                {userData.email}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
 
-              <Box className={classes.infoSection}>
-                <Typography variant="subtitle2" className={classes.label}>
-                  Email Address
-                </Typography>
-                {isEditing ? (
-                  <TextField
-                    fullWidth
-                    value={editedData.email}
-                    onChange={handleInputChange("email")}
-                    variant="outlined"
-                    size="small"
-                    type="email"
-                  />
+        <Grid item xs={12} md={8}>
+          <Card className={classes.detailsCard}>
+            <CardContent>
+              <Box className={classes.sectionHeader}>
+                <Typography variant="h6">Profile Information</Typography>
+                {!isEditing ? (
+                  <Button
+                    startIcon={<EditIcon />}
+                    onClick={handleEdit}
+                    className={classes.editButton}
+                  >
+                    Edit Profile
+                  </Button>
                 ) : (
-                  <Typography variant="body1" className={classes.value}>
-                    {profileData.email}
-                  </Typography>
+                  <Box className={classes.editActions}>
+                    <Button
+                      startIcon={<SaveIcon />}
+                      onClick={handleSave}
+                      variant="contained"
+                      color="primary"
+                      className={classes.saveButton}
+                    >
+                      Save
+                    </Button>
+                    <Button
+                      startIcon={<CancelIcon />}
+                      onClick={handleCancel}
+                      variant="outlined"
+                      className={classes.cancelButton}
+                    >
+                      Cancel
+                    </Button>
+                  </Box>
                 )}
               </Box>
 
               <Divider className={classes.divider} />
 
-              <Box className={classes.infoSection}>
-                <Typography variant="subtitle2" className={classes.label}>
-                  Subscription Status
-                </Typography>
-                <Box className={classes.subscriptionInfo}>
-                  <Typography
-                    variant="body1"
-                    className={classes.subscriptionStatus}
-                    style={{
-                      color: getSubscriptionColor(
-                        profileData.subscriptionStatus
+              <Grid container spacing={3} className={classes.formGrid}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Full Name"
+                    value={isEditing ? editedData.name : userData.name}
+                    onChange={handleInputChange("name")}
+                    fullWidth
+                    disabled={!isEditing}
+                    InputProps={{
+                      startAdornment: (
+                        <PersonIcon className={classes.inputIcon} />
                       ),
                     }}
-                  >
-                    {profileData.subscriptionStatus.charAt(0).toUpperCase() +
-                      profileData.subscriptionStatus.slice(1)}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    className={classes.subscriptionDate}
-                  >
-                    Valid until{" "}
-                    {new Date(
-                      profileData.subscriptionEndDate
-                    ).toLocaleDateString()}
-                  </Typography>
-                  {profileData.subscriptionStatus !== "enterprise" && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleUpgradeSubscription}
-                      className={classes.upgradeButton}
-                    >
-                      Upgrade Plan
-                    </Button>
-                  )}
-                </Box>
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Email Address"
+                    value={isEditing ? editedData.email : userData.email}
+                    onChange={handleInputChange("email")}
+                    fullWidth
+                    disabled={!isEditing}
+                    InputProps={{
+                      startAdornment: (
+                        <EmailIcon className={classes.inputIcon} />
+                      ),
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+
+          <Card className={classes.subscriptionCard}>
+            <CardContent>
+              <Box className={classes.sectionHeader}>
+                <Typography variant="h6">Subscription Details</Typography>
+                <Button
+                  variant="outlined"
+                  onClick={handleSubscriptionDialog}
+                  className={classes.manageSubscriptionButton}
+                >
+                  Manage Subscription
+                </Button>
               </Box>
 
-              <Box className={classes.infoSection}>
-                <Typography variant="subtitle2" className={classes.label}>
-                  Notifications
-                </Typography>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={
-                        isEditing
-                          ? editedData.notificationsEnabled
-                          : profileData.notificationsEnabled
+              <Divider className={classes.divider} />
+
+              <Grid container spacing={3} className={classes.subscriptionGrid}>
+                <Grid item xs={12} sm={6}>
+                  <Box className={classes.subscriptionInfo}>
+                    <SubscriptionIcon className={classes.subscriptionIcon} />
+                    <Box>
+                      <Typography variant="subtitle1">Current Plan</Typography>
+                      <Typography variant="h6">
+                        {userData.subscription.plan}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Box className={classes.subscriptionInfo}>
+                    <Chip
+                      label={userData.subscription.status.toUpperCase()}
+                      color={
+                        userData.subscription.status === "active"
+                          ? "success"
+                          : "warning"
                       }
-                      onChange={handleNotificationToggle}
-                      disabled={!isEditing}
+                      className={classes.statusChip}
                     />
-                  }
-                  label="Enable email notifications"
-                />
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
-      </Box>
+                    <Typography variant="body2" className={classes.billingDate}>
+                      Next billing date: {userData.subscription.nextBillingDate}
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
 
       <Dialog
-        open={showUpgradeDialog}
-        onClose={handleCloseUpgradeDialog}
+        open={subscriptionDialogOpen}
+        onClose={handleCloseSubscriptionDialog}
         maxWidth="sm"
         fullWidth
-        className={classes.upgradeDialog}
+        className={classes.subscriptionDialog}
       >
-        <DialogTitle className={classes.dialogTitle}>
-          <SubscriptionIcon className={classes.dialogIcon} />
-          Upgrade Your Subscription
-        </DialogTitle>
+        <DialogTitle>Manage Subscription</DialogTitle>
         <DialogContent>
-          <Typography variant="body1" className={classes.dialogContent}>
-            Choose a plan that best fits your needs:
+          <Typography variant="body1" paragraph>
+            Current Plan: {userData.subscription.plan}
           </Typography>
-          <Box className={classes.plansContainer}>
-            <Card className={classes.planCard}>
-              <CardContent>
-                <Typography variant="h6">Premium</Typography>
-                <Typography variant="h4" className={classes.price}>
-                  $29
-                </Typography>
-                <Typography variant="body2" className={classes.period}>
-                  per month
-                </Typography>
-                <ul className={classes.featuresList}>
-                  <li>Unlimited pitches</li>
-                  <li>Priority support</li>
-                  <li>Advanced analytics</li>
-                </ul>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  className={classes.selectPlanButton}
-                >
-                  Select Plan
-                </Button>
-              </CardContent>
-            </Card>
-
-            <Card className={classes.planCard}>
-              <CardContent>
-                <Typography variant="h6">Enterprise</Typography>
-                <Typography variant="h4" className={classes.price}>
-                  $99
-                </Typography>
-                <Typography variant="body2" className={classes.period}>
-                  per month
-                </Typography>
-                <ul className={classes.featuresList}>
-                  <li>All Premium features</li>
-                  <li>Team collaboration</li>
-                  <li>Custom integrations</li>
-                  <li>Dedicated support</li>
-                </ul>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  fullWidth
-                  className={classes.selectPlanButton}
-                >
-                  Select Plan
-                </Button>
-              </CardContent>
-            </Card>
-          </Box>
+          <Typography variant="body2" color="textSecondary" paragraph>
+            Your subscription will be billed on{" "}
+            {userData.subscription.nextBillingDate}
+          </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseUpgradeDialog} color="primary">
-            Cancel
+          <Button onClick={handleCloseSubscriptionDialog}>Close</Button>
+          <Button
+            onClick={handleUpgradeSubscription}
+            variant="contained"
+            color="primary"
+          >
+            Upgrade Plan
+          </Button>
+          <Button
+            onClick={handleCancelSubscription}
+            variant="outlined"
+            color="error"
+          >
+            Cancel Subscription
           </Button>
         </DialogActions>
       </Dialog>
-
-      <Snackbar
-        open={showSnackbar}
-        autoHideDuration={6000}
-        onClose={() => setShowSnackbar(false)}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-      >
-        <Alert
-          onClose={() => setShowSnackbar(false)}
-          severity="success"
-          sx={{ width: "100%" }}
-        >
-          {snackbarMessage}
-        </Alert>
-      </Snackbar>
     </Box>
   );
 };

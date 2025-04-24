@@ -47,9 +47,10 @@ const useStyles = makeStyles()((theme) => ({
   },
   profileButton: {
     textTransform: "none",
-    fontWeight: 600,
+    color: theme.palette.text.primary,
+    fontWeight: 500,
     "&:hover": {
-      backgroundColor: "rgba(25, 118, 210, 0.05)",
+      backgroundColor: "rgba(0, 0, 0, 0.04)",
     },
   },
   userProfile: {

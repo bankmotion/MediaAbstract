@@ -314,28 +314,27 @@ const WritersDashboard = () => {
             </Typography>
           </Button>
 
-          <Box className={classes.headerActions}>
-            <Button
-              startIcon={<PersonIcon />}
-              color="primary"
-              variant="text"
-              onClick={() => navigate("/profile")}
-              sx={{ fontWeight: 500 }}
-              className={classes.profileButton}
-            >
-              Profile
-            </Button>
-            <Button
-              startIcon={<Logout />}
-              color="primary"
-              variant="outlined"
-              onClick={() => navigate("/")}
-              sx={{ fontWeight: 500 }}
-              className={classes.logoutButton}
-            >
-              LogOut
-            </Button>
-          </Box>
+          <>
+            <Box className={classes.headerActions}>
+              <Button
+                startIcon={<PersonIcon />}
+                onClick={() => navigate("/profile")}
+                className={classes.profileButton}
+              >
+                Profile
+              </Button>
+              <Button
+                startIcon={<Logout />}
+                color="primary"
+                variant="outlined"
+                onClick={() => navigate("/")}
+                sx={{ fontWeight: 500 }}
+                className={classes.logoutButton}
+              >
+                LogOut
+              </Button>
+            </Box>
+          </>
         </Toolbar>
       </AppBar>
       <Box className={classes.body}>
