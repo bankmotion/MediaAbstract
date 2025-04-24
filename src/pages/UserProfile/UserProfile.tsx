@@ -42,7 +42,7 @@ const UserProfile = () => {
     email: "jane.doe@example.com",
     subscription: {
       status: "active",
-      plan: "Professional",
+      plan: "Writer Plan",
       nextBillingDate: "2024-04-21",
     },
     avatar:
