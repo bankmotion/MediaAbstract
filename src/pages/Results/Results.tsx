@@ -275,7 +275,23 @@ const Results = () => {
                       <Box display="flex" alignItems="center" gap={0.5}>
                         <span className={classes.tooltip}>✓ AI Partnered</span>
                         <Tooltip
-                          title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."
+                          title={
+                            <Box>
+                              <Typography
+                                variant="body2"
+                                sx={{ fontWeight: 600, mb: 1 }}
+                              >
+                                AI Partnered
+                              </Typography>
+                              <Typography variant="body2">
+                                This outlet has a confirmed partnership with an
+                                AI platform like OpenAI. Publishing here may
+                                increase your story's visibility in AI-generated
+                                search results, summaries, and tools like
+                                ChatGPT or Perplexity.
+                              </Typography>
+                            </Box>
+                          }
                           arrow
                           classes={{ tooltip: classes.matchExplanationTooltip }}
                         >
@@ -291,7 +307,22 @@ const Results = () => {
                           Unknown
                         </span>
                         <Tooltip
-                          title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."
+                          title={
+                            <Box>
+                              <Typography
+                                variant="body2"
+                                sx={{ fontWeight: 600, mb: 1 }}
+                              >
+                                AI Partnership Unknown
+                              </Typography>
+                              <Typography variant="body2">
+                                We couldn't confirm an AI partnership for this
+                                outlet. Status may change over time as more
+                                media organizations sign licensing agreements
+                                with AI platforms.
+                              </Typography>
+                            </Box>
+                          }
                           arrow
                           classes={{ tooltip: classes.matchExplanationTooltip }}
                         >
@@ -484,7 +515,24 @@ const Results = () => {
                                 ✓ AI Partnered
                               </span>
                               <Tooltip
-                                title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."
+                                title={
+                                  <Box>
+                                    <Typography
+                                      variant="body2"
+                                      sx={{ fontWeight: 600, mb: 1 }}
+                                    >
+                                      AI Partnered
+                                    </Typography>
+                                    <Typography variant="body2">
+                                      This outlet has a confirmed partnership
+                                      with an AI platform like OpenAI.
+                                      Publishing here may increase your story's
+                                      visibility in AI-generated search results,
+                                      summaries, and tools like ChatGPT or
+                                      Perplexity.
+                                    </Typography>
+                                  </Box>
+                                }
                                 arrow
                                 classes={{
                                   tooltip: classes.matchExplanationTooltip,
@@ -504,7 +552,22 @@ const Results = () => {
                                 Unknown
                               </span>
                               <Tooltip
-                                title="AI Partnered: May boost visibility in AI search results. 'Unknown' means unclear."
+                                title={
+                                  <Box>
+                                    <Typography
+                                      variant="body2"
+                                      sx={{ fontWeight: 600, mb: 1 }}
+                                    >
+                                      AI Partnership Unknown
+                                    </Typography>
+                                    <Typography variant="body2">
+                                      We couldn't confirm an AI partnership for
+                                      this outlet. Status may change over time
+                                      as more media organizations sign licensing
+                                      agreements with AI platforms.
+                                    </Typography>
+                                  </Box>
+                                }
                                 arrow
                                 classes={{
                                   tooltip: classes.matchExplanationTooltip,
