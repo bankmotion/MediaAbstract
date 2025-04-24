@@ -99,7 +99,7 @@ const UserProfile = () => {
       <Box className={classes.header}>
         <Button
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/writers/dashboard")}
           className={classes.backButton}
         >
           Back to Dashboard
