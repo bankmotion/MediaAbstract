@@ -4,7 +4,7 @@ const useStyles = makeStyles()((theme) => ({
   wrapper: {
     display: "flex",
     flexDirection: "column",
-    background: "linear-gradient(to right, #fdfbfb, #ebedee)",
+    background: "#fff",
     minHeight: "100vh",
     padding: theme.spacing(3),
     [theme.breakpoints.down("sm")]: {
@@ -14,11 +14,12 @@ const useStyles = makeStyles()((theme) => ({
   header: {
     display: "flex",
     alignItems: "center",
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(3),
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
       alignItems: "flex-start",
       gap: theme.spacing(2),
+      padding: theme.spacing(0, 2),
     },
   },
   backButton: {
@@ -37,38 +38,49 @@ const useStyles = makeStyles()((theme) => ({
     maxWidth: "1200px",
     margin: "0 auto",
     width: "100%",
+    padding: theme.spacing(0, 2),
+    [theme.breakpoints.down("sm")]: {
+      margin: 0,
+      padding: theme.spacing(1),
+      "& .MuiGrid-item": {
+        padding: theme.spacing(1),
+      },
+    },
   },
   profileCard: {
-    height: "100%",
     background: "#fff",
-    borderRadius: "16px",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
-    transition: "all 0.3s ease",
-    "&:hover": {
-      transform: "translateY(-4px)",
-      boxShadow: "0 8px 24px rgba(0, 0, 0, 0.12)",
+    borderRadius: "8px",
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.3)",
+    marginBottom: theme.spacing(2),
+    width: "100%",
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "100%",
+      margin: theme.spacing(0, 0, 2),
     },
   },
   profileCardContent: {
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    padding: theme.spacing(4),
+    padding: theme.spacing(3),
     textAlign: "center",
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(2),
+    },
   },
   avatarContainer: {
     position: "relative",
     marginBottom: theme.spacing(2),
+    width: "fit-content",
   },
   avatar: {
     width: 120,
     height: 120,
     border: "3px solid #fff",
-    boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-    transition: "all 0.3s ease",
-    "&:hover": {
-      transform: "scale(1.05)",
-      boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
+    boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+    [theme.breakpoints.down("sm")]: {
+      width: 100,
+      height: 100,
     },
   },
   editAvatarButton: {
@@ -77,22 +89,30 @@ const useStyles = makeStyles()((theme) => ({
     right: 0,
     backgroundColor: theme.palette.primary.main,
     color: "#fff",
+    padding: "6px",
     "&:hover": {
       backgroundColor: theme.palette.primary.dark,
     },
   },
   userName: {
     fontWeight: 600,
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(0.5),
+    fontSize: "1.25rem",
   },
   userEmail: {
     color: theme.palette.text.secondary,
+    fontSize: "0.9rem",
   },
   detailsCard: {
     background: "#fff",
-    borderRadius: "16px",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
-    marginBottom: theme.spacing(3),
+    borderRadius: "8px",
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.12)",
+    marginBottom: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "100%",
+      margin: "0 auto",
+      marginBottom: theme.spacing(2),
+    },
   },
   sectionHeader: {
     display: "flex",
@@ -131,12 +151,20 @@ const useStyles = makeStyles()((theme) => ({
   },
   subscriptionCard: {
     background: "#fff",
-    borderRadius: "16px",
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+    borderRadius: "8px",
+    boxShadow: "0 1px 3px rgba(0, 0, 0, 0.12)",
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "100%",
+      margin: "0 auto",
+    },
   },
   manageSubscriptionButton: {
     textTransform: "none",
     borderRadius: "8px",
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(0.5, 1),
+      fontSize: "0.875rem",
+    },
   },
   subscriptionGrid: {
     marginTop: theme.spacing(2),
@@ -147,11 +175,20 @@ const useStyles = makeStyles()((theme) => ({
     gap: theme.spacing(2),
     padding: theme.spacing(2),
     backgroundColor: "rgba(0, 0, 0, 0.02)",
-    borderRadius: "12px",
+    borderRadius: "8px",
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(1.5),
+      flexDirection: "column",
+      alignItems: "flex-start",
+      textAlign: "left",
+    },
   },
   subscriptionIcon: {
     color: theme.palette.primary.main,
     fontSize: "2rem",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.75rem",
+    },
   },
   statusChip: {
     fontWeight: 600,

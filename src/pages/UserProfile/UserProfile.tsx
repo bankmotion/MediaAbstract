@@ -109,8 +109,21 @@ const UserProfile = () => {
         </Typography>
       </Box>
 
-      <Grid container spacing={3} className={classes.content}>
-        <Grid item xs={12} md={4}>
+      <Grid container spacing={2} className={classes.content}>
+        <Grid
+          item
+          xs={12}
+          sm={10}
+          md={4}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+            [theme.breakpoints.down("sm")]: {
+              padding: theme.spacing(1),
+            },
+          }}
+        >
           <Card className={classes.profileCard}>
             <CardContent className={classes.profileCardContent}>
               <Box className={classes.avatarContainer}>
@@ -140,7 +153,20 @@ const UserProfile = () => {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={8}>
+        <Grid
+          item
+          xs={12}
+          sm={10}
+          md={8}
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%",
+            [theme.breakpoints.down("sm")]: {
+              padding: theme.spacing(1),
+            },
+          }}
+        >
           <Card className={classes.detailsCard}>
             <CardContent>
               <Box className={classes.sectionHeader}>
