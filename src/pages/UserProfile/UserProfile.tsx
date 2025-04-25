@@ -17,9 +17,6 @@ import {
   Grid,
   useTheme,
   useMediaQuery,
-  Tooltip,
-  Zoom,
-  Fade,
 } from "@mui/material";
 import {
   Edit as EditIcon,
@@ -29,7 +26,6 @@ import {
   Email as EmailIcon,
   CardMembership as SubscriptionIcon,
   ArrowBack as ArrowBackIcon,
-  PhotoCamera as PhotoCameraIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
@@ -100,22 +96,18 @@ const UserProfile = () => {
 
   return (
     <Box className={classes.wrapper}>
-      <Fade in timeout={600}>
-        <Box className={classes.header}>
-          <Tooltip title="Return to Dashboard" arrow>
-            <Button
-              startIcon={<ArrowBackIcon />}
-              onClick={() => navigate("/writers/dashboard")}
-              className={classes.backButton}
-            >
-              Back to Dashboard
-            </Button>
-          </Tooltip>
-          <Typography variant="h4" className={classes.pageTitle}>
-            User Profile
-          </Typography>
-        </Box>
-      </Fade>
+      <Box className={classes.header}>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate("/writers/dashboard")}
+          className={classes.backButton}
+        >
+          Back to Dashboard
+        </Button>
+        <Typography variant="h4" className={classes.pageTitle}>
+          User Profile
+        </Typography>
+      </Box>
 
       <Grid container spacing={2} className={classes.content}>
         <Grid
@@ -128,45 +120,37 @@ const UserProfile = () => {
             justifyContent: "center",
             width: "100%",
             [theme.breakpoints.down("sm")]: {
-              padding: theme.spacing(2, 0),
-              maxWidth: "100%",
+              padding: theme.spacing(1),
             },
           }}
         >
-          <Zoom in timeout={600}>
-            <Card className={classes.profileCard}>
-              <CardContent className={classes.profileCardContent}>
-                <Box className={classes.avatarContainer}>
-                  <Avatar
-                    src={userData.avatar}
-                    alt={userData.name}
-                    className={classes.avatar}
+          <Card className={classes.profileCard}>
+            <CardContent className={classes.profileCardContent}>
+              <Box className={classes.avatarContainer}>
+                <Avatar
+                  src={userData.avatar}
+                  alt={userData.name}
+                  className={classes.avatar}
+                >
+                  <PersonIcon />
+                </Avatar>
+                {!isEditing && (
+                  <IconButton
+                    className={classes.editAvatarButton}
+                    onClick={handleEdit}
                   >
-                    <PersonIcon />
-                  </Avatar>
-                  {!isEditing && (
-                    <Tooltip title="Change Profile Picture" arrow>
-                      <IconButton
-                        className={classes.editAvatarButton}
-                        onClick={handleEdit}
-                        size={isMobile ? "small" : "medium"}
-                      >
-                        <PhotoCameraIcon
-                          fontSize={isMobile ? "small" : "medium"}
-                        />
-                      </IconButton>
-                    </Tooltip>
-                  )}
-                </Box>
-                <Typography variant="h5" className={classes.userName}>
-                  {userData.name}
-                </Typography>
-                <Typography variant="body1" className={classes.userEmail}>
-                  {userData.email}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Zoom>
+                    <EditIcon />
+                  </IconButton>
+                )}
+              </Box>
+              <Typography variant="h5" className={classes.userName}>
+                {userData.name}
+              </Typography>
+              <Typography variant="body1" className={classes.userEmail}>
+                {userData.email}
+              </Typography>
+            </CardContent>
+          </Card>
         </Grid>
 
         <Grid
@@ -179,147 +163,126 @@ const UserProfile = () => {
             flexDirection: "column",
             width: "100%",
             [theme.breakpoints.down("sm")]: {
-              padding: 0,
-              maxWidth: "100%",
+              padding: theme.spacing(1),
             },
           }}
         >
-          <Zoom in timeout={800}>
-            <Card className={classes.detailsCard}>
-              <CardContent>
-                <Box className={classes.sectionHeader}>
-                  <Typography
-                    variant="h6"
-                    style={{ color: "rgba(0, 0, 0, 0.87)" }}
+          <Card className={classes.detailsCard}>
+            <CardContent>
+              <Box className={classes.sectionHeader}>
+                <Typography variant="h6">Profile Information</Typography>
+                {!isEditing ? (
+                  <Button
+                    startIcon={<EditIcon />}
+                    onClick={handleEdit}
+                    className={classes.editButton}
                   >
-                    Profile Information
-                  </Typography>
-                  {!isEditing ? (
+                    Edit Profile
+                  </Button>
+                ) : (
+                  <Box className={classes.editActions}>
                     <Button
-                      startIcon={<EditIcon />}
-                      onClick={handleEdit}
-                      className={classes.editButton}
-                      size={isMobile ? "small" : "medium"}
+                      startIcon={<SaveIcon />}
+                      onClick={handleSave}
+                      variant="contained"
+                      color="primary"
+                      className={classes.saveButton}
                     >
-                      Edit Profile
+                      Save
                     </Button>
-                  ) : (
-                    <Box className={classes.editActions}>
-                      <Button
-                        onClick={handleSave}
-                        variant="contained"
-                        className={classes.saveButton}
-                        disableElevation={isMobile}
-                      >
-                        Save
-                      </Button>
-                      <Button
-                        onClick={handleCancel}
-                        variant="outlined"
-                        className={classes.cancelButton}
-                      >
-                        Cancel
-                      </Button>
-                    </Box>
-                  )}
-                </Box>
-
-                <Grid container spacing={3} className={classes.formGrid}>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Full Name"
-                      value={isEditing ? editedData.name : userData.name}
-                      onChange={handleInputChange("name")}
-                      fullWidth
-                      disabled={!isEditing}
-                      variant={isMobile ? "outlined" : "standard"}
-                      InputProps={{
-                        startAdornment: (
-                          <PersonIcon className={classes.inputIcon} />
-                        ),
-                      }}
-                    />
-                  </Grid>
-                  <Grid item xs={12}>
-                    <TextField
-                      label="Email Address"
-                      value={isEditing ? editedData.email : userData.email}
-                      onChange={handleInputChange("email")}
-                      fullWidth
-                      disabled={!isEditing}
-                      variant={isMobile ? "outlined" : "standard"}
-                      InputProps={{
-                        startAdornment: (
-                          <EmailIcon className={classes.inputIcon} />
-                        ),
-                      }}
-                    />
-                  </Grid>
-                </Grid>
-              </CardContent>
-            </Card>
-          </Zoom>
-
-          <Zoom in timeout={1000}>
-            <Card className={classes.subscriptionCard}>
-              <CardContent>
-                <Box className={classes.sectionHeader}>
-                  <Typography variant="h6">Subscription Details</Typography>
-                  <Tooltip title="Manage Your Subscription" arrow>
                     <Button
+                      startIcon={<CancelIcon />}
+                      onClick={handleCancel}
                       variant="outlined"
-                      onClick={handleSubscriptionDialog}
-                      className={classes.manageSubscriptionButton}
+                      className={classes.cancelButton}
                     >
-                      Manage Subscription
+                      Cancel
                     </Button>
-                  </Tooltip>
-                </Box>
+                  </Box>
+                )}
+              </Box>
 
-                <Divider className={classes.divider} />
+              <Divider className={classes.divider} />
 
-                <Grid
-                  container
-                  spacing={3}
-                  className={classes.subscriptionGrid}
+              <Grid container spacing={3} className={classes.formGrid}>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Full Name"
+                    value={isEditing ? editedData.name : userData.name}
+                    onChange={handleInputChange("name")}
+                    fullWidth
+                    disabled={!isEditing}
+                    InputProps={{
+                      startAdornment: (
+                        <PersonIcon className={classes.inputIcon} />
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextField
+                    label="Email Address"
+                    value={isEditing ? editedData.email : userData.email}
+                    onChange={handleInputChange("email")}
+                    fullWidth
+                    disabled={!isEditing}
+                    InputProps={{
+                      startAdornment: (
+                        <EmailIcon className={classes.inputIcon} />
+                      ),
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
+
+          <Card className={classes.subscriptionCard}>
+            <CardContent>
+              <Box className={classes.sectionHeader}>
+                <Typography variant="h6">Subscription Details</Typography>
+                <Button
+                  variant="outlined"
+                  onClick={handleSubscriptionDialog}
+                  className={classes.manageSubscriptionButton}
                 >
-                  <Grid item xs={12} sm={6}>
-                    <Box className={classes.subscriptionInfo}>
-                      <SubscriptionIcon className={classes.subscriptionIcon} />
-                      <Box>
-                        <Typography variant="subtitle1">
-                          Current Plan
-                        </Typography>
-                        <Typography variant="h6">
-                          {userData.subscription.plan}
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Box className={classes.subscriptionInfo}>
-                      <Chip
-                        label={userData.subscription.status.toUpperCase()}
-                        color={
-                          userData.subscription.status === "active"
-                            ? "success"
-                            : "warning"
-                        }
-                        className={classes.statusChip}
-                      />
-                      <Typography
-                        variant="body2"
-                        className={classes.billingDate}
-                      >
-                        Next billing date:{" "}
-                        {userData.subscription.nextBillingDate}
+                  Manage Subscription
+                </Button>
+              </Box>
+
+              <Divider className={classes.divider} />
+
+              <Grid container spacing={3} className={classes.subscriptionGrid}>
+                <Grid item xs={12} sm={6}>
+                  <Box className={classes.subscriptionInfo}>
+                    <SubscriptionIcon className={classes.subscriptionIcon} />
+                    <Box>
+                      <Typography variant="subtitle1">Current Plan</Typography>
+                      <Typography variant="h6">
+                        {userData.subscription.plan}
                       </Typography>
                     </Box>
-                  </Grid>
+                  </Box>
                 </Grid>
-              </CardContent>
-            </Card>
-          </Zoom>
+                <Grid item xs={12} sm={6}>
+                  <Box className={classes.subscriptionInfo}>
+                    <Chip
+                      label={userData.subscription.status.toUpperCase()}
+                      color={
+                        userData.subscription.status === "active"
+                          ? "success"
+                          : "warning"
+                      }
+                      className={classes.statusChip}
+                    />
+                    <Typography variant="body2" className={classes.billingDate}>
+                      Next billing date: {userData.subscription.nextBillingDate}
+                    </Typography>
+                  </Box>
+                </Grid>
+              </Grid>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
 
@@ -329,7 +292,6 @@ const UserProfile = () => {
         maxWidth="sm"
         fullWidth
         className={classes.subscriptionDialog}
-        TransitionComponent={Zoom}
       >
         <DialogTitle>Manage Subscription</DialogTitle>
         <DialogContent>
@@ -347,7 +309,6 @@ const UserProfile = () => {
             onClick={handleUpgradeSubscription}
             variant="contained"
             color="primary"
-            className={classes.saveButton}
           >
             Upgrade Plan
           </Button>
@@ -355,7 +316,6 @@ const UserProfile = () => {
             onClick={handleCancelSubscription}
             variant="outlined"
             color="error"
-            className={classes.cancelButton}
           >
             Cancel Subscription
           </Button>
