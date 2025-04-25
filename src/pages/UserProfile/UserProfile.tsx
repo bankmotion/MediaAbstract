@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   Box,
   Typography,
@@ -17,6 +17,10 @@ import {
   Grid,
   useTheme,
   useMediaQuery,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
 } from "@mui/material";
 import {
   Edit as EditIcon,
@@ -26,6 +30,8 @@ import {
   Email as EmailIcon,
   CardMembership as SubscriptionIcon,
   ArrowBack as ArrowBackIcon,
+  PhotoCamera as PhotoCameraIcon,
+  Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
@@ -35,6 +41,10 @@ const UserProfile = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [avatarMenuAnchor, setAvatarMenuAnchor] = useState<null | HTMLElement>(
+    null
+  );
 
   // Mock user data - replace with actual data from Supabase
   const [userData, setUserData] = useState({
@@ -94,6 +104,61 @@ const UserProfile = () => {
     handleCloseSubscriptionDialog();
   };
 
+  const handleAvatarEditClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    setAvatarMenuAnchor(event.currentTarget);
+  };
+
+  const handleAvatarMenuClose = () => {
+    setAvatarMenuAnchor(null);
+  };
+
+  const handleUploadClick = () => {
+    handleAvatarMenuClose();
+    fileInputRef.current?.click();
+  };
+
+  const handleRemoveAvatar = () => {
+    setUserData((prev) => ({
+      ...prev,
+      avatar: "", // Reset to empty or you could set a default avatar URL
+    }));
+    handleAvatarMenuClose();
+    // TODO: Implement actual avatar removal in your backend
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        alert("Please upload an image file");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size should be less than 5MB");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUserData((prev) => ({
+          ...prev,
+          avatar: e.target?.result as string,
+        }));
+      };
+      reader.readAsDataURL(file);
+
+      // TODO: Implement actual file upload to your backend/storage
+      // const formData = new FormData();
+      // formData.append('avatar', file);
+      // Upload logic here
+    }
+  };
+
   return (
     <Box className={classes.wrapper}>
       <Box className={classes.header}>
@@ -134,14 +199,53 @@ const UserProfile = () => {
                 >
                   <PersonIcon />
                 </Avatar>
-                {!isEditing && (
-                  <IconButton
-                    className={classes.editAvatarButton}
-                    onClick={handleEdit}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                )}
+                <IconButton
+                  className={classes.editAvatarButton}
+                  onClick={handleAvatarEditClick}
+                  aria-label="edit avatar"
+                  aria-controls="avatar-menu"
+                  aria-haspopup="true"
+                >
+                  <EditIcon />
+                </IconButton>
+                <Menu
+                  id="avatar-menu"
+                  anchorEl={avatarMenuAnchor}
+                  open={Boolean(avatarMenuAnchor)}
+                  onClose={handleAvatarMenuClose}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                >
+                  <MenuItem onClick={handleUploadClick}>
+                    <ListItemIcon>
+                      <PhotoCameraIcon fontSize="small" />
+                    </ListItemIcon>
+                    <ListItemText>Upload Photo</ListItemText>
+                  </MenuItem>
+                  {userData.avatar && (
+                    <MenuItem onClick={handleRemoveAvatar}>
+                      <ListItemIcon>
+                        <DeleteIcon fontSize="small" color="error" />
+                      </ListItemIcon>
+                      <ListItemText sx={{ color: theme.palette.error.main }}>
+                        Remove Photo
+                      </ListItemText>
+                    </MenuItem>
+                  )}
+                </Menu>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  onChange={handleFileChange}
+                  accept="image/*"
+                  style={{ display: "none" }}
+                />
               </Box>
               <Typography variant="h5" className={classes.userName}>
                 {userData.name}
@@ -293,31 +397,256 @@ const UserProfile = () => {
         fullWidth
         className={classes.subscriptionDialog}
       >
-        <DialogTitle>Manage Subscription</DialogTitle>
-        <DialogContent>
-          <Typography variant="body1" paragraph>
-            Current Plan: {userData.subscription.plan}
+        <DialogTitle
+          sx={{
+            pb: 1,
+            display: "flex",
+            alignItems: "center",
+            gap: 1,
+            px: { xs: 2, sm: 3 },
+          }}
+        >
+          <SubscriptionIcon sx={{ color: "primary.main" }} />
+          <Typography
+            variant="h6"
+            sx={{ fontSize: { xs: "1.125rem", sm: "1.25rem" } }}
+          >
+            Manage Subscription
           </Typography>
-          <Typography variant="body2" color="textSecondary" paragraph>
-            Your subscription will be billed on{" "}
-            {userData.subscription.nextBillingDate}
-          </Typography>
+        </DialogTitle>
+        <DialogContent
+          sx={{
+            pt: 2,
+            px: { xs: 2, sm: 3 },
+          }}
+        >
+          <Box sx={{ mb: 4 }}>
+            <Typography
+              variant="subtitle2"
+              color="text.secondary"
+              gutterBottom
+              sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}
+            >
+              CURRENT PLAN
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: { xs: "flex-start", sm: "center" },
+                flexDirection: { xs: "column", sm: "row" },
+                justifyContent: "space-between",
+                mb: 2,
+                gap: { xs: 1, sm: 0 },
+              }}
+            >
+              <Typography
+                variant="h6"
+                component="span"
+                sx={{
+                  fontSize: { xs: "1.125rem", sm: "1.25rem" },
+                }}
+              >
+                {userData.subscription.plan}
+              </Typography>
+              <Chip
+                label={userData.subscription.status.toUpperCase()}
+                color={
+                  userData.subscription.status === "active"
+                    ? "success"
+                    : "warning"
+                }
+                size="small"
+                sx={{ fontWeight: 500 }}
+              />
+            </Box>
+            <Box
+              sx={{
+                bgcolor: "background.default",
+                borderRadius: 1,
+                p: 2,
+                display: "flex",
+                flexDirection: "column",
+                gap: 0.5,
+              }}
+            >
+              <Typography variant="body2" color="text.secondary">
+                Next billing date
+              </Typography>
+              <Typography variant="body1" fontWeight={500}>
+                {userData.subscription.nextBillingDate}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Divider sx={{ my: 3 }} />
+
+          <Box>
+            <Typography
+              variant="subtitle2"
+              color="text.secondary"
+              gutterBottom
+              sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}
+            >
+              AVAILABLE PLANS
+            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                mb: 2,
+              }}
+            >
+              {/* Professional Plan */}
+              <Box
+                sx={{
+                  p: 2,
+                  border: "1px solid",
+                  borderColor: "divider",
+                  borderRadius: 1,
+                  cursor: "pointer",
+                  "&:hover": {
+                    bgcolor: "background.default",
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { xs: "column", sm: "row" },
+                    justifyContent: "space-between",
+                    alignItems: { xs: "flex-start", sm: "flex-start" },
+                    mb: 1,
+                    gap: { xs: 1, sm: 0 },
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight={600}
+                      sx={{
+                        fontSize: { xs: "1rem", sm: "1.125rem" },
+                      }}
+                    >
+                      Professional Plan
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      For serious writers and professionals
+                    </Typography>
+                  </Box>
+                  <Typography
+                    variant="h6"
+                    color="primary.main"
+                    sx={{
+                      fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                    }}
+                  >
+                    $19.99
+                  </Typography>
+                </Box>
+                <Typography variant="body2" color="text.secondary">
+                  Includes advanced features, priority support, and unlimited
+                  access
+                </Typography>
+              </Box>
+
+              {/* Enterprise Plan */}
+              <Box
+                sx={{
+                  p: 2,
+                  border: "1px solid",
+                  borderColor: "divider",
+                  borderRadius: 1,
+                  cursor: "pointer",
+                  "&:hover": {
+                    bgcolor: "background.default",
+                  },
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: { xs: "column", sm: "row" },
+                    justifyContent: "space-between",
+                    alignItems: { xs: "flex-start", sm: "flex-start" },
+                    mb: 1,
+                    gap: { xs: 1, sm: 0 },
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="subtitle1"
+                      fontWeight={600}
+                      sx={{
+                        fontSize: { xs: "1rem", sm: "1.125rem" },
+                      }}
+                    >
+                      Enterprise Plan
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      For teams and organizations
+                    </Typography>
+                  </Box>
+                  <Typography
+                    variant="h6"
+                    color="primary.main"
+                    sx={{
+                      fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                    }}
+                  >
+                    $49.99
+                  </Typography>
+                </Box>
+                <Typography variant="body2" color="text.secondary">
+                  Custom features, dedicated support, and team collaboration
+                  tools
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseSubscriptionDialog}>Close</Button>
+        <DialogActions
+          sx={{
+            px: { xs: 2, sm: 3 },
+            pb: { xs: 2, sm: 3 },
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            gap: 1,
+            "& > button": {
+              width: { xs: "100%", sm: "auto" },
+            },
+          }}
+        >
+          <Button
+            onClick={handleCloseSubscriptionDialog}
+            sx={{
+              color: "text.secondary",
+              order: { xs: 1, sm: 0 },
+              "&:hover": {
+                bgcolor: "background.default",
+              },
+            }}
+          >
+            Close
+          </Button>
+          {userData.subscription.status === "active" && (
+            <Button
+              onClick={handleCancelSubscription}
+              color="error"
+              variant="outlined"
+              startIcon={<CancelIcon />}
+              sx={{ order: { xs: 0, sm: 1 } }}
+            >
+              Cancel Subscription
+            </Button>
+          )}
           <Button
             onClick={handleUpgradeSubscription}
             variant="contained"
-            color="primary"
+            startIcon={<SaveIcon />}
+            sx={{ order: { xs: -1, sm: 2 } }}
           >
             Upgrade Plan
-          </Button>
-          <Button
-            onClick={handleCancelSubscription}
-            variant="outlined"
-            color="error"
-          >
-            Cancel Subscription
           </Button>
         </DialogActions>
       </Dialog>
