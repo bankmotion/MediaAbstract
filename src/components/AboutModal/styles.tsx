@@ -2,16 +2,14 @@ import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()((theme) => ({
   dialogPaper: {
-    borderRadius: 24,
+    borderRadius: 16,
     padding: theme.spacing(2),
-    background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
-    boxShadow: "0 8px 32px rgba(0, 0, 0, 0.1)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
-    backdropFilter: "blur(10px)",
-    animation: "$float 6s ease-in-out infinite",
+    background: "#ffffff",
+    boxShadow: "0 12px 40px rgba(0, 0, 0, 0.08)",
+    border: "1px solid rgba(0, 0, 0, 0.08)",
     [theme.breakpoints.down("sm")]: {
       margin: theme.spacing(2),
-      borderRadius: 16,
+      borderRadius: 12,
     },
   },
 
@@ -31,8 +29,8 @@ const useStyles = makeStyles()((theme) => ({
     padding: theme.spacing(4),
     position: "relative",
     borderBottom: `1px solid ${theme.palette.divider}`,
-    background: "linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)",
-    borderRadius: "24px 24px 0 0",
+    background: "#ffffff",
+    borderRadius: "16px 16px 0 0",
     overflow: "hidden",
     "&::before": {
       content: '""',
@@ -40,9 +38,8 @@ const useStyles = makeStyles()((theme) => ({
       top: 0,
       left: 0,
       right: 0,
-      height: "4px",
-      background: "linear-gradient(90deg, #007BFF, #00C6FF, #007BFF)",
-      animation: "$gradient 3s ease infinite",
+      height: "3px",
+      background: "#2C3E50",
     },
   },
 
@@ -70,32 +67,30 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   title: {
-    fontWeight: 800,
-    background: "linear-gradient(45deg, #007BFF 30%, #00C6FF 90%)",
-    WebkitBackgroundClip: "text",
-    WebkitTextFillColor: "transparent",
+    fontWeight: 700,
+    color: "#2C3E50",
     textAlign: "center",
-    fontSize: "2.5rem",
+    fontSize: "2.25rem",
     marginBottom: theme.spacing(2),
     [theme.breakpoints.down("sm")]: {
-      fontSize: "1.8rem",
+      fontSize: "1.75rem",
     },
   },
 
   titleDecoration: {
     position: "absolute",
-    bottom: -10,
+    bottom: -8,
     left: "50%",
     transform: "translateX(-50%)",
-    width: "60px",
-    height: "4px",
-    background: "linear-gradient(90deg, #007BFF, #00C6FF)",
+    width: "50px",
+    height: "3px",
+    background: "#3498DB",
     borderRadius: "2px",
   },
 
   subtitle: {
     color: theme.palette.text.secondary,
-    fontSize: "1.2rem",
+    fontSize: "1.1rem",
     marginTop: theme.spacing(1),
     fontWeight: 500,
     marginBottom: theme.spacing(2),
@@ -109,12 +104,32 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   badge: {
-    borderRadius: "20px",
-    padding: theme.spacing(0.5, 2),
+    borderRadius: "8px",
+    padding: theme.spacing(0.75, 2),
     fontWeight: 600,
-    boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+    fontSize: "0.875rem",
+    boxShadow: "none",
+    border: "1px solid rgba(0, 0, 0, 0.1)",
     "& .MuiChip-icon": {
       color: "inherit",
+      fontSize: "1rem",
+      marginRight: theme.spacing(0.5),
+    },
+    "&.MuiChip-colorPrimary": {
+      backgroundColor: "#E3F2FD",
+      color: "#1565C0",
+      borderColor: "#90CAF9",
+      "& .MuiChip-icon": {
+        color: "#1565C0",
+      },
+    },
+    "&.MuiChip-colorSecondary": {
+      backgroundColor: "#E8F5E9",
+      color: "#2E7D32",
+      borderColor: "#A5D6A7",
+      "& .MuiChip-icon": {
+        color: "#2E7D32",
+      },
     },
   },
 
@@ -122,30 +137,19 @@ const useStyles = makeStyles()((theme) => ({
     position: "absolute",
     right: theme.spacing(2),
     top: theme.spacing(2),
-    color: theme.palette.grey[500],
+    color: theme.palette.grey[600],
     transition: "all 0.3s ease",
     "&:hover": {
-      color: theme.palette.grey[700],
-      transform: "rotate(90deg) scale(1.1)",
-      background: "rgba(0, 0, 0, 0.05)",
+      color: theme.palette.grey[800],
+      transform: "rotate(90deg)",
+      background: "rgba(0, 0, 0, 0.04)",
     },
   },
 
   dialogContent: {
     padding: theme.spacing(4),
-    background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+    background: "#ffffff",
     position: "relative",
-    "&::before": {
-      content: '""',
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
-      background:
-        "radial-gradient(circle at 50% 50%, rgba(0, 123, 255, 0.05) 0%, transparent 70%)",
-      pointerEvents: "none",
-    },
   },
 
   contentWrapper: {
@@ -156,38 +160,22 @@ const useStyles = makeStyles()((theme) => ({
 
   section: {
     padding: theme.spacing(4),
-    borderRadius: 16,
-    background: "rgba(255, 255, 255, 0.9)",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.05)",
-    transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-    border: "1px solid rgba(255, 255, 255, 0.2)",
+    borderRadius: 12,
+    background: "#ffffff",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.04)",
+    transition: "all 0.3s ease",
+    border: "1px solid rgba(0, 0, 0, 0.06)",
     position: "relative",
     overflow: "hidden",
-    "&::before": {
-      content: '""',
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      background:
-        "linear-gradient(45deg, transparent, rgba(0, 123, 255, 0.05), transparent)",
-      transform: "translateX(-100%)",
-      transition: "transform 0.6s ease",
-    },
     "&:hover": {
-      transform: "translateY(-4px) scale(1.02)",
-      boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
-      background: "rgba(255, 255, 255, 1)",
-      "&::before": {
-        transform: "translateX(100%)",
-      },
+      transform: "translateY(-2px)",
+      boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
     },
   },
 
   sectionHovered: {
-    transform: "translateY(-4px) scale(1.02)",
-    boxShadow: "0 8px 16px rgba(0, 0, 0, 0.1)",
+    transform: "translateY(-2px)",
+    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
   },
 
   iconContainer: {
@@ -201,14 +189,12 @@ const useStyles = makeStyles()((theme) => ({
     "&::before": {
       content: '""',
       position: "absolute",
-      top: "-10px",
-      left: "-10px",
-      right: "-10px",
-      bottom: "-10px",
-      background:
-        "radial-gradient(circle, rgba(0, 123, 255, 0.1) 0%, transparent 70%)",
+      top: "-8px",
+      left: "-8px",
+      right: "-8px",
+      bottom: "-8px",
+      background: "rgba(52, 152, 219, 0.08)",
       borderRadius: "50%",
-      animation: "$pulse 2s infinite",
     },
   },
 
@@ -228,31 +214,31 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   sectionIcon: {
-    fontSize: "2.5rem",
+    fontSize: "2rem",
     color: "#ffffff",
-    background: "linear-gradient(45deg, #007BFF 30%, #00C6FF 90%)",
-    padding: theme.spacing(1.5),
+    background: "#3498DB",
+    padding: theme.spacing(1.25),
     borderRadius: "50%",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.08)",
     position: "relative",
     zIndex: 1,
   },
 
   sectionTitle: {
-    fontWeight: 700,
-    color: theme.palette.primary.main,
+    fontWeight: 600,
+    color: "#2C3E50",
     marginBottom: theme.spacing(2),
     textAlign: "center",
     position: "relative",
     "&::after": {
       content: '""',
       position: "absolute",
-      bottom: -8,
+      bottom: -6,
       left: "50%",
       transform: "translateX(-50%)",
-      width: "40px",
+      width: "32px",
       height: "2px",
-      background: "linear-gradient(90deg, #007BFF, #00C6FF)",
+      background: "#3498DB",
       borderRadius: "1px",
     },
     [theme.breakpoints.down("sm")]: {
@@ -262,18 +248,18 @@ const useStyles = makeStyles()((theme) => ({
 
   sectionDivider: {
     margin: theme.spacing(2, 0),
-    background: "linear-gradient(90deg, transparent, #007BFF, transparent)",
+    background: "#E2E8F0",
     height: "1px",
     border: "none",
   },
 
   sectionText: {
-    color: theme.palette.text.secondary,
-    lineHeight: 1.8,
-    fontSize: "1.1rem",
+    color: "#4A5568",
+    lineHeight: 1.7,
+    fontSize: "1rem",
     textAlign: "center",
     [theme.breakpoints.down("sm")]: {
-      fontSize: "1rem",
+      fontSize: "0.95rem",
     },
   },
 
@@ -285,49 +271,34 @@ const useStyles = makeStyles()((theme) => ({
     "&::before": {
       content: '""',
       position: "absolute",
-      top: "-20px",
+      top: "-16px",
       left: "50%",
       transform: "translateX(-50%)",
-      width: "80%",
+      width: "60%",
       height: "1px",
-      background: "linear-gradient(90deg, transparent, #007BFF, transparent)",
+      background: "#E2E8F0",
     },
   },
 
   ctaButton: {
     padding: theme.spacing(1.5, 4),
-    fontSize: "1.1rem",
+    fontSize: "1rem",
     fontWeight: 600,
-    borderRadius: 12,
+    borderRadius: 8,
     textTransform: "none",
-    background: "linear-gradient(45deg, #007BFF 30%, #00C6FF 90%)",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+    background: "#3498DB",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.08)",
     color: "#ffffff",
     position: "relative",
     overflow: "hidden",
-    "&::before": {
-      content: '""',
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
-      height: "100%",
-      background:
-        "linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent)",
-      transform: "translateX(-100%)",
-      transition: "transform 0.6s ease",
-    },
     "&:hover": {
-      transform: "translateY(-2px)",
-      boxShadow: "0 6px 12px rgba(0, 0, 0, 0.15)",
-      background: "linear-gradient(45deg, #0069d9 30%, #00b3ff 90%)",
-      "&::before": {
-        transform: "translateX(100%)",
-      },
+      transform: "translateY(-1px)",
+      boxShadow: "0 6px 12px rgba(0, 0, 0, 0.12)",
+      background: "#2980B9",
     },
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(1, 3),
-      fontSize: "1rem",
+      fontSize: "0.95rem",
     },
   },
 }));

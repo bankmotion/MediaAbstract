@@ -111,10 +111,11 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               </Typography>
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
-                WriteFor.co helps PR professionals, content creators, and
-                businesses pitch smarter with AI, matching your ideas to the
-                right outlets. We're launching with 100 vetted outlets to match
-                your pitches to the right publications.
+                WriteFor.co helps PR professionals, founders, content creators,
+                and subject-matter experts pitch smarter with AI—matching your
+                best ideas to the right media outlets. We're launching with 100+
+                vetted publications to streamline your thought leadership
+                strategy and amplify your voice where it matters most.
               </Typography>
             </Box>
           </Zoom>
@@ -137,9 +138,9 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               </Typography>
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
-                Founded by Mike Lizun, a PR veteran with 26 years of experience,
-                WriteFor.co combines industry expertise with cutting-edge AI to
-                streamline your pitching process.
+                Founded by Mike Lizun, a PR leader with 26 years of experience,
+                WriteFor.co brings together deep media expertise and AI
+                innovation to make pitching faster, smarter, and more effective.
               </Typography>
             </Box>
           </Zoom>
@@ -162,9 +163,9 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               </Typography>
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
-                Join our early beta to help shape the future of smarter, more
-                targeted pitching and better media connections—your feedback
-                matters!
+                Join our early beta and help shape the future of smarter, more
+                targeted pitching. Get early access, share your feedback, and
+                connect your ideas with the right media—faster.
               </Typography>
             </Box>
           </Zoom>
