@@ -1,3 +1,4 @@
+import { Theme } from "@mui/material/styles";
 import { makeStyles } from "tss-react/mui";
 import { keyframes } from "@emotion/react";
 
@@ -21,335 +22,376 @@ const shimmer = keyframes`
   }
 `;
 
-const useStyles = makeStyles()((theme) => ({
+export const useStyles = makeStyles()((theme: Theme) => ({
   wrapper: {
-    display: "flex",
-    flexDirection: "column",
-    background: "linear-gradient(150deg, #ffffff 0%, #f5f9ff 100%)",
+    width: "100%",
     minHeight: "100vh",
-    padding: theme.spacing(4),
-    paddingBottom: theme.spacing(8),
-    animation: `${fadeIn} 0.5s ease-out`,
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2, 2, 4),
-      background: "#ffffff",
-    },
+    backgroundColor: "#F8FAFC",
   },
   header: {
+    position: "relative",
+    padding: theme.spacing(3, 0),
+    backgroundColor: "#FFFFFF",
+    borderBottom: "1px solid",
+    borderColor: "#E2E8F0",
     display: "flex",
     alignItems: "center",
-    marginBottom: theme.spacing(4),
-    backgroundColor: "rgba(255, 255, 255, 0.95)",
-    borderRadius: "16px",
-    padding: theme.spacing(3),
-    boxShadow: "0 4px 20px rgba(0, 0, 0, 0.04)",
-    position: "relative",
-    overflow: "hidden",
-    backdropFilter: "blur(8px)",
-    "&::before": {
+    justifyContent: "center",
+    [theme.breakpoints.down("sm")]: {
+      padding: theme.spacing(2, 0),
+    },
+    "&::after": {
       content: '""',
       position: "absolute",
       top: 0,
       left: 0,
       right: 0,
-      height: "3px",
-      background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-      opacity: 0.8,
-    },
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
-      alignItems: "flex-start",
-      gap: theme.spacing(1.5),
-      padding: theme.spacing(2),
-      backgroundColor: "transparent",
-      boxShadow: "none",
+      height: "100%",
+      backgroundImage:
+        "linear-gradient(to right, #F1F5F9 8%, #E2E8F0 18%, #F1F5F9 33%)",
+      backgroundSize: "2000px 100%",
+      animation: `${shimmer} 2.2s linear infinite`,
+      opacity: 0.1,
     },
   },
   backButton: {
-    marginRight: theme.spacing(3),
-    textTransform: "none",
-    color: theme.palette.text.primary,
-    borderRadius: "8px",
-    padding: theme.spacing(1, 2),
-    fontSize: "0.95rem",
-    fontWeight: 500,
-    backgroundColor: "rgba(0, 0, 0, 0.03)",
-    "&:hover": {
-      backgroundColor: "rgba(0, 0, 0, 0.06)",
-      transform: "translateX(-2px)",
-    },
+    color: "#64748B",
+    marginRight: theme.spacing(1),
+    position: "absolute",
+    left: theme.spacing(3),
     [theme.breakpoints.down("sm")]: {
-      marginRight: 0,
-      backgroundColor: "transparent",
+      left: theme.spacing(2),
+      padding: theme.spacing(1),
+    },
+    "&:hover": {
+      backgroundColor: "rgba(100, 116, 139, 0.04)",
     },
   },
   pageTitle: {
     fontWeight: 600,
-    color: theme.palette.text.primary,
-    fontSize: "1.75rem",
-    letterSpacing: "-0.3px",
+    color: "#1E293B",
+    textAlign: "center",
     [theme.breakpoints.down("sm")]: {
-      fontSize: "1.5rem",
+      fontSize: "1.25rem",
+      paddingLeft: theme.spacing(4),
+      paddingRight: theme.spacing(4),
     },
   },
   content: {
-    maxWidth: "1200px",
+    maxWidth: "1280px",
     margin: "0 auto",
-    width: "100%",
-    padding: theme.spacing(0, 2),
+    padding: theme.spacing(3, 2),
+    [theme.breakpoints.up("md")]: {
+      padding: theme.spacing(4),
+    },
     [theme.breakpoints.down("sm")]: {
-      padding: 0,
-      margin: 0,
-      "& .MuiGrid-item": {
-        padding: theme.spacing(1, 0),
-      },
+      // paddingRight: theme.spacing(4),
     },
   },
   profileCard: {
-    background: "#ffffff",
-    borderRadius: "16px",
-    boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
-    marginBottom: theme.spacing(3),
     width: "100%",
-    transition: "all 0.3s ease",
-    position: "relative",
-    overflow: "hidden",
-    "&:hover": {
-      transform: "translateY(-4px)",
-      boxShadow: "0 20px 60px rgba(0, 0, 0, 0.06)",
-    },
+    backgroundColor: "#FFFFFF",
+    borderRadius: "16px",
+    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
+    padding: theme.spacing(3),
+    marginBottom: theme.spacing(3),
     [theme.breakpoints.down("sm")]: {
+      width: "90%",
+      margin: `${theme.spacing(2)} auto`,
+      padding: theme.spacing(2),
       marginBottom: theme.spacing(2),
-      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.06)",
-      "&:hover": {
-        transform: "none",
-      },
     },
   },
   profileCardContent: {
+    padding: 0,
+  },
+  detailsCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: "16px",
+    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
+    marginBottom: theme.spacing(3),
+  },
+  sectionHeader: {
     display: "flex",
-    flexDirection: "column",
     alignItems: "center",
-    padding: theme.spacing(4),
-    textAlign: "center",
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2),
+    justifyContent: "space-between",
+    marginBottom: theme.spacing(2),
+  },
+  editButton: {
+    color: "#64748B",
+    "&:hover": {
+      backgroundColor: "rgba(100, 116, 139, 0.04)",
+    },
+  },
+  editActions: {
+    display: "flex",
+    gap: theme.spacing(1),
+  },
+  saveButton: {
+    backgroundColor: "#1E293B",
+    "&:hover": {
+      backgroundColor: "#0F172A",
     },
   },
   avatarContainer: {
     position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     marginBottom: theme.spacing(3),
-    "&::after": {
-      content: '""',
-      position: "absolute",
-      top: -4,
-      left: -4,
-      right: -4,
-      bottom: -4,
-      background: `linear-gradient(135deg, ${theme.palette.primary.light}20, ${theme.palette.primary.main}20)`,
-      borderRadius: "50%",
-      zIndex: -1,
-      transition: "all 0.3s ease",
-    },
   },
   avatar: {
-    width: 140,
-    height: 140,
-    border: "3px solid #ffffff",
-    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
-    transition: "all 0.3s ease",
-    [theme.breakpoints.down("sm")]: {
-      width: 120,
-      height: 120,
+    width: 120,
+    height: 120,
+    marginRight: 0,
+    borderRadius: "50%",
+    boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+    transition: "transform 0.2s ease-in-out",
+    "&:hover": {
+      transform: "scale(1.05)",
     },
   },
   editAvatarButton: {
     position: "absolute",
     bottom: 0,
-    right: 0,
-    backgroundColor: "#ffffff",
-    color: theme.palette.primary.main,
-    padding: "8px",
-    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+    left: "calc(50% + 30px)",
+    transform: "translateX(-50%)",
+    backgroundColor: "#FFFFFF",
+    color: "#64748B",
     "&:hover": {
-      backgroundColor: "#ffffff",
-      transform: "scale(1.05)",
+      backgroundColor: "#F1F5F9",
     },
+  },
+  userInfo: {
+    flex: 1,
   },
   userName: {
-    fontWeight: 600,
-    marginBottom: theme.spacing(0.5),
-    fontSize: "1.5rem",
-    color: theme.palette.text.primary,
-    letterSpacing: "-0.3px",
+    color: "#1E293B",
+    marginBottom: theme.spacing(1),
   },
   userEmail: {
-    color: theme.palette.text.secondary,
-    fontSize: "1rem",
-    fontWeight: 400,
-  },
-  detailsCard: {
-    background: "#ffffff",
-    borderRadius: "16px",
-    boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
-    marginBottom: theme.spacing(3),
-    overflow: "hidden",
-    transition: "all 0.3s ease",
-    "&:hover": {
-      transform: "translateY(-4px)",
-      boxShadow: "0 20px 60px rgba(0, 0, 0, 0.06)",
-    },
-    [theme.breakpoints.down("sm")]: {
-      marginBottom: theme.spacing(2),
-      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.06)",
-      "&:hover": {
-        transform: "none",
-      },
-    },
-  },
-  sectionHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: theme.spacing(3),
-    borderBottom: "1px solid rgba(0, 0, 0, 0.06)",
-    backgroundColor: "rgba(0, 0, 0, 0.02)",
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2),
-      flexDirection: "column",
-      alignItems: "flex-start",
-      gap: theme.spacing(1.5),
-    },
-  },
-  editButton: {
-    textTransform: "none",
-    borderRadius: "8px",
-    padding: theme.spacing(1, 3),
-    color: theme.palette.text.primary,
-    backgroundColor: "rgba(0, 0, 0, 0.04)",
-    "&:hover": {
-      backgroundColor: "rgba(0, 0, 0, 0.08)",
-    },
-  },
-  editActions: {
-    display: "flex",
-    gap: theme.spacing(2),
-    [theme.breakpoints.down("sm")]: {
-      width: "100%",
-      "& > button": {
-        flex: 1,
-      },
-    },
-  },
-  saveButton: {
-    textTransform: "none",
-    borderRadius: "8px",
-    padding: theme.spacing(1.25, 3),
-    backgroundColor: theme.palette.primary.main,
-    color: "#ffffff",
-    fontWeight: 500,
-    "&:hover": {
-      backgroundColor: theme.palette.primary.dark,
-    },
-  },
-  cancelButton: {
-    textTransform: "none",
-    borderRadius: "8px",
-    padding: theme.spacing(1.25, 3),
-    border: "1px solid rgba(0, 0, 0, 0.12)",
-    color: theme.palette.text.primary,
-    fontWeight: 500,
-    "&:hover": {
-      backgroundColor: "rgba(0, 0, 0, 0.04)",
-    },
-  },
-  formGrid: {
-    padding: theme.spacing(3),
-    "& .MuiTextField-root": {
-      "& .MuiOutlinedInput-root": {
-        borderRadius: "8px",
-        backgroundColor: "rgba(0, 0, 0, 0.02)",
-        transition: "all 0.2s ease",
-        "&:hover": {
-          backgroundColor: "rgba(0, 0, 0, 0.03)",
-        },
-        "&.Mui-focused": {
-          backgroundColor: "#ffffff",
-        },
-      },
-    },
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2),
-    },
+    color: "#64748B",
+    marginBottom: theme.spacing(2),
   },
   divider: {
     margin: theme.spacing(3, 0),
-    backgroundColor: "rgba(0, 0, 0, 0.06)",
-  },
-  inputIcon: {
-    color: theme.palette.text.secondary,
-    marginRight: theme.spacing(1),
+    backgroundColor: "#E2E8F0",
   },
   subscriptionCard: {
-    background: "#ffffff",
+    backgroundColor: "#FFFFFF",
     borderRadius: "16px",
-    boxShadow: "0 10px 40px rgba(0, 0, 0, 0.04)",
-    overflow: "hidden",
+    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
+    margin: theme.spacing(3),
     [theme.breakpoints.down("sm")]: {
-      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.06)",
+      margin: `${theme.spacing(2)} auto`,
     },
   },
-  subscriptionInfo: {
+  subscriptionHeader: {
     display: "flex",
     alignItems: "center",
-    gap: theme.spacing(2.5),
-    padding: theme.spacing(2.5),
-    backgroundColor: "rgba(0, 0, 0, 0.02)",
-    borderRadius: "12px",
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2),
-      gap: theme.spacing(1.5),
-      flexDirection: "column",
-      alignItems: "flex-start",
-    },
+    justifyContent: "space-between",
+    padding: theme.spacing(2, 3),
+    borderBottom: "1px solid #E2E8F0",
   },
-  subscriptionIcon: {
-    color: theme.palette.primary.main,
-    fontSize: "2rem",
+  subscriptionTitle: {
+    color: "#1E293B",
+    fontWeight: 600,
+  },
+  subscriptionStatus: {
+    display: "flex",
+    alignItems: "center",
+    gap: theme.spacing(1),
+    marginBottom: theme.spacing(2),
   },
   statusChip: {
+    backgroundColor: "#E2F8F0",
+    color: "#0D9488",
+    fontWeight: 600,
     borderRadius: "6px",
-    height: "28px",
-    fontWeight: 500,
-    fontSize: "0.875rem",
+    padding: theme.spacing(0.5, 1),
+  },
+  subscriptionPrice: {
+    color: "#1E293B",
+    fontWeight: 600,
+    fontSize: "1.5rem",
+    marginBottom: theme.spacing(1),
   },
   billingDate: {
-    color: theme.palette.text.secondary,
-    fontSize: "0.875rem",
-    marginTop: theme.spacing(0.5),
+    color: "#64748B",
+    marginBottom: theme.spacing(2),
+  },
+  billingHistoryPaper: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: "16px",
+    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
+    padding: theme.spacing(3),
+  },
+  billingHistoryItem: {
+    border: "1px solid #E2E8F0",
+    borderRadius: "8px",
+    padding: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    "&:last-child": {
+      marginBottom: 0,
+    },
+  },
+  downloadButton: {
+    color: "#64748B",
+    "&:hover": {
+      backgroundColor: "rgba(100, 116, 139, 0.04)",
+    },
+  },
+  dialogActions: {
+    padding: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column-reverse",
+      gap: theme.spacing(1),
+    },
+  },
+  closeButton: {
+    color: "#64748B",
+    order: 0,
+    "&:hover": {
+      backgroundColor: "rgba(100, 116, 139, 0.04)",
+    },
+    [theme.breakpoints.down("sm")]: {
+      order: 1,
+    },
+  },
+  actionButton: {
+    order: 1,
+    backgroundColor: "#1E293B",
+    "&:hover": {
+      backgroundColor: "#0F172A",
+    },
+    [theme.breakpoints.down("sm")]: {
+      order: 0,
+    },
+  },
+  cancelButton: {
+    color: "#64748B",
+    "&:hover": {
+      backgroundColor: "rgba(100, 116, 139, 0.04)",
+    },
+  },
+  formGrid: {
+    marginTop: theme.spacing(2),
+  },
+  inputIcon: {
+    color: "#64748B",
+  },
+  manageBillingButton: {
+    color: "#64748B",
+    "&:hover": {
+      backgroundColor: "rgba(100, 116, 139, 0.04)",
+    },
+  },
+  subscriptionContent: {
+    padding: 10,
+  },
+  subscriptionBox: {
+    border: "1px solid #E2E8F0",
+    borderRadius: "16px",
+    overflow: "hidden",
+  },
+  planHeader: {
+    backgroundColor: "#1E293B",
+    color: "white",
+    padding: theme.spacing(2),
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  planIconContainer: {
+    width: 40,
+    height: 40,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderRadius: "8px",
+  },
+  activeChip: {
+    backgroundColor: "#10B981",
+    color: "white",
+    fontWeight: 600,
+  },
+  planDetails: {
+    padding: theme.spacing(2),
+  },
+  planInfoContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    marginBottom: theme.spacing(3),
+  },
+  planActions: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingTop: theme.spacing(2),
+    borderTop: "1px solid #E2E8F0",
+  },
+  comparePlansButton: {
+    backgroundColor: "#1E293B",
+    color: "white",
+    "&:hover": {
+      backgroundColor: "#0F172A",
+    },
   },
   subscriptionDialog: {
     "& .MuiDialog-paper": {
       borderRadius: "16px",
-      padding: theme.spacing(2),
     },
   },
-  manageSubscriptionButton: {
-    textTransform: "none",
-    borderRadius: "8px",
-    padding: theme.spacing(1, 2),
-    color: theme.palette.primary.main,
-    border: `1px solid ${theme.palette.primary.main}`,
-    "&:hover": {
-      backgroundColor: `${theme.palette.primary.main}10`,
-    },
+  dialogPaper: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: "16px",
   },
-  subscriptionGrid: {
+  dialogTitle: {
+    padding: theme.spacing(2, 3),
+    borderBottom: "1px solid #E2E8F0",
+  },
+  dialogContent: {
     padding: theme.spacing(3),
-    [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2),
+  },
+  currentPlanSummary: {
+    backgroundColor: "#1E293B",
+    color: "white",
+    padding: theme.spacing(3),
+    borderRadius: "16px",
+    marginBottom: theme.spacing(3),
+  },
+  paymentMethodHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: theme.spacing(2),
+  },
+  paymentMethodButton: {
+    color: "#64748B",
+    "&:hover": {
+      backgroundColor: "rgba(100, 116, 139, 0.04)",
     },
+  },
+  paymentMethodPaper: {
+    padding: theme.spacing(2),
+    border: "1px solid #E2E8F0",
+    borderRadius: "8px",
+  },
+  cardIconContainer: {
+    width: 44,
+    height: 28,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    border: "1px solid #E2E8F0",
+    borderRadius: "4px",
+    padding: theme.spacing(1),
+  },
+  centeredUserInfo: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
   },
 }));
-
-export default useStyles;

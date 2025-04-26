@@ -21,6 +21,7 @@ import {
   MenuItem,
   ListItemIcon,
   ListItemText,
+  Paper,
 } from "@mui/material";
 import {
   Edit as EditIcon,
@@ -34,7 +35,7 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import useStyles from "./styles";
+import { useStyles } from "./styles";
 
 const UserProfile = () => {
   const { classes } = useStyles();
@@ -62,6 +63,9 @@ const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedData, setEditedData] = useState(userData);
   const [subscriptionDialogOpen, setSubscriptionDialogOpen] = useState(false);
+  const [subscriptionDialogMode, setSubscriptionDialogMode] = useState<
+    "manage" | "change"
+  >("manage");
 
   const handleEdit = () => {
     setEditedData(userData);
@@ -86,7 +90,13 @@ const UserProfile = () => {
       });
     };
 
-  const handleSubscriptionDialog = () => {
+  const handleManageSubscription = () => {
+    setSubscriptionDialogMode("manage");
+    setSubscriptionDialogOpen(true);
+  };
+
+  const handleChangePlan = () => {
+    setSubscriptionDialogMode("change");
     setSubscriptionDialogOpen(true);
   };
 
@@ -96,11 +106,6 @@ const UserProfile = () => {
 
   const handleUpgradeSubscription = () => {
     // TODO: Implement subscription upgrade logic
-    handleCloseSubscriptionDialog();
-  };
-
-  const handleCancelSubscription = () => {
-    // TODO: Implement subscription cancellation logic
     handleCloseSubscriptionDialog();
   };
 
@@ -159,6 +164,38 @@ const UserProfile = () => {
     }
   };
 
+  const plans = [
+    {
+      id: "writer",
+      name: "Writer Plan",
+      price: "$15",
+      interval: "month",
+      description: "Perfect for individual writers and content creators",
+      features: [
+        "Unlimited writing projects",
+        "AI-powered writing assistance",
+        "Grammar and style checking",
+        "Export to multiple formats",
+        "Basic analytics",
+      ],
+      isPopular: true,
+    },
+    {
+      id: "professional",
+      name: "Professional Plan",
+      price: "$29",
+      interval: "month",
+      description: "Enhanced features for serious writers",
+      features: [
+        "Everything in Writer Plan",
+        "Advanced AI features",
+        "Priority support",
+        "Team collaboration tools",
+        "Advanced analytics",
+      ],
+    },
+  ];
+
   return (
     <Box className={classes.wrapper}>
       <Box className={classes.header}>
@@ -167,14 +204,14 @@ const UserProfile = () => {
           onClick={() => navigate("/writers/dashboard")}
           className={classes.backButton}
         >
-          Back to Dashboard
+          {!isMobile && "Back to Dashboard"}
         </Button>
         <Typography variant="h4" className={classes.pageTitle}>
           User Profile
         </Typography>
       </Box>
 
-      <Grid container spacing={2} className={classes.content}>
+      <Grid container spacing={0} rowSpacing={2} className={classes.content}>
         <Grid
           item
           xs={12}
@@ -184,12 +221,16 @@ const UserProfile = () => {
             display: "flex",
             justifyContent: "center",
             width: "100%",
+            padding: 0,
             [theme.breakpoints.down("sm")]: {
-              padding: theme.spacing(1),
+              padding: 0,
             },
           }}
         >
-          <Card className={classes.profileCard}>
+          <Card
+            className={classes.profileCard}
+            sx={{ maxWidth: 400, width: "100%" }}
+          >
             <CardContent className={classes.profileCardContent}>
               <Box className={classes.avatarContainer}>
                 <Avatar
@@ -247,12 +288,14 @@ const UserProfile = () => {
                   style={{ display: "none" }}
                 />
               </Box>
-              <Typography variant="h5" className={classes.userName}>
-                {userData.name}
-              </Typography>
-              <Typography variant="body1" className={classes.userEmail}>
-                {userData.email}
-              </Typography>
+              <Box className={classes.centeredUserInfo}>
+                <Typography variant="h5" className={classes.userName}>
+                  {userData.name}
+                </Typography>
+                <Typography variant="body1" className={classes.userEmail}>
+                  {userData.email}
+                </Typography>
+              </Box>
             </CardContent>
           </Card>
         </Grid>
@@ -265,13 +308,18 @@ const UserProfile = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
+            alignItems: "center",
             width: "100%",
+            padding: 0,
             [theme.breakpoints.down("sm")]: {
-              padding: theme.spacing(1),
+              padding: 0,
             },
           }}
         >
-          <Card className={classes.detailsCard}>
+          <Card
+            className={classes.detailsCard}
+            sx={{ maxWidth: 600, width: "100%", margin: "0 auto" }}
+          >
             <CardContent>
               <Box className={classes.sectionHeader}>
                 <Typography variant="h6">Profile Information</Typography>
@@ -341,313 +389,312 @@ const UserProfile = () => {
             </CardContent>
           </Card>
 
-          <Card className={classes.subscriptionCard}>
-            <CardContent>
-              <Box className={classes.sectionHeader}>
-                <Typography variant="h6">Subscription Details</Typography>
-                <Button
-                  variant="outlined"
-                  onClick={handleSubscriptionDialog}
-                  className={classes.manageSubscriptionButton}
+          <Box sx={{ width: "100%" }}>
+            <Card className={classes.subscriptionCard}>
+              <CardContent sx={{ p: 0 }}>
+                <Box
+                  className={`${classes.sectionHeader} ${classes.subscriptionHeader}`}
                 >
-                  Manage Subscription
-                </Button>
-              </Box>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "#1E293B" }}
+                  >
+                    Subscription Details
+                  </Typography>
+                  <Button
+                    variant="outlined"
+                    onClick={handleManageSubscription}
+                    className={classes.manageBillingButton}
+                    startIcon={<SubscriptionIcon sx={{ color: "#334155" }} />}
+                  >
+                    Manage Billing
+                  </Button>
+                </Box>
 
-              <Divider className={classes.divider} />
+                <Box className={classes.subscriptionContent}>
+                  <Box className={classes.subscriptionBox}>
+                    <Box className={classes.planHeader}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
+                        <Box className={classes.planIconContainer}>
+                          <SubscriptionIcon />
+                        </Box>
+                        <Box>
+                          <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                            Current Plan
+                          </Typography>
+                          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                            Writer Plan
+                          </Typography>
+                        </Box>
+                      </Box>
+                      <Chip
+                        label="ACTIVE"
+                        size="small"
+                        className={classes.activeChip}
+                      />
+                    </Box>
 
-              <Grid container spacing={3} className={classes.subscriptionGrid}>
-                <Grid item xs={12} sm={6}>
-                  <Box className={classes.subscriptionInfo}>
-                    <SubscriptionIcon className={classes.subscriptionIcon} />
-                    <Box>
-                      <Typography variant="subtitle1">Current Plan</Typography>
-                      <Typography variant="h6">
-                        {userData.subscription.plan}
-                      </Typography>
+                    <Box className={classes.planDetails}>
+                      <Box className={classes.planInfoContainer}>
+                        <Box>
+                          <Typography
+                            variant="body2"
+                            sx={{ color: "#64748B" }}
+                            gutterBottom
+                          >
+                            Next billing date
+                          </Typography>
+                          <Typography
+                            variant="h6"
+                            sx={{ fontWeight: 600, color: "#1E293B" }}
+                          >
+                            {userData.subscription.nextBillingDate}
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <Typography
+                            variant="body2"
+                            sx={{ color: "#64748B" }}
+                            gutterBottom
+                          >
+                            Monthly payment
+                          </Typography>
+                          <Typography
+                            variant="h6"
+                            sx={{ fontWeight: 600, color: "#1E293B" }}
+                          >
+                            $15.00
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      <Box className={classes.planActions}>
+                        <Typography variant="body2" sx={{ color: "#64748B" }}>
+                          Want to explore other plan options?
+                        </Typography>
+                        <Button
+                          variant="contained"
+                          onClick={handleChangePlan}
+                          className={classes.comparePlansButton}
+                        >
+                          Compare Plans
+                        </Button>
+                      </Box>
                     </Box>
                   </Box>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Box className={classes.subscriptionInfo}>
-                    <Chip
-                      label={userData.subscription.status.toUpperCase()}
-                      color={
-                        userData.subscription.status === "active"
-                          ? "success"
-                          : "warning"
-                      }
-                      className={classes.statusChip}
-                    />
-                    <Typography variant="body2" className={classes.billingDate}>
-                      Next billing date: {userData.subscription.nextBillingDate}
-                    </Typography>
-                  </Box>
-                </Grid>
-              </Grid>
-            </CardContent>
-          </Card>
+                </Box>
+              </CardContent>
+            </Card>
+          </Box>
         </Grid>
       </Grid>
 
       <Dialog
         open={subscriptionDialogOpen}
         onClose={handleCloseSubscriptionDialog}
-        maxWidth="sm"
+        maxWidth="md"
         fullWidth
         className={classes.subscriptionDialog}
+        PaperProps={{
+          className: classes.dialogPaper,
+        }}
       >
-        <DialogTitle
-          sx={{
-            pb: 1,
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-            px: { xs: 2, sm: 3 },
-          }}
-        >
-          <SubscriptionIcon sx={{ color: "primary.main" }} />
+        <DialogTitle className={classes.dialogTitle}>
+          <SubscriptionIcon sx={{ color: "#1E293B" }} />
           <Typography
             variant="h6"
             sx={{ fontSize: { xs: "1.125rem", sm: "1.25rem" } }}
           >
-            Manage Subscription
+            {subscriptionDialogMode === "manage"
+              ? "Manage Billing"
+              : "Compare Plans"}
           </Typography>
         </DialogTitle>
-        <DialogContent
-          sx={{
-            pt: 2,
-            px: { xs: 2, sm: 3 },
-          }}
-        >
-          <Box sx={{ mb: 4 }}>
-            <Typography
-              variant="subtitle2"
-              color="text.secondary"
-              gutterBottom
-              sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}
-            >
-              CURRENT PLAN
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: { xs: "flex-start", sm: "center" },
-                flexDirection: { xs: "column", sm: "row" },
-                justifyContent: "space-between",
-                mb: 2,
-                gap: { xs: 1, sm: 0 },
-              }}
-            >
-              <Typography
-                variant="h6"
-                component="span"
-                sx={{
-                  fontSize: { xs: "1.125rem", sm: "1.25rem" },
-                }}
-              >
-                {userData.subscription.plan}
-              </Typography>
-              <Chip
-                label={userData.subscription.status.toUpperCase()}
-                color={
-                  userData.subscription.status === "active"
-                    ? "success"
-                    : "warning"
-                }
-                size="small"
-                sx={{ fontWeight: 500 }}
-              />
-            </Box>
-            <Box
-              sx={{
-                bgcolor: "background.default",
-                borderRadius: 1,
-                p: 2,
-                display: "flex",
-                flexDirection: "column",
-                gap: 0.5,
-              }}
-            >
-              <Typography variant="body2" color="text.secondary">
-                Next billing date
-              </Typography>
-              <Typography variant="body1" fontWeight={500}>
-                {userData.subscription.nextBillingDate}
-              </Typography>
-            </Box>
-          </Box>
-
-          <Divider sx={{ my: 3 }} />
-
-          <Box>
-            <Typography
-              variant="subtitle2"
-              color="text.secondary"
-              gutterBottom
-              sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}
-            >
-              AVAILABLE PLANS
-            </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-                mb: 2,
-              }}
-            >
-              {/* Professional Plan */}
-              <Box
-                sx={{
-                  p: 2,
-                  border: "1px solid",
-                  borderColor: "divider",
-                  borderRadius: 1,
-                  cursor: "pointer",
-                  "&:hover": {
-                    bgcolor: "background.default",
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: { xs: "column", sm: "row" },
-                    justifyContent: "space-between",
-                    alignItems: { xs: "flex-start", sm: "flex-start" },
-                    mb: 1,
-                    gap: { xs: 1, sm: 0 },
-                  }}
-                >
-                  <Box>
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight={600}
-                      sx={{
-                        fontSize: { xs: "1rem", sm: "1.125rem" },
-                      }}
-                    >
-                      Professional Plan
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      For serious writers and professionals
-                    </Typography>
-                  </Box>
-                  <Typography
-                    variant="h6"
-                    color="primary.main"
+        <DialogContent className={classes.dialogContent}>
+          {subscriptionDialogMode === "manage" ? (
+            <Box>
+              <Box className={classes.currentPlanSummary}>
+                <Box sx={{ position: "relative", zIndex: 1 }}>
+                  <Typography variant="h6" gutterBottom>
+                    Writer Plan
+                  </Typography>
+                  <Box
                     sx={{
-                      fontSize: { xs: "1.25rem", sm: "1.5rem" },
+                      display: "flex",
+                      justifyContent: "space-between",
+                      mb: 2,
                     }}
                   >
-                    $19.99
-                  </Typography>
-                </Box>
-                <Typography variant="body2" color="text.secondary">
-                  Includes advanced features, priority support, and unlimited
-                  access
-                </Typography>
-              </Box>
-
-              {/* Enterprise Plan */}
-              <Box
-                sx={{
-                  p: 2,
-                  border: "1px solid",
-                  borderColor: "divider",
-                  borderRadius: 1,
-                  cursor: "pointer",
-                  "&:hover": {
-                    bgcolor: "background.default",
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: { xs: "column", sm: "row" },
-                    justifyContent: "space-between",
-                    alignItems: { xs: "flex-start", sm: "flex-start" },
-                    mb: 1,
-                    gap: { xs: 1, sm: 0 },
-                  }}
-                >
-                  <Box>
-                    <Typography
-                      variant="subtitle1"
-                      fontWeight={600}
-                      sx={{
-                        fontSize: { xs: "1rem", sm: "1.125rem" },
-                      }}
-                    >
-                      Enterprise Plan
+                    <Typography variant="body1" sx={{ opacity: 0.9 }}>
+                      Monthly payment
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      For teams and organizations
+                    <Typography variant="h5" sx={{ fontWeight: 600 }}>
+                      $15.00
                     </Typography>
                   </Box>
-                  <Typography
-                    variant="h6"
-                    color="primary.main"
-                    sx={{
-                      fontSize: { xs: "1.25rem", sm: "1.5rem" },
-                    }}
+                  <Box
+                    sx={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    $49.99
-                  </Typography>
+                    <Typography variant="body2" sx={{ opacity: 0.9 }}>
+                      Next billing
+                    </Typography>
+                    <Typography variant="body1">
+                      {userData.subscription.nextBillingDate}
+                    </Typography>
+                  </Box>
                 </Box>
-                <Typography variant="body2" color="text.secondary">
-                  Custom features, dedicated support, and team collaboration
-                  tools
+                <Box
+                  sx={{
+                    position: "absolute",
+                    right: -20,
+                    bottom: -20,
+                    width: 100,
+                    height: 100,
+                    bgcolor: "rgba(255, 255, 255, 0.1)",
+                    borderRadius: "50%",
+                  }}
+                />
+              </Box>
+
+              <Box sx={{ mb: 4 }}>
+                <Box className={classes.paymentMethodHeader}>
+                  <Typography variant="h6" sx={{ color: "#1E293B" }}>
+                    Payment Method
+                  </Typography>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    className={classes.paymentMethodButton}
+                  >
+                    Update
+                  </Button>
+                </Box>
+                <Paper className={classes.paymentMethodPaper}>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                    <Box className={classes.cardIconContainer}>
+                      <Box
+                        component="img"
+                        src="/visa-icon.png"
+                        alt="Visa"
+                        sx={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "contain",
+                        }}
+                      />
+                    </Box>
+                    <Box>
+                      <Typography variant="body1">
+                        •••• •••• •••• 4242
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Expires 12/2024
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Paper>
+              </Box>
+
+              <Box>
+                <Typography variant="h6" sx={{ color: "#1E293B" }} gutterBottom>
+                  Billing History
                 </Typography>
+                <Paper className={classes.billingHistoryPaper}>
+                  {[
+                    { date: "2024-03-25", amount: "$15.00" },
+                    { date: "2024-02-25", amount: "$15.00" },
+                    { date: "2024-01-25", amount: "$15.00" },
+                  ].map((invoice, index, arr) => (
+                    <Box
+                      key={index}
+                      className={classes.billingHistoryItem}
+                      sx={{
+                        borderBottom:
+                          index !== arr.length - 1 ? "1px solid" : "none",
+                        borderColor: "divider",
+                      }}
+                    >
+                      <Box>
+                        <Typography variant="body1">Writer Plan</Typography>
+                        <Typography variant="body2" color="text.secondary">
+                          {invoice.date}
+                        </Typography>
+                      </Box>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
+                        <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                          {invoice.amount}
+                        </Typography>
+                        <Button size="small" className={classes.downloadButton}>
+                          <Box
+                            component="img"
+                            src="/download-icon.png"
+                            alt="Download"
+                            sx={{ width: 20, height: 20 }}
+                          />
+                        </Button>
+                      </Box>
+                    </Box>
+                  ))}
+                </Paper>
               </Box>
             </Box>
-          </Box>
+          ) : (
+            <Box>
+              <Box sx={{ mb: 4 }}>
+                <Typography
+                  variant="subtitle2"
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  CURRENT PLAN
+                </Typography>
+                {/* ... existing current plan content ... */}
+              </Box>
+
+              <Divider sx={{ my: 3 }} />
+
+              <Box>
+                <Typography
+                  variant="subtitle2"
+                  color="text.secondary"
+                  gutterBottom
+                >
+                  AVAILABLE PLANS
+                </Typography>
+                {/* ... existing plans grid ... */}
+              </Box>
+            </Box>
+          )}
         </DialogContent>
-        <DialogActions
-          sx={{
-            px: { xs: 2, sm: 3 },
-            pb: { xs: 2, sm: 3 },
-            display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
-            gap: 1,
-            "& > button": {
-              width: { xs: "100%", sm: "auto" },
-            },
-          }}
-        >
+        <DialogActions className={classes.dialogActions}>
           <Button
             onClick={handleCloseSubscriptionDialog}
-            sx={{
-              color: "text.secondary",
-              order: { xs: 1, sm: 0 },
-              "&:hover": {
-                bgcolor: "background.default",
-              },
-            }}
+            className={classes.closeButton}
           >
             Close
           </Button>
-          {userData.subscription.status === "active" && (
+          {subscriptionDialogMode === "manage" ? (
             <Button
-              onClick={handleCancelSubscription}
-              color="error"
-              variant="outlined"
-              startIcon={<CancelIcon />}
-              sx={{ order: { xs: 0, sm: 1 } }}
+              variant="contained"
+              onClick={handleCloseSubscriptionDialog}
+              className={classes.actionButton}
             >
-              Cancel Subscription
+              Done
+            </Button>
+          ) : (
+            <Button
+              onClick={handleUpgradeSubscription}
+              variant="contained"
+              startIcon={<SaveIcon />}
+              className={classes.actionButton}
+            >
+              Upgrade Plan
             </Button>
           )}
-          <Button
-            onClick={handleUpgradeSubscription}
-            variant="contained"
-            startIcon={<SaveIcon />}
-            sx={{ order: { xs: -1, sm: 2 } }}
-          >
-            Upgrade Plan
-          </Button>
         </DialogActions>
       </Dialog>
     </Box>
