@@ -78,3 +78,20 @@ export const fetchAllOutletsAPI = async () => {
 
   return response.data;
 };
+
+export const updatePitchStatusAndNotes = async (
+  pitchId: string,
+  status: string,
+  notes: string
+) => {
+  try {
+    const response = await axios.put(`${API_URL}/update_pitch_status`, {
+      pitchId,
+      status,
+      notes,
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
