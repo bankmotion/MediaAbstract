@@ -30,7 +30,7 @@ export const useStyles = makeStyles()((theme: Theme) => ({
   },
   header: {
     position: "relative",
-    padding: theme.spacing(3, 0),
+    padding: theme.spacing(3, 4),
     backgroundColor: "#FFFFFF",
     borderBottom: "1px solid",
     borderColor: "#E2E8F0",
@@ -38,30 +38,15 @@ export const useStyles = makeStyles()((theme: Theme) => ({
     alignItems: "center",
     justifyContent: "center",
     [theme.breakpoints.down("sm")]: {
-      padding: theme.spacing(2, 0),
-    },
-    "&::after": {
-      content: '""',
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      height: "100%",
-      backgroundImage:
-        "linear-gradient(to right, #F1F5F9 8%, #E2E8F0 18%, #F1F5F9 33%)",
-      backgroundSize: "2000px 100%",
-      animation: `${shimmer} 2.2s linear infinite`,
-      opacity: 0.1,
+      padding: theme.spacing(2, 3),
     },
   },
   backButton: {
     color: "#64748B",
-    marginRight: theme.spacing(1),
     position: "absolute",
-    left: theme.spacing(3),
+    left: theme.spacing(4),
     [theme.breakpoints.down("sm")]: {
-      left: theme.spacing(2),
-      padding: theme.spacing(1),
+      left: theme.spacing(3),
     },
     "&:hover": {
       backgroundColor: "rgba(100, 116, 139, 0.04)",
@@ -70,11 +55,10 @@ export const useStyles = makeStyles()((theme: Theme) => ({
   pageTitle: {
     fontWeight: 600,
     color: "#1E293B",
-    textAlign: "center",
+    fontSize: "1.5rem",
+    letterSpacing: "-0.02em",
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.25rem",
-      paddingLeft: theme.spacing(4),
-      paddingRight: theme.spacing(4),
     },
   },
   content: {
@@ -84,9 +68,6 @@ export const useStyles = makeStyles()((theme: Theme) => ({
     [theme.breakpoints.up("md")]: {
       padding: theme.spacing(4),
     },
-    [theme.breakpoints.down("sm")]: {
-      // paddingRight: theme.spacing(4),
-    },
   },
   profileCard: {
     width: "100%",
@@ -95,6 +76,7 @@ export const useStyles = makeStyles()((theme: Theme) => ({
     boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
     padding: theme.spacing(3),
     marginBottom: theme.spacing(3),
+    marginRight: theme.spacing(3),
     [theme.breakpoints.down("sm")]: {
       width: "90%",
       margin: `${theme.spacing(2)} auto`,
@@ -116,6 +98,11 @@ export const useStyles = makeStyles()((theme: Theme) => ({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: theme.spacing(2),
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      alignItems: "flex-start",
+      gap: theme.spacing(1),
+    },
   },
   editButton: {
     color: "#64748B",
@@ -126,6 +113,14 @@ export const useStyles = makeStyles()((theme: Theme) => ({
   editActions: {
     display: "flex",
     gap: theme.spacing(1),
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "row",
+      gap: theme.spacing(1),
+      width: "100%",
+      "& button": {
+        width: "100%",
+      },
+    },
   },
   saveButton: {
     backgroundColor: "#1E293B",
@@ -164,6 +159,8 @@ export const useStyles = makeStyles()((theme: Theme) => ({
   },
   userInfo: {
     flex: 1,
+
+    margin: `${theme.spacing(2)} auto`,
   },
   userName: {
     color: "#1E293B",
@@ -181,10 +178,6 @@ export const useStyles = makeStyles()((theme: Theme) => ({
     backgroundColor: "#FFFFFF",
     borderRadius: "16px",
     boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
-    margin: theme.spacing(3),
-    [theme.breakpoints.down("sm")]: {
-      margin: `${theme.spacing(2)} auto`,
-    },
   },
   subscriptionHeader: {
     display: "flex",
@@ -243,14 +236,17 @@ export const useStyles = makeStyles()((theme: Theme) => ({
   },
   dialogActions: {
     padding: theme.spacing(2),
+
     [theme.breakpoints.down("sm")]: {
-      flexDirection: "column-reverse",
+      flexDirection: "row",
       gap: theme.spacing(1),
     },
   },
   closeButton: {
     color: "#64748B",
     order: 0,
+    // margin: theme.spacing(2),
+
     "&:hover": {
       backgroundColor: "rgba(100, 116, 139, 0.04)",
     },
@@ -393,5 +389,11 @@ export const useStyles = makeStyles()((theme: Theme) => ({
     flexDirection: "column",
     alignItems: "center",
     textAlign: "center",
+  },
+  titleAndEdit: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%",
   },
 }));

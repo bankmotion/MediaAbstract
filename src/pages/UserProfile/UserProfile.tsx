@@ -199,13 +199,13 @@ const UserProfile = () => {
   return (
     <Box className={classes.wrapper}>
       <Box className={classes.header}>
-        <Button
-          startIcon={<ArrowBackIcon />}
+        <IconButton
           onClick={() => navigate("/writers/dashboard")}
           className={classes.backButton}
+          size="medium"
         >
-          {!isMobile && "Back to Dashboard"}
-        </Button>
+          <ArrowBackIcon />
+        </IconButton>
         <Typography variant="h4" className={classes.pageTitle}>
           User Profile
         </Typography>
@@ -322,36 +322,38 @@ const UserProfile = () => {
           >
             <CardContent>
               <Box className={classes.sectionHeader}>
-                <Typography variant="h6">Profile Information</Typography>
-                {!isEditing ? (
-                  <Button
-                    startIcon={<EditIcon />}
-                    onClick={handleEdit}
-                    className={classes.editButton}
-                  >
-                    Edit Profile
-                  </Button>
-                ) : (
-                  <Box className={classes.editActions}>
+                <Box className={classes.titleAndEdit}>
+                  <Typography variant="h6">Profile Information</Typography>
+                  {!isEditing ? (
                     <Button
-                      startIcon={<SaveIcon />}
-                      onClick={handleSave}
-                      variant="contained"
-                      color="primary"
-                      className={classes.saveButton}
+                      startIcon={<EditIcon />}
+                      onClick={handleEdit}
+                      className={classes.editButton}
                     >
-                      Save
+                      Edit
                     </Button>
-                    <Button
-                      startIcon={<CancelIcon />}
-                      onClick={handleCancel}
-                      variant="outlined"
-                      className={classes.cancelButton}
-                    >
-                      Cancel
-                    </Button>
-                  </Box>
-                )}
+                  ) : (
+                    <Box className={classes.editActions}>
+                      <Button
+                        startIcon={<SaveIcon />}
+                        onClick={handleSave}
+                        variant="contained"
+                        color="primary"
+                        className={classes.saveButton}
+                      >
+                        Save
+                      </Button>
+                      <Button
+                        startIcon={<CancelIcon />}
+                        onClick={handleCancel}
+                        variant="outlined"
+                        className={classes.cancelButton}
+                      >
+                        Cancel
+                      </Button>
+                    </Box>
+                  )}
+                </Box>
               </Box>
 
               <Divider className={classes.divider} />
