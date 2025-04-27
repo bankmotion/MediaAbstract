@@ -57,8 +57,6 @@ const dashboardSlice = createSlice({
         state.matches_outlets = action.payload.my_pitches.matches_outlets;
 
         state.loading = false;
-
-        console.log("Action:", action);
       })
       .addCase(fetchDashboardData.rejected, (state) => {
         state.loading = false;

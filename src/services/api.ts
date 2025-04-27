@@ -3,8 +3,8 @@ import axios from "axios";
 // const API_URL = "http://127.0.0.1:10000";
 // const API_URL = "https://mediaabstract-backend.onrender.com";
 
-// const API_URL = "http://146.190.131.130:10000";
-const API_URL = "https://backend.writefor.co/";
+const API_URL = "http://146.190.131.130:10000";
+// const API_URL = "https://backend.writefor.co";
 
 export const submitPitch = async (abstract: string, industry: string) => {
   try {
@@ -51,7 +51,7 @@ export const updatePitchSubmissionStatus = async (
 
 export const fetchDashboardDataAPI = async () => {
   const response = await axios.get(`${API_URL}/get_dashboard_data`);
-
+  console.log("Dashboard Data:", response.data);
   return response.data;
 };
 
@@ -85,11 +85,15 @@ export const updatePitchStatusAndNotes = async (
   notes: string
 ) => {
   try {
-    const response = await axios.put(`${API_URL}/update_pitch_status`, {
-      pitchId,
-      status,
-      notes,
-    });
+    const response = await axios.put(
+      `${API_URL}/update_pitch_status_and_notes`,
+      {
+        pitchId,
+        status,
+        notes,
+      }
+    );
+    console.log("Response:", response.data);
     return response.data;
   } catch (error) {
     throw error;

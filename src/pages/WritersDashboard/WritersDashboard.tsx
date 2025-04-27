@@ -94,8 +94,6 @@ const WritersDashboard = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollToSaved, setShowScrollToSaved] = useState(false);
 
-  console.log("Saved Pitches: ", savedPitches);
-
   const navigate = useNavigate();
 
   const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
@@ -317,11 +315,10 @@ const WritersDashboard = () => {
       status: pitch.status,
       notes: pitch.notes || "",
     };
-    dispatch(
-      updatePitchStatusAndNotes({ pitchId: pitch.id, status, notes })
-    ).then(() => {
-      dispatch(fetchDashboardData());
-    });
+    dispatch(updatePitchStatusAndNotes({ pitchId: pitch.id, status, notes }));
+    // .then(() => {
+    //   dispatch(fetchDashboardData());
+    // });
   };
 
   const [statusSaved, setStatusSaved] = useState<{

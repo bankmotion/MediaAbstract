@@ -434,6 +434,7 @@ const useStyles = makeStyles()((theme) => ({
   pitchStatus: {
     display: "flex",
     alignItems: "center",
+    justifyContent: "center",
     gap: theme.spacing(1),
     padding: theme.spacing(0.5, 1),
     borderRadius: "8px",
@@ -451,6 +452,18 @@ const useStyles = makeStyles()((theme) => ({
       background: "rgba(76, 175, 80, 0.08)",
       color: "#4caf50",
     },
+    "&.accepted": {
+      background: "rgba(76, 175, 80, 0.12)",
+      color: "#388e3c",
+    },
+    "&.rejected": {
+      background: "rgba(244, 67, 54, 0.12)",
+      color: "#d32f2f",
+    },
+    "&.followedup": {
+      background: "rgba(255, 193, 7, 0.12)",
+      color: "#fbc02d",
+    },
   },
   pitchStatusDot: {
     width: "8px",
@@ -461,6 +474,15 @@ const useStyles = makeStyles()((theme) => ({
     },
     "&.matched": {
       backgroundColor: "#4caf50",
+    },
+    "&.accepted": {
+      backgroundColor: "#388e3c",
+    },
+    "&.rejected": {
+      backgroundColor: "#d32f2f",
+    },
+    "&.followedup": {
+      backgroundColor: "#fbc02d",
     },
   },
   pitchMatches: {
