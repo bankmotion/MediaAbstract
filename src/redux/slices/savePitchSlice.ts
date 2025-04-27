@@ -1,6 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { saveSelectedOutletsAPI } from "../../services/api";
 import { fetchSavedOutletsAPI } from "../../services/api";
+import { deleteSavedPitch } from "../../services/api";
+
 interface SavedPitch {
   description: string;
   outlets: string[];
@@ -45,6 +47,20 @@ export const fetchSavedOutlets = createAsyncThunk(
   }
 );
 
+export const deleteSavedPitchAction = createAsyncThunk(
+  "savedOutlets/deleteSavedPitch",
+  async ({
+    description,
+    selected_date,
+  }: {
+    description: string;
+    selected_date: string;
+  }) => {
+    const response = await deleteSavedPitch(description, selected_date);
+    return response;
+  }
+);
+
 const savePitchSlice = createSlice({
   name: "saveOutlets",
   initialState,
@@ -71,6 +87,18 @@ const savePitchSlice = createSlice({
         state.results = action.payload;
       })
       .addCase(fetchSavedOutlets.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something went wrong";
+      })
+
+      .addCase(deleteSavedPitchAction.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteSavedPitchAction.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.results = action.payload;
+      })
+      .addCase(deleteSavedPitchAction.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message || "Something went wrong";
       });

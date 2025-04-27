@@ -99,3 +99,17 @@ export const updatePitchStatusAndNotes = async (
     throw error;
   }
 };
+
+export const deleteSavedPitch = async (
+  description: string,
+  selected_date: string
+) => {
+  try {
+    const response = await axios.delete(`${API_URL}/delete_saved_pitch`, {
+      data: { description, selected_date },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -21,6 +21,7 @@ import {
   Tooltip,
   Alert,
   Badge,
+  DialogTitle,
 } from "@mui/material";
 import {
   Logout,
@@ -65,7 +66,10 @@ import useStyles from "./styles";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
 import { fetchDashboardData } from "../../redux/slices/dashboardSlice";
-import { fetchSavedOutlets } from "../../redux/slices/savePitchSlice";
+import {
+  fetchSavedOutlets,
+  deleteSavedPitchAction,
+} from "../../redux/slices/savePitchSlice";
 import { fetchAllOutlets } from "../../redux/slices/outletsSlice";
 import { Outlet } from "../../redux/slices/outletsSlice";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
@@ -85,9 +89,11 @@ const WritersDashboard = () => {
   );
   const dashboardResult = useSelector((state: RootState) => state.dashboard);
   console.log("Dashboard Result: ", dashboardResult);
-  const savedPitches =
-    useSelector((state: RootState) => state.savedOutlets.results) || [];
-
+  const savedPitchesRaw = useSelector(
+    (state: RootState) => state.savedOutlets.results
+  );
+  const savedPitches = Array.isArray(savedPitchesRaw) ? savedPitchesRaw : [];
+  console.log("Saved Pitches: ", savedPitches);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedOutlet, setSelectedOutlet] = useState<Outlet | null>(null);
   const [expandedOutlets, setExpandedOutlets] = useState<number[]>([]);
@@ -324,9 +330,6 @@ const WritersDashboard = () => {
   const [statusSaved, setStatusSaved] = useState<{
     [pitchId: string]: boolean;
   }>({});
-  const [notesSaved, setNotesSaved] = useState<{ [pitchId: string]: boolean }>(
-    {}
-  );
 
   const [openNotes, setOpenNotes] = useState<{ [pitchId: string]: boolean }>(
     {}
@@ -367,6 +370,42 @@ const WritersDashboard = () => {
       default:
         return "default";
     }
+  };
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [pitchToDelete, setPitchToDelete] = useState<{
+    description: string;
+    selected_date: string;
+  } | null>(null);
+
+  const handleDeleteClick = (pitch: {
+    description: string;
+    selected_date: string;
+  }) => {
+    setPitchToDelete(pitch);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    if (pitchToDelete) {
+      dispatch(deleteSavedPitchAction(pitchToDelete))
+        .unwrap()
+        .then(() => {
+          setDeleteDialogOpen(false);
+          setPitchToDelete(null);
+          // Refresh the saved outlets list
+          dispatch(fetchSavedOutlets());
+        })
+        .catch((error) => {
+          console.error("Failed to delete pitch:", error);
+          // You might want to show an error message to the user here
+        });
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setPitchToDelete(null);
   };
 
   return (
@@ -562,7 +601,6 @@ const WritersDashboard = () => {
                               border: "1px solid #e3e8ee",
                               display: "flex",
                               flexDirection: "column",
-                              gap: 2,
                             }}
                           >
                             <Box
@@ -804,15 +842,35 @@ const WritersDashboard = () => {
                       <Typography className={classes.savedPitchTitle}>
                         {pitch.description}
                       </Typography>
-                      {isMobile && (
-                        <KeyboardArrowDownIcon
-                          className={`${classes.savedPitchDropdown} ${
-                            expandedOutlets.includes(pitchIndex)
-                              ? "expanded"
-                              : ""
-                          }`}
-                        />
-                      )}
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
+                        {isMobile && (
+                          <KeyboardArrowDownIcon
+                            className={`${classes.savedPitchDropdown} ${
+                              expandedOutlets.includes(pitchIndex)
+                                ? "expanded"
+                                : ""
+                            }`}
+                          />
+                        )}
+                        <IconButton
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteClick(pitch);
+                          }}
+                          sx={{
+                            color: "error.main",
+                            "&:hover": {
+                              backgroundColor: "error.light",
+                              color: "error.contrastText",
+                            },
+                          }}
+                        >
+                          <CloseIcon fontSize="small" />
+                        </IconButton>
+                      </Box>
                     </Box>
                     <Box
                       className={`${classes.savedOutletsList} ${
@@ -833,9 +891,11 @@ const WritersDashboard = () => {
                             <Box
                               key={outletIndex}
                               className={classes.savedOutletItem}
-                              onClick={() => handleOpenModal(outlet)}
                             >
-                              <Typography className={classes.savedOutletName}>
+                              <Typography
+                                className={classes.savedOutletName}
+                                onClick={() => handleOpenModal(outlet)}
+                              >
                                 {outlet}
                               </Typography>
                             </Box>
@@ -1049,6 +1109,67 @@ const WritersDashboard = () => {
               }}
             >
               Save Reminder
+            </Button>
+          </DialogActions>
+        </Dialog>
+
+        <Dialog
+          open={deleteDialogOpen}
+          onClose={handleCancelDelete}
+          maxWidth="xs"
+          fullWidth
+          PaperProps={{
+            sx: {
+              borderRadius: 3,
+              p: 2,
+              boxShadow: 10,
+              background: "#fff",
+            },
+          }}
+        >
+          <DialogTitle sx={{ pb: 1 }}>
+            <Typography variant="h6" fontWeight={600}>
+              Delete Pitch
+            </Typography>
+          </DialogTitle>
+          <DialogContent>
+            <Typography variant="body1" color="text.secondary">
+              Are you sure you want to delete this pitch and all its saved
+              outlets? This action cannot be undone.
+            </Typography>
+            {pitchToDelete && (
+              <Box sx={{ mt: 2, p: 2, bgcolor: "grey.50", borderRadius: 1 }}>
+                <Typography variant="body2" color="text.secondary">
+                  <strong>Description:</strong> {pitchToDelete.description}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  <strong>Saved on:</strong>{" "}
+                  {new Date(pitchToDelete.selected_date).toLocaleDateString()}
+                </Typography>
+              </Box>
+            )}
+          </DialogContent>
+          <DialogActions sx={{ px: 3, pb: 2 }}>
+            <Button
+              onClick={handleCancelDelete}
+              variant="text"
+              sx={{ textTransform: "none", fontWeight: 500 }}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleConfirmDelete}
+              variant="contained"
+              color="error"
+              sx={{
+                textTransform: "none",
+                borderRadius: 2,
+                px: 3,
+                fontWeight: 600,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+              }}
+            >
+              Delete
             </Button>
           </DialogActions>
         </Dialog>

@@ -362,7 +362,8 @@ const useStyles = makeStyles()((theme) => ({
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: theme.spacing(4),
+    marginTop: theme.spacing(2),
+
     [theme.breakpoints.down("sm")]: {
       flexDirection: "column",
       gap: theme.spacing(2),
@@ -372,7 +373,6 @@ const useStyles = makeStyles()((theme) => ({
     display: "grid",
     gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
     gap: theme.spacing(3),
-    marginTop: theme.spacing(2),
   },
   pitchCard: {
     height: "100%",
@@ -668,6 +668,7 @@ const useStyles = makeStyles()((theme) => ({
     background: "rgba(0, 0, 0, 0.02)",
     display: "flex",
     alignItems: "center",
+    justifyContent: "space-between",
     gap: theme.spacing(1.5),
     cursor: "pointer",
     transition: "all 0.2s ease",
@@ -683,7 +684,11 @@ const useStyles = makeStyles()((theme) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
-    width: "100%",
+    flex: 1,
+    cursor: "pointer",
+    "&:hover": {
+      color: theme.palette.primary.main,
+    },
   },
   emptyStateCard: {
     padding: theme.spacing(4),
