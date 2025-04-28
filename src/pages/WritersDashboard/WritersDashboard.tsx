@@ -618,7 +618,7 @@ const WritersDashboard = () => {
                                   minWidth: 160,
                                   flex: "1 1 160px",
                                   width: isMobile ? "100%" : undefined,
-                                  mb: isMobile ? 1.5 : 0,
+                                  mb: 1.5,
                                   fontSize: "0.85rem",
                                 }}
                               >
