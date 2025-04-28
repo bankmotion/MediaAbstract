@@ -364,7 +364,7 @@ const WritersDashboard = () => {
       case "Rejected":
         return "error";
       case "Followed Up":
-        return "info";
+        return "warning";
       case "Submitted":
         return "primary";
       default:
@@ -594,8 +594,8 @@ const WritersDashboard = () => {
                         {editable && (
                           <Box
                             sx={{
-                              mb: 2,
-                              p: 2,
+                              mb: 1,
+                              p: 1,
                               background: "#f7fafd",
                               borderRadius: 2,
                               border: "1px solid #e3e8ee",
@@ -619,9 +619,15 @@ const WritersDashboard = () => {
                                   flex: "1 1 160px",
                                   width: isMobile ? "100%" : undefined,
                                   mb: isMobile ? 1.5 : 0,
+                                  fontSize: "0.85rem",
                                 }}
                               >
-                                <InputLabel>Status</InputLabel>
+                                <InputLabel
+                                  size="small"
+                                  sx={{ fontSize: "0.85rem" }}
+                                >
+                                  Status
+                                </InputLabel>
                                 <Select
                                   label="Status"
                                   value={
@@ -634,15 +640,37 @@ const WritersDashboard = () => {
                                       e.target.value
                                     );
                                   }}
-                                  sx={{ background: "#fff", borderRadius: 1 }}
+                                  sx={{
+                                    background: "#fff",
+                                    borderRadius: 1,
+                                    "& .MuiSelect-select": {
+                                      paddingRight: "32px !important",
+                                      fontSize: "0.85rem",
+                                    },
+                                    fontSize: "0.85rem",
+                                  }}
+                                  MenuProps={{
+                                    PaperProps: {
+                                      sx: {
+                                        mt: 0.5,
+                                        fontSize: "0.85rem",
+                                      },
+                                    },
+                                    disablePortal: false,
+                                  }}
                                 >
                                   {statusOptions.map((opt) => (
-                                    <MenuItem key={opt.value} value={opt.value}>
+                                    <MenuItem
+                                      key={opt.value}
+                                      value={opt.value}
+                                      sx={{ fontSize: "0.85rem" }}
+                                    >
                                       <Box
                                         sx={{
                                           display: "flex",
                                           alignItems: "center",
                                           gap: 1,
+                                          fontSize: "0.85rem",
                                         }}
                                       >
                                         {opt.icon} {opt.label}
@@ -682,10 +710,17 @@ const WritersDashboard = () => {
                                 label={
                                   editStates[pitch.id]?.status || pitch.status
                                 }
-                                color={statusChipColor(
-                                  editStates[pitch.id]?.status || pitch.status
-                                )}
                                 size="small"
+                                variant="outlined"
+                                color={
+                                  (editStates[pitch.id]?.status ||
+                                    pitch.status) === "Followed Up"
+                                    ? "warning"
+                                    : statusChipColor(
+                                        editStates[pitch.id]?.status ||
+                                          pitch.status
+                                      )
+                                }
                                 sx={{
                                   fontWeight: 600,
                                   letterSpacing: 0.5,
@@ -747,9 +782,12 @@ const WritersDashboard = () => {
                                       (pitch.notes ?? ""))
                                 }
                                 sx={{
-                                  minWidth: isMobile ? undefined : 80,
+                                  minWidth: isMobile ? undefined : 60,
                                   fontWeight: 600,
-                                  fontSize: isMobile ? "1rem" : undefined,
+                                  fontSize: "0.85rem",
+                                  px: 1.5,
+                                  py: 0.5,
+                                  height: 28,
                                 }}
                               >
                                 Save
@@ -772,14 +810,16 @@ const WritersDashboard = () => {
                             {pitch.title}
                           </Typography>
                           <Box
-                            className={`${
-                              classes.pitchStatus
-                            } ${pitch.status.toLowerCase()}`}
+                            className={`${classes.pitchStatus} ${pitch.status
+                              .replace(/\s+/g, "")
+                              .toLowerCase()}`}
                           >
                             <Box
                               className={`${
                                 classes.pitchStatusDot
-                              } ${pitch.status.toLowerCase()}`}
+                              } ${pitch.status
+                                .replace(/\s+/g, "")
+                                .toLowerCase()}`}
                             />
                             {pitch.status}
                           </Box>

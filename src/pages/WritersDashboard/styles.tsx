@@ -442,27 +442,27 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 500,
     whiteSpace: "nowrap",
     flexShrink: 0,
-    background: "rgba(25, 118, 210, 0.08)",
-    color: theme.palette.primary.main,
+    background: theme.palette.primary.main,
+    color: "#fff",
     "&.submitted": {
-      background: "rgba(25, 118, 210, 0.08)",
-      color: theme.palette.primary.main,
+      background: theme.palette.primary.main,
+      color: "#fff",
     },
     "&.matched": {
-      background: "rgba(76, 175, 80, 0.08)",
-      color: "#4caf50",
+      background: "#81c784",
+      color: "#fff",
     },
     "&.accepted": {
-      background: "rgba(76, 175, 80, 0.12)",
-      color: "#388e3c",
+      background: "#388e3c",
+      color: "#fff",
     },
     "&.rejected": {
-      background: "rgba(244, 67, 54, 0.12)",
-      color: "#d32f2f",
+      background: "#d32f2f",
+      color: "#fff",
     },
     "&.followedup": {
-      background: "rgba(255, 193, 7, 0.12)",
-      color: "#fbc02d",
+      background: `${theme.palette.warning.main} !important`,
+      color: `#fff !important`,
     },
   },
   pitchStatusDot: {
@@ -470,19 +470,19 @@ const useStyles = makeStyles()((theme) => ({
     height: "8px",
     borderRadius: "50%",
     "&.submitted": {
-      backgroundColor: theme.palette.primary.main,
+      backgroundColor: "white",
     },
     "&.matched": {
-      backgroundColor: "#4caf50",
+      backgroundColor: "white",
     },
     "&.accepted": {
-      backgroundColor: "#388e3c",
+      backgroundColor: "white",
     },
     "&.rejected": {
-      backgroundColor: "#d32f2f",
+      backgroundColor: "white",
     },
     "&.followedup": {
-      backgroundColor: "#fbc02d",
+      backgroundColor: "white",
     },
   },
   pitchMatches: {
