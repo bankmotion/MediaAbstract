@@ -321,10 +321,11 @@ const WritersDashboard = () => {
       status: pitch.status,
       notes: pitch.notes || "",
     };
-    dispatch(updatePitchStatusAndNotes({ pitchId: pitch.id, status, notes }));
-    // .then(() => {
-    //   dispatch(fetchDashboardData());
-    // });
+    dispatch(
+      updatePitchStatusAndNotes({ pitchId: pitch.id, status, notes })
+    ).then(() => {
+      dispatch(fetchDashboardData());
+    });
   };
 
   const [statusSaved, setStatusSaved] = useState<{
@@ -810,18 +811,20 @@ const WritersDashboard = () => {
                             {pitch.title}
                           </Typography>
                           <Box
-                            className={`${classes.pitchStatus} ${pitch.status
+                            className={`${classes.pitchStatus} ${(
+                              pitch.status || ""
+                            )
                               .replace(/\s+/g, "")
                               .toLowerCase()}`}
                           >
                             <Box
-                              className={`${
-                                classes.pitchStatusDot
-                              } ${pitch.status
+                              className={`${classes.pitchStatusDot} ${(
+                                pitch.status || ""
+                              )
                                 .replace(/\s+/g, "")
                                 .toLowerCase()}`}
                             />
-                            {pitch.status}
+                            {pitch.status || "No Status"}
                           </Box>
                         </Box>
                         <Box className={classes.pitchMatches}>
