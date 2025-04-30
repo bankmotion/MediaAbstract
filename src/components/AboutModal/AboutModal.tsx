@@ -138,9 +138,9 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               </Typography>
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
-                Founded by Mike Lizun, a PR leader with 26 years of experience,
-                WriteFor.co brings together deep media expertise and AI
-                innovation to make pitching faster, smarter, and more effective.
+                Founded by a PR leader with 25+ years of experience, WriteFor.co
+                brings together deep media expertise and AI innovation to make
+                pitching faster, smarter, and more effective.
               </Typography>
             </Box>
           </Zoom>
