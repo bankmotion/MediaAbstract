@@ -11,6 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../Navbar/Nabvar";
 import useStyles from "./styles";
+import { supabase } from "../../../../utils/supabase";
 
 const planOptions = [
   {
@@ -30,6 +31,11 @@ const Signup = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const handleLoginClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate("/login");
+  };
+
   const handleSignup = async () => {
     if (!email || !password || !plan) {
       setError("Please fill in all fields");
@@ -39,6 +45,58 @@ const Signup = () => {
     try {
       setLoading(true);
       setError(null);
+
+      // Check if user profile exists
+      const { data: existingUser, error: checkError } = await supabase
+        .from("user_profiles")
+        .select("email, password")
+        .eq("email", email)
+        .single();
+
+      if (existingUser) {
+        setError(
+          "An account with this email already exists. Please login instead."
+        );
+        return;
+      }
+
+      // Create user in Supabase auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            plan_type: plan,
+          },
+        },
+      });
+
+      if (authError) {
+        throw authError;
+      }
+
+      if (!authData.user) {
+        throw new Error("Failed to create user account");
+      }
+
+      // Create user profile with email and password
+      const { error: profileError } = await supabase
+        .from("user_profiles")
+        .insert([
+          {
+            email: email,
+            password: password, // Explicitly set password
+            plan_type: plan,
+            user_id: authData.user.id,
+            payment_status: "beta",
+          },
+        ])
+        .select();
+
+      if (profileError) {
+        console.error("Profile creation error:", profileError);
+        throw profileError;
+      }
 
       // Store registration data in localStorage
       const registrationData = {
@@ -59,6 +117,7 @@ const Signup = () => {
 
       window.location.href = selectedPlan.checkoutUrl;
     } catch (err) {
+      console.error("Signup error:", err);
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
@@ -140,7 +199,7 @@ const Signup = () => {
             Already have an account?{" "}
             <Link
               component="button"
-              onClick={() => navigate("/login")}
+              onClick={handleLoginClick}
               underline="hover"
               sx={{ color: "#007BFF", fontWeight: 500 }}
             >

@@ -1,7 +1,16 @@
 // src/pages/Login.tsx
-import React, { useState } from "react";
-import { Box, Button, TextField, Typography, Paper, Link } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Button,
+  TextField,
+  Typography,
+  Paper,
+  Link,
+  Alert,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../../utils/supabase";
 
 import Navbar from "../../Navbar/Nabvar";
 
@@ -13,11 +22,74 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = () => {
-    // Placeholder login logic
-    alert("Login successful (mock)");
-    navigate("/onboarding");
+  const handleLogin = async () => {
+    if (!email || !password) {
+      setError("Please fill in all fields");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError(null);
+
+      const { data, error: signInError } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+      if (signInError) {
+        // Check if user exists in user_profiles table
+        const { data: profileExists } = await supabase
+          .from("user_profiles")
+          .select("user_id")
+          .eq("email", email)
+          .single();
+
+        if (profileExists) {
+          setError("Incorrect password. Please try again.");
+        } else {
+          setError("No account found with this email. Please sign up first.");
+        }
+        return;
+      }
+
+      if (data?.user) {
+        // Check if user has a profile
+        const { data: profileData, error: profileError } = await supabase
+          .from("user_profiles")
+          .select("*")
+          .eq("user_id", data.user.id)
+          .single();
+
+        if (profileError) {
+          setError(
+            "No profile found. Please contact support or sign up again."
+          );
+          await supabase.auth.signOut();
+          return;
+        }
+
+        // Check if user is a beta tester or has active subscription
+        if (
+          profileData?.payment_status === "beta" ||
+          profileData?.payment_status === "active"
+        ) {
+          navigate("/writers/dashboard");
+        } else {
+          // If not a beta tester or active user, sign them out
+          await supabase.auth.signOut();
+          setError("Your account is not active. Please sign up first.");
+        }
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to login");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -32,6 +104,12 @@ const Login = () => {
             Login to continue to WriteFor.co
           </Typography>
 
+          {error && (
+            <Alert severity="error" sx={{ width: "100%", mb: 2 }}>
+              {error}
+            </Alert>
+          )}
+
           <TextField
             label="Email Address"
             type="email"
@@ -39,6 +117,7 @@ const Login = () => {
             className={classes.email}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            disabled={loading}
           />
           <TextField
             label="Password"
@@ -47,6 +126,7 @@ const Login = () => {
             className={classes.password}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            disabled={loading}
           />
 
           <Button
@@ -54,6 +134,7 @@ const Login = () => {
             fullWidth
             onClick={handleLogin}
             className={classes.loginButton}
+            disabled={loading}
             sx={{
               backgroundColor: "#007BFF",
               color: "#fff",
@@ -62,11 +143,11 @@ const Login = () => {
               mt: 1,
             }}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </Button>
 
           <Typography variant="body2" className={classes.noteText}>
-            Don’t have an account?{" "}
+            Don't have an account?{" "}
             <Link
               component="button"
               onClick={() => navigate("/")}
