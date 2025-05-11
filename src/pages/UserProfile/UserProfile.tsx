@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -22,6 +22,8 @@ import {
   ListItemIcon,
   ListItemText,
   Paper,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   Edit as EditIcon,
@@ -36,6 +38,7 @@ import {
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useStyles } from "./styles";
+import { supabase } from "../../utils/supabase";
 
 const UserProfile = () => {
   const { classes } = useStyles();
@@ -49,15 +52,15 @@ const UserProfile = () => {
 
   // Mock user data - replace with actual data from Supabase
   const [userData, setUserData] = useState({
-    name: "Jane Doe",
-    email: "jane.doe@example.com",
+    name: "",
+    email: "",
     subscription: {
       status: "active",
       plan: "Writer Plan",
       nextBillingDate: "2025-05-25",
     },
     avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
   });
 
   const [isEditing, setIsEditing] = useState(false);
@@ -67,15 +70,57 @@ const UserProfile = () => {
     "manage" | "change"
   >("manage");
 
+  const [snackbar, setSnackbar] = useState({
+    open: false,
+    message: "",
+    severity: "success" as "success" | "error",
+  });
+
   const handleEdit = () => {
     setEditedData(userData);
     setIsEditing(true);
   };
 
-  const handleSave = () => {
-    setUserData(editedData);
-    setIsEditing(false);
-    // TODO: Add API call to update user data in Supabase
+  const handleSave = async () => {
+    try {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        throw new Error("No authenticated user found");
+      }
+      console.log("editdata:", editedData);
+      console.log("user", user);
+      console.log("userId", user.id);
+
+      const { error } = await supabase
+        .from("user_profiles")
+        .update({
+          full_name: editedData.name,
+          email: editedData.email,
+          updated_at: new Date().toISOString(),
+        })
+        .eq("user_id", user.id)
+        .select();
+
+      if (error) throw error;
+
+      setUserData(editedData);
+      setIsEditing(false);
+      setSnackbar({
+        open: true,
+        message: "Profile updated successfully",
+        severity: "success",
+      });
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      setSnackbar({
+        open: true,
+        message: "Failed to update profile. Please try again.",
+        severity: "error",
+      });
+    }
   };
 
   const handleCancel = () => {
@@ -164,6 +209,10 @@ const UserProfile = () => {
     }
   };
 
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
   const plans = [
     {
       id: "writer",
@@ -195,6 +244,47 @@ const UserProfile = () => {
       ],
     },
   ];
+
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
+        if (!user) throw new Error("No authenticated user found");
+
+        const { data, error } = await supabase
+          .from("user_profiles")
+          .select("full_name, email")
+          .eq("user_id", user.id)
+          .single(); // Only one profile expected per user
+
+        if (error) throw error;
+
+        setUserData({
+          name: data.full_name,
+          email: data.email,
+          subscription: {
+            status: "active",
+            plan: "Writer Plan",
+            nextBillingDate: "2025-05-25",
+          },
+          avatar:
+            "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60",
+        });
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+        setSnackbar({
+          open: true,
+          message: "Failed to load profile. Please refresh.",
+          severity: "error",
+        });
+      }
+    };
+
+    fetchUserProfile();
+  }, []);
 
   return (
     <Box className={classes.wrapper}>
@@ -699,6 +789,20 @@ const UserProfile = () => {
           )}
         </DialogActions>
       </Dialog>
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbar.severity}
+          sx={{ width: "100%" }}
+        >
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
