@@ -22,6 +22,7 @@ import {
   Alert,
   Badge,
   DialogTitle,
+  Snackbar,
 } from "@mui/material";
 import {
   Logout,
@@ -76,6 +77,8 @@ import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailMo
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { updatePitchStatusAndNotes } from "../../redux/slices/dashboardSlice";
+import { createReminder } from "../../services/reminderService";
+import { reminderApi } from "../../api/reminderApi";
 
 const WritersDashboard = () => {
   const { classes } = useStyles();
@@ -208,19 +211,54 @@ const WritersDashboard = () => {
     setReminderDialogOpen(true);
   };
 
-  const handleSaveReminder = () => {
+  const [error, setError] = useState<string | null>(null);
+  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const handleSaveReminder = async () => {
     if (selectedPitchId && reminderDate) {
-      setActivityLog((prevLog) => [
-        ...prevLog,
-        {
-          id: Date.now(),
-          action: `Reminder set for pitch ID ${selectedPitchId} on ${reminderDate}`,
-          type: "reminder",
-          date: new Date(reminderDate).toLocaleDateString(),
-          time: new Date(reminderDate).toLocaleTimeString(),
-        },
-      ]);
-      setReminderDialogOpen(false);
+      try {
+        const pitch = dashboardResult.myPitches.find(
+          (p) => p.id === selectedPitchId
+        );
+        if (!pitch) {
+          throw new Error("Pitch not found");
+        }
+
+        // Get user email from your auth state or context
+        const userEmail = "user@example.com"; // Replace with actual user email
+
+        await reminderApi.createReminder({
+          pitchId: selectedPitchId,
+          pitchTitle: pitch.title,
+          reminderDate: new Date(reminderDate),
+          userEmail,
+        });
+
+        setActivityLog((prevLog) => [
+          ...prevLog,
+          {
+            id: Date.now(),
+            action: `Reminder set for "${pitch.title}" on ${new Date(
+              reminderDate
+            ).toLocaleDateString()}`,
+            type: "reminder",
+            date: new Date(reminderDate).toLocaleDateString(),
+            time: new Date(reminderDate).toLocaleTimeString(),
+          },
+        ]);
+
+        setSuccessMessage("Reminder set successfully!");
+        setShowSuccess(true);
+        setReminderDialogOpen(false);
+      } catch (error) {
+        console.error("Error setting reminder:", error);
+        setError(
+          error instanceof Error ? error.message : "Failed to set reminder"
+        );
+        setShowError(true);
+      }
     }
   };
 
@@ -407,6 +445,16 @@ const WritersDashboard = () => {
   const handleCancelDelete = () => {
     setDeleteDialogOpen(false);
     setPitchToDelete(null);
+  };
+
+  const handleCloseError = () => {
+    setShowError(false);
+    setError(null);
+  };
+
+  const handleCloseSuccess = () => {
+    setShowSuccess(false);
+    setSuccessMessage("");
   };
 
   return (
@@ -1256,6 +1304,35 @@ const WritersDashboard = () => {
           </Zoom>
         </>
       )}
+      <Snackbar
+        open={showError}
+        autoHideDuration={6000}
+        onClose={handleCloseError}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseError}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
+
+      <Snackbar
+        open={showSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {successMessage}
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };
