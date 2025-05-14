@@ -192,6 +192,17 @@ const useStyles = makeStyles()((theme) => ({
     "&:hover": {
       transform: "translateY(-2px)",
       boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
+      "& .iconWrapper::before": {
+        background: "rgba(26, 26, 26, 0.05)",
+        transform: "rotate(45deg) scale(1.05)",
+      },
+      "& .iconWrapper::after": {
+        borderColor: "rgba(26, 26, 26, 0.12)",
+        transform: "rotate(45deg) scale(1.05)",
+      },
+      "& .sectionIcon": {
+        transform: "scale(1.1)",
+      },
     },
   },
 
@@ -203,20 +214,40 @@ const useStyles = makeStyles()((theme) => ({
   iconContainer: {
     display: "flex",
     justifyContent: "center",
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(3),
+    position: "relative",
   },
 
   iconWrapper: {
     position: "relative",
+    width: "64px",
+    height: "64px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     "&::before": {
       content: '""',
       position: "absolute",
-      top: "-8px",
-      left: "-8px",
-      right: "-8px",
-      bottom: "-8px",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
       background: "rgba(26, 26, 26, 0.05)",
-      borderRadius: "50%",
+      borderRadius: "16px",
+      transform: "rotate(45deg)",
+      transition: "all 0.3s ease",
+    },
+    "&::after": {
+      content: '""',
+      position: "absolute",
+      top: "-4px",
+      left: "-4px",
+      right: "-4px",
+      bottom: "-4px",
+      border: "1px solid rgba(26, 26, 26, 0.08)",
+      borderRadius: "20px",
+      transform: "rotate(45deg)",
+      transition: "all 0.3s ease",
     },
   },
 
@@ -236,14 +267,11 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   sectionIcon: {
-    fontSize: "2rem",
-    color: "#ffffff",
-    background: "#1a1a1a",
-    padding: theme.spacing(1.25),
-    borderRadius: "50%",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.08)",
+    fontSize: "1.75rem",
+    color: "#1a1a1a",
     position: "relative",
     zIndex: 1,
+    transition: "all 0.3s ease",
   },
 
   sectionTitle: {

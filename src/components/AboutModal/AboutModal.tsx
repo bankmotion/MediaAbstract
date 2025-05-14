@@ -17,9 +17,9 @@ import {
 } from "@mui/material";
 import {
   Close as CloseIcon,
-  RocketLaunch,
-  AutoAwesome,
-  ConnectWithoutContact,
+  BusinessCenter,
+  Lightbulb,
+  Groups,
   Star,
   TrendingUp,
 } from "@mui/icons-material";
@@ -103,7 +103,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
             >
               <Box className={classes.iconContainer}>
                 <Box className={classes.iconWrapper}>
-                  <RocketLaunch className={classes.sectionIcon} />
+                  <BusinessCenter className={classes.sectionIcon} />
                 </Box>
               </Box>
               <Typography variant="h5" className={classes.sectionTitle}>
@@ -130,7 +130,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
             >
               <Box className={classes.iconContainer}>
                 <Box className={classes.iconWrapper}>
-                  <AutoAwesome className={classes.sectionIcon} />
+                  <Lightbulb className={classes.sectionIcon} />
                 </Box>
               </Box>
               <Typography variant="h5" className={classes.sectionTitle}>
@@ -155,7 +155,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
             >
               <Box className={classes.iconContainer}>
                 <Box className={classes.iconWrapper}>
-                  <ConnectWithoutContact className={classes.sectionIcon} />
+                  <Groups className={classes.sectionIcon} />
                 </Box>
               </Box>
               <Typography variant="h5" className={classes.sectionTitle}>
@@ -193,7 +193,6 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               color="primary"
               className={classes.ctaButton}
               onClick={handleClose}
-              startIcon={<RocketLaunch />}
             >
               Get Started
             </Button>
