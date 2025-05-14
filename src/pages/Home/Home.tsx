@@ -102,12 +102,6 @@ const Home = () => {
         color="transparent"
         elevation={0}
         className={classes.appbar}
-        sx={{
-          zIndex: theme.zIndex.drawer + 1,
-          backgroundColor: "white",
-          borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
-          height: isMobile ? "56px" : "64px",
-        }}
       >
         <Toolbar
           className={classes.toolbar}
