@@ -5,8 +5,8 @@ const useStyles = makeStyles()((theme) => ({
     borderRadius: 16,
     padding: theme.spacing(2),
     background: "#ffffff",
-    boxShadow: "0 12px 40px rgba(0, 0, 0, 0.08)",
-    border: "1px solid rgba(0, 0, 0, 0.08)",
+    boxShadow: "0 12px 40px rgba(37, 99, 235, 0.08)",
+    border: "1px solid rgba(37, 99, 235, 0.08)",
     position: "relative",
     "&::before": {
       content: '""',
@@ -47,8 +47,8 @@ const useStyles = makeStyles()((theme) => ({
   dialogTitle: {
     padding: theme.spacing(4),
     position: "relative",
-    borderBottom: "1px solid rgba(0, 0, 0, 0.04)",
-    background: "rgba(255, 255, 255, 0.98)",
+    borderBottom: "1px solid rgba(37, 99, 235, 0.08)",
+    background: "#ffffff",
     borderRadius: "16px 16px 0 0",
     overflow: "hidden",
     backdropFilter: "blur(10px)",
@@ -59,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
       left: 0,
       right: 0,
       height: "3px",
-      background: "linear-gradient(90deg, #1a1a1a, #333333)",
+      background: "linear-gradient(90deg, #2563eb, #1d4ed8)",
     },
   },
 
@@ -77,7 +77,7 @@ const useStyles = makeStyles()((theme) => ({
 
   titleContainer: {
     textAlign: "center",
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(3),
     position: "relative",
   },
 
@@ -104,7 +104,7 @@ const useStyles = makeStyles()((theme) => ({
     transform: "translateX(-50%)",
     width: "50px",
     height: "3px",
-    background: "#1a1a1a",
+    background: "#2563eb",
     borderRadius: "2px",
   },
 
@@ -114,6 +114,7 @@ const useStyles = makeStyles()((theme) => ({
     marginTop: theme.spacing(1),
     fontWeight: 500,
     marginBottom: theme.spacing(2),
+    lineHeight: 1.6,
   },
 
   badgeContainer: {
@@ -129,26 +130,26 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 600,
     fontSize: "0.875rem",
     boxShadow: "none",
-    border: "1px solid rgba(0, 0, 0, 0.1)",
+    border: "1px solid rgba(37, 99, 235, 0.1)",
     "& .MuiChip-icon": {
       color: "inherit",
       fontSize: "1rem",
       marginRight: theme.spacing(0.5),
     },
     "&.MuiChip-colorPrimary": {
-      backgroundColor: "rgba(26, 26, 26, 0.05)",
-      color: "#1a1a1a",
-      borderColor: "rgba(26, 26, 26, 0.1)",
+      backgroundColor: "rgba(37, 99, 235, 0.05)",
+      color: "#2563eb",
+      borderColor: "rgba(37, 99, 235, 0.1)",
       "& .MuiChip-icon": {
-        color: "#1a1a1a",
+        color: "#2563eb",
       },
     },
     "&.MuiChip-colorSecondary": {
-      backgroundColor: "rgba(26, 26, 26, 0.05)",
-      color: "#1a1a1a",
-      borderColor: "rgba(26, 26, 26, 0.1)",
+      backgroundColor: "rgba(37, 99, 235, 0.05)",
+      color: "#2563eb",
+      borderColor: "rgba(37, 99, 235, 0.1)",
       "& .MuiChip-icon": {
-        color: "#1a1a1a",
+        color: "#2563eb",
       },
     },
   },
@@ -157,64 +158,63 @@ const useStyles = makeStyles()((theme) => ({
     position: "absolute",
     right: theme.spacing(2),
     top: theme.spacing(2),
-    color: "#666666",
+    color: "#64748b",
     transition: "all 0.3s ease",
     "&:hover": {
-      color: "#1a1a1a",
+      color: "#2563eb",
       transform: "rotate(90deg)",
-      background: "rgba(0, 0, 0, 0.04)",
+      background: "rgba(37, 99, 235, 0.04)",
     },
   },
 
   dialogContent: {
     padding: theme.spacing(4),
-    background: "rgba(255, 255, 255, 0.98)",
+    background: "#ffffff",
     position: "relative",
-    backdropFilter: "blur(10px)",
   },
 
   contentWrapper: {
     display: "flex",
     flexDirection: "column",
-    gap: theme.spacing(4),
+    gap: theme.spacing(5),
   },
 
   section: {
-    padding: theme.spacing(4),
+    padding: theme.spacing(5),
     borderRadius: 12,
-    background: "rgba(255, 255, 255, 0.98)",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.04)",
+    background: "#ffffff",
+    boxShadow: "0 4px 12px rgba(37, 99, 235, 0.04)",
     transition: "all 0.3s ease",
-    border: "1px solid rgba(0, 0, 0, 0.04)",
+    border: "1px solid rgba(37, 99, 235, 0.08)",
     position: "relative",
     overflow: "hidden",
-    backdropFilter: "blur(10px)",
     "&:hover": {
       transform: "translateY(-2px)",
-      boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
+      boxShadow: "0 8px 24px rgba(37, 99, 235, 0.08)",
       "& .iconWrapper::before": {
-        background: "rgba(26, 26, 26, 0.05)",
+        background: "rgba(37, 99, 235, 0.05)",
         transform: "rotate(45deg) scale(1.05)",
       },
       "& .iconWrapper::after": {
-        borderColor: "rgba(26, 26, 26, 0.12)",
+        borderColor: "rgba(37, 99, 235, 0.12)",
         transform: "rotate(45deg) scale(1.05)",
       },
       "& .sectionIcon": {
         transform: "scale(1.1)",
+        color: "#2563eb",
       },
     },
   },
 
   sectionHovered: {
     transform: "translateY(-2px)",
-    boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
+    boxShadow: "0 8px 24px rgba(37, 99, 235, 0.08)",
   },
 
   iconContainer: {
     display: "flex",
     justifyContent: "center",
-    marginBottom: theme.spacing(3),
+    marginBottom: theme.spacing(4),
     position: "relative",
   },
 
@@ -232,7 +232,7 @@ const useStyles = makeStyles()((theme) => ({
       left: 0,
       right: 0,
       bottom: 0,
-      background: "rgba(26, 26, 26, 0.05)",
+      background: "rgba(37, 99, 235, 0.05)",
       borderRadius: "16px",
       transform: "rotate(45deg)",
       transition: "all 0.3s ease",
@@ -244,7 +244,7 @@ const useStyles = makeStyles()((theme) => ({
       left: "-4px",
       right: "-4px",
       bottom: "-4px",
-      border: "1px solid rgba(26, 26, 26, 0.08)",
+      border: "1px solid rgba(37, 99, 235, 0.08)",
       borderRadius: "20px",
       transform: "rotate(45deg)",
       transition: "all 0.3s ease",
@@ -268,7 +268,7 @@ const useStyles = makeStyles()((theme) => ({
 
   sectionIcon: {
     fontSize: "1.75rem",
-    color: "#1a1a1a",
+    color: "#2563eb",
     position: "relative",
     zIndex: 1,
     transition: "all 0.3s ease",
@@ -277,18 +277,18 @@ const useStyles = makeStyles()((theme) => ({
   sectionTitle: {
     fontWeight: 600,
     color: "#1a1a1a",
-    marginBottom: theme.spacing(2),
+    marginBottom: theme.spacing(3),
     textAlign: "center",
     position: "relative",
     "&::after": {
       content: '""',
       position: "absolute",
-      bottom: -6,
+      bottom: -8,
       left: "50%",
       transform: "translateX(-50%)",
       width: "32px",
       height: "2px",
-      background: "#1a1a1a",
+      background: "#2563eb",
       borderRadius: "1px",
     },
     [theme.breakpoints.down("sm")]: {
@@ -297,25 +297,28 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   sectionDivider: {
-    margin: theme.spacing(2, 0),
-    background: "rgba(0, 0, 0, 0.04)",
+    margin: theme.spacing(3, 0),
+    background: "rgba(37, 99, 235, 0.08)",
     height: "1px",
     border: "none",
   },
 
   sectionText: {
     color: "#4a4a4a",
-    lineHeight: 1.7,
-    fontSize: "1rem",
+    lineHeight: 1.8,
+    fontSize: "1.05rem",
     textAlign: "center",
+    padding: theme.spacing(0, 2),
     [theme.breakpoints.down("sm")]: {
-      fontSize: "0.95rem",
+      fontSize: "1rem",
+      padding: theme.spacing(0, 1),
     },
   },
 
   ctaContainer: {
     display: "flex",
-    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
     marginTop: theme.spacing(4),
     position: "relative",
     "&::before": {
@@ -326,7 +329,7 @@ const useStyles = makeStyles()((theme) => ({
       transform: "translateX(-50%)",
       width: "60%",
       height: "1px",
-      background: "rgba(0, 0, 0, 0.04)",
+      background: "rgba(37, 99, 235, 0.08)",
     },
   },
 
@@ -334,17 +337,17 @@ const useStyles = makeStyles()((theme) => ({
     padding: theme.spacing(1.5, 4),
     fontSize: "1rem",
     fontWeight: 600,
-    borderRadius: 8,
+    borderRadius: 10,
     textTransform: "none",
-    background: "#1a1a1a",
-    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.08)",
+    background: "#2563eb",
+    boxShadow: "0 4px 6px rgba(37, 99, 235, 0.2)",
     color: "#ffffff",
     position: "relative",
     overflow: "hidden",
     "&:hover": {
       transform: "translateY(-1px)",
-      boxShadow: "0 6px 12px rgba(0, 0, 0, 0.12)",
-      background: "#333333",
+      boxShadow: "0 6px 12px rgba(37, 99, 235, 0.3)",
+      background: "#1d4ed8",
     },
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(1, 3),

@@ -3,7 +3,7 @@ import { makeStyles } from "tss-react/mui";
 
 const useStyles = makeStyles()((theme) => ({
   wrapper: {
-    background: "#ffffff",
+    background: "#f8fafc",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -13,25 +13,6 @@ const useStyles = makeStyles()((theme) => ({
     paddingBottom: theme.spacing(20),
     minHeight: "100vh",
     position: "relative",
-    "&::before": {
-      content: '""',
-      position: "absolute",
-      top: 0,
-      left: 0,
-      right: 0,
-      height: "100%",
-      backgroundImage: `
-        radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.07) 1px, transparent 0),
-        linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px),
-        linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
-        linear-gradient(45deg, rgba(0, 0, 0, 0.04) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.04) 75%, rgba(0, 0, 0, 0.04)),
-        linear-gradient(-45deg, rgba(0, 0, 0, 0.04) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.04) 75%, rgba(0, 0, 0, 0.04))
-      `,
-      backgroundSize: "24px 24px, 48px 48px, 48px 48px, 96px 96px, 96px 96px",
-      backgroundPosition: "center, center, center, 0 0, 48px 48px",
-      opacity: 1,
-      zIndex: 0,
-    },
   },
 
   appbar: {
@@ -72,7 +53,7 @@ const useStyles = makeStyles()((theme) => ({
     color: "#1a1a1a",
     transition: "all 0.2s ease",
     "&:hover": {
-      color: "#333333",
+      color: "#2563eb",
     },
   },
 
@@ -85,8 +66,9 @@ const useStyles = makeStyles()((theme) => ({
     border: "1px solid #e0e0e0",
     transition: "all 0.2s ease",
     "&:hover": {
-      backgroundColor: "#f5f5f5",
-      borderColor: "#bdbdbd",
+      backgroundColor: "#f1f5f9",
+      borderColor: "#2563eb",
+      color: "#2563eb",
     },
     [theme.breakpoints.down("sm")]: {
       width: "90px",
@@ -95,7 +77,7 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   heroSection: {
-    background: "rgba(255, 255, 255, 0.98)",
+    background: "#ffffff",
     borderRadius: "16px",
     padding: theme.spacing(8),
     marginTop: theme.spacing(6),
@@ -106,7 +88,6 @@ const useStyles = makeStyles()((theme) => ({
     position: "relative",
     zIndex: 1,
     border: "1px solid rgba(0, 0, 0, 0.04)",
-    backdropFilter: "blur(10px)",
     [theme.breakpoints.down("sm")]: {
       borderRadius: "12px",
       padding: theme.spacing(4, 2),
@@ -144,10 +125,9 @@ const useStyles = makeStyles()((theme) => ({
     maxWidth: 600,
     margin: "0 auto",
     marginTop: theme.spacing(4),
-    backgroundColor: "rgba(248, 249, 250, 0.9)",
+    backgroundColor: "#f1f5f9",
     borderRadius: "10px",
     padding: theme.spacing(0.5),
-    backdropFilter: "blur(8px)",
     [theme.breakpoints.down("sm")]: {
       maxWidth: "100%",
       marginTop: theme.spacing(2),
@@ -162,12 +142,12 @@ const useStyles = makeStyles()((theme) => ({
     borderRadius: "8px",
     transition: "all 0.2s ease",
     "&.Mui-selected": {
-      color: "#1a1a1a",
+      color: "#2563eb",
       backgroundColor: "#ffffff",
-      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
+      boxShadow: "0 2px 8px rgba(37, 99, 235, 0.1)",
     },
     "&:hover": {
-      color: "#333333",
+      color: "#2563eb",
       backgroundColor: "rgba(255, 255, 255, 0.8)",
     },
     [theme.breakpoints.down("sm")]: {
@@ -177,7 +157,7 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   tabIcon: {
-    color: "#666666",
+    color: "#64748b",
     marginRight: theme.spacing(1),
     fontSize: "1.2rem",
     [theme.breakpoints.down("sm")]: {
@@ -191,15 +171,15 @@ const useStyles = makeStyles()((theme) => ({
     fontSize: "1.1rem",
     fontWeight: 500,
     borderRadius: "10px",
-    backgroundColor: "#1a1a1a",
+    backgroundColor: "#2563eb",
     textTransform: "none",
     color: "#fff",
-    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
+    boxShadow: "0 2px 8px rgba(37, 99, 235, 0.2)",
     transition: "all 0.2s ease",
     "&:hover": {
-      backgroundColor: "#333333",
+      backgroundColor: "#1d4ed8",
       transform: "translateY(-1px)",
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+      boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)",
     },
     [theme.breakpoints.down("sm")]: {
       marginTop: theme.spacing(4),
@@ -236,11 +216,10 @@ const useStyles = makeStyles()((theme) => ({
     borderRadius: "16px",
     boxShadow: "0 4px 24px rgba(0, 0, 0, 0.06)",
     transition: "all 0.3s ease",
-    background: "rgba(255, 255, 255, 0.98)",
+    background: "#ffffff",
     position: "relative",
     overflow: "hidden",
     border: "1px solid rgba(0, 0, 0, 0.04)",
-    backdropFilter: "blur(10px)",
     "&::before": {
       content: '""',
       position: "absolute",
@@ -248,13 +227,13 @@ const useStyles = makeStyles()((theme) => ({
       left: 0,
       right: 0,
       height: "3px",
-      background: "linear-gradient(90deg, #1a1a1a, #333333)",
+      background: "linear-gradient(90deg, #2563eb, #1d4ed8)",
       opacity: 0,
       transition: "opacity 0.3s ease",
     },
     "&:hover": {
       transform: "translateY(-4px)",
-      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
+      boxShadow: "0 8px 32px rgba(37, 99, 235, 0.1)",
       "&::before": {
         opacity: 1,
       },
@@ -274,7 +253,7 @@ const useStyles = makeStyles()((theme) => ({
 
   howIcon: {
     fontSize: "2.8rem",
-    color: "#1a1a1a",
+    color: "#2563eb",
     marginBottom: theme.spacing(2),
     transition: "all 0.2s ease",
   },
@@ -301,10 +280,10 @@ const useStyles = makeStyles()((theme) => ({
     bottom: theme.spacing(8),
     right: theme.spacing(4),
     zIndex: 1000,
-    backgroundColor: "#1a1a1a",
+    backgroundColor: "#2563eb",
     color: "white",
     "&:hover": {
-      backgroundColor: "#333333",
+      backgroundColor: "#1d4ed8",
     },
     display: "flex",
   },
