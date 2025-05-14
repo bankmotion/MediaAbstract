@@ -7,6 +7,25 @@ const useStyles = makeStyles()((theme) => ({
     background: "#ffffff",
     boxShadow: "0 12px 40px rgba(0, 0, 0, 0.08)",
     border: "1px solid rgba(0, 0, 0, 0.08)",
+    position: "relative",
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundImage: `
+        radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.03) 1px, transparent 0),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px)
+      `,
+      backgroundSize: "24px 24px, 48px 48px, 48px 48px",
+      backgroundPosition: "center",
+      opacity: 0.8,
+      zIndex: 0,
+      pointerEvents: "none",
+    },
     [theme.breakpoints.down("sm")]: {
       margin: theme.spacing(2),
       borderRadius: 12,
@@ -28,10 +47,11 @@ const useStyles = makeStyles()((theme) => ({
   dialogTitle: {
     padding: theme.spacing(4),
     position: "relative",
-    borderBottom: `1px solid ${theme.palette.divider}`,
-    background: "#ffffff",
+    borderBottom: "1px solid rgba(0, 0, 0, 0.04)",
+    background: "rgba(255, 255, 255, 0.98)",
     borderRadius: "16px 16px 0 0",
     overflow: "hidden",
+    backdropFilter: "blur(10px)",
     "&::before": {
       content: '""',
       position: "absolute",
@@ -39,7 +59,7 @@ const useStyles = makeStyles()((theme) => ({
       left: 0,
       right: 0,
       height: "3px",
-      background: "#2C3E50",
+      background: "linear-gradient(90deg, #1a1a1a, #333333)",
     },
   },
 
@@ -68,7 +88,7 @@ const useStyles = makeStyles()((theme) => ({
 
   title: {
     fontWeight: 700,
-    color: "#2C3E50",
+    color: "#1a1a1a",
     textAlign: "center",
     fontSize: "2.25rem",
     marginBottom: theme.spacing(2),
@@ -84,12 +104,12 @@ const useStyles = makeStyles()((theme) => ({
     transform: "translateX(-50%)",
     width: "50px",
     height: "3px",
-    background: "#3498DB",
+    background: "#1a1a1a",
     borderRadius: "2px",
   },
 
   subtitle: {
-    color: theme.palette.text.secondary,
+    color: "#4a4a4a",
     fontSize: "1.1rem",
     marginTop: theme.spacing(1),
     fontWeight: 500,
@@ -116,19 +136,19 @@ const useStyles = makeStyles()((theme) => ({
       marginRight: theme.spacing(0.5),
     },
     "&.MuiChip-colorPrimary": {
-      backgroundColor: "#E3F2FD",
-      color: "#1565C0",
-      borderColor: "#90CAF9",
+      backgroundColor: "rgba(26, 26, 26, 0.05)",
+      color: "#1a1a1a",
+      borderColor: "rgba(26, 26, 26, 0.1)",
       "& .MuiChip-icon": {
-        color: "#1565C0",
+        color: "#1a1a1a",
       },
     },
     "&.MuiChip-colorSecondary": {
-      backgroundColor: "#E8F5E9",
-      color: "#2E7D32",
-      borderColor: "#A5D6A7",
+      backgroundColor: "rgba(26, 26, 26, 0.05)",
+      color: "#1a1a1a",
+      borderColor: "rgba(26, 26, 26, 0.1)",
       "& .MuiChip-icon": {
-        color: "#2E7D32",
+        color: "#1a1a1a",
       },
     },
   },
@@ -137,10 +157,10 @@ const useStyles = makeStyles()((theme) => ({
     position: "absolute",
     right: theme.spacing(2),
     top: theme.spacing(2),
-    color: theme.palette.grey[600],
+    color: "#666666",
     transition: "all 0.3s ease",
     "&:hover": {
-      color: theme.palette.grey[800],
+      color: "#1a1a1a",
       transform: "rotate(90deg)",
       background: "rgba(0, 0, 0, 0.04)",
     },
@@ -148,8 +168,9 @@ const useStyles = makeStyles()((theme) => ({
 
   dialogContent: {
     padding: theme.spacing(4),
-    background: "#ffffff",
+    background: "rgba(255, 255, 255, 0.98)",
     position: "relative",
+    backdropFilter: "blur(10px)",
   },
 
   contentWrapper: {
@@ -161,12 +182,13 @@ const useStyles = makeStyles()((theme) => ({
   section: {
     padding: theme.spacing(4),
     borderRadius: 12,
-    background: "#ffffff",
+    background: "rgba(255, 255, 255, 0.98)",
     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.04)",
     transition: "all 0.3s ease",
-    border: "1px solid rgba(0, 0, 0, 0.06)",
+    border: "1px solid rgba(0, 0, 0, 0.04)",
     position: "relative",
     overflow: "hidden",
+    backdropFilter: "blur(10px)",
     "&:hover": {
       transform: "translateY(-2px)",
       boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
@@ -193,7 +215,7 @@ const useStyles = makeStyles()((theme) => ({
       left: "-8px",
       right: "-8px",
       bottom: "-8px",
-      background: "rgba(52, 152, 219, 0.08)",
+      background: "rgba(26, 26, 26, 0.05)",
       borderRadius: "50%",
     },
   },
@@ -216,7 +238,7 @@ const useStyles = makeStyles()((theme) => ({
   sectionIcon: {
     fontSize: "2rem",
     color: "#ffffff",
-    background: "#3498DB",
+    background: "#1a1a1a",
     padding: theme.spacing(1.25),
     borderRadius: "50%",
     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.08)",
@@ -226,7 +248,7 @@ const useStyles = makeStyles()((theme) => ({
 
   sectionTitle: {
     fontWeight: 600,
-    color: "#2C3E50",
+    color: "#1a1a1a",
     marginBottom: theme.spacing(2),
     textAlign: "center",
     position: "relative",
@@ -238,7 +260,7 @@ const useStyles = makeStyles()((theme) => ({
       transform: "translateX(-50%)",
       width: "32px",
       height: "2px",
-      background: "#3498DB",
+      background: "#1a1a1a",
       borderRadius: "1px",
     },
     [theme.breakpoints.down("sm")]: {
@@ -248,13 +270,13 @@ const useStyles = makeStyles()((theme) => ({
 
   sectionDivider: {
     margin: theme.spacing(2, 0),
-    background: "#E2E8F0",
+    background: "rgba(0, 0, 0, 0.04)",
     height: "1px",
     border: "none",
   },
 
   sectionText: {
-    color: "#4A5568",
+    color: "#4a4a4a",
     lineHeight: 1.7,
     fontSize: "1rem",
     textAlign: "center",
@@ -276,7 +298,7 @@ const useStyles = makeStyles()((theme) => ({
       transform: "translateX(-50%)",
       width: "60%",
       height: "1px",
-      background: "#E2E8F0",
+      background: "rgba(0, 0, 0, 0.04)",
     },
   },
 
@@ -286,7 +308,7 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 600,
     borderRadius: 8,
     textTransform: "none",
-    background: "#3498DB",
+    background: "#1a1a1a",
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.08)",
     color: "#ffffff",
     position: "relative",
@@ -294,7 +316,7 @@ const useStyles = makeStyles()((theme) => ({
     "&:hover": {
       transform: "translateY(-1px)",
       boxShadow: "0 6px 12px rgba(0, 0, 0, 0.12)",
-      background: "#2980B9",
+      background: "#333333",
     },
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(1, 3),

@@ -161,15 +161,15 @@ const Home = () => {
           indicatorColor="primary"
         >
           <Tab
-            icon={<Lightbulb className={classes.tabIcon} />}
-            iconPosition="start"
-            label="For Writers"
-            className={classes.tabLabel}
-          />
-          <Tab
             icon={<BusinessCenter className={classes.tabIcon} />}
             iconPosition="start"
             label="For Agencies & Teams"
+            className={classes.tabLabel}
+          />
+          <Tab
+            icon={<Lightbulb className={classes.tabIcon} />}
+            iconPosition="start"
+            label="For Writers"
             className={classes.tabLabel}
           />
         </Tabs>

@@ -20,11 +20,14 @@ const useStyles = makeStyles()((theme) => ({
       left: 0,
       right: 0,
       height: "100%",
-      backgroundImage:
-        "url('https://images.unsplash.com/photo-1497215842964-222b430dc094?auto=format&fit=crop&w=2000&q=80')",
-      backgroundSize: "cover",
+      backgroundImage: `
+        radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.03) 1px, transparent 0),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px)
+      `,
+      backgroundSize: "24px 24px, 48px 48px, 48px 48px",
       backgroundPosition: "center",
-      opacity: 0.2,
+      opacity: 0.8,
       zIndex: 0,
     },
   },
@@ -36,7 +39,8 @@ const useStyles = makeStyles()((theme) => ({
     top: "0",
     background: "rgba(255, 255, 255, 0.98)",
     zIndex: 1000,
-    borderBottom: "1px solid rgba(0, 0, 0, 0.06)",
+    borderBottom: "1px solid rgba(0, 0, 0, 0.04)",
+    backdropFilter: "blur(8px)",
   },
 
   toolbar: {
@@ -58,10 +62,10 @@ const useStyles = makeStyles()((theme) => ({
   logoText: {
     fontWeight: 600,
     fontSize: "1.4rem",
-    color: "#2c3e50",
+    color: "#1a1a1a",
     transition: "all 0.2s ease",
     "&:hover": {
-      color: "#34495e",
+      color: "#333333",
     },
   },
 
@@ -84,19 +88,20 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   heroSection: {
-    background: "#ffffff",
-    borderRadius: "12px",
+    background: "rgba(255, 255, 255, 0.98)",
+    borderRadius: "16px",
     padding: theme.spacing(8),
     marginTop: theme.spacing(6),
-    boxShadow: "0 2px 12px rgba(0, 0, 0, 0.04)",
+    boxShadow: "0 4px 24px rgba(0, 0, 0, 0.06)",
     textAlign: "center",
     maxWidth: 800,
     width: "100%",
     position: "relative",
-    // opacity: 0.8,
     zIndex: 1,
+    border: "1px solid rgba(0, 0, 0, 0.04)",
+    backdropFilter: "blur(10px)",
     [theme.breakpoints.down("sm")]: {
-      borderRadius: "8px",
+      borderRadius: "12px",
       padding: theme.spacing(4, 2),
       margin: theme.spacing(10, 2, 0),
     },
@@ -104,17 +109,18 @@ const useStyles = makeStyles()((theme) => ({
 
   title: {
     fontWeight: 700,
-    color: "#2c3e50",
+    color: "#1a1a1a",
     marginBottom: theme.spacing(3),
     fontSize: "2.8rem",
     lineHeight: 1.2,
+    letterSpacing: "-0.02em",
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.8rem",
     },
   },
 
   subtitle: {
-    color: "#546e7a",
+    color: "#4a4a4a",
     fontSize: "1.2rem",
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(3),
@@ -131,9 +137,10 @@ const useStyles = makeStyles()((theme) => ({
     maxWidth: 600,
     margin: "0 auto",
     marginTop: theme.spacing(4),
-    backgroundColor: "#f8f9fa",
-    borderRadius: "8px",
+    backgroundColor: "rgba(248, 249, 250, 0.9)",
+    borderRadius: "10px",
     padding: theme.spacing(0.5),
+    backdropFilter: "blur(8px)",
     [theme.breakpoints.down("sm")]: {
       maxWidth: "100%",
       marginTop: theme.spacing(2),
@@ -145,15 +152,15 @@ const useStyles = makeStyles()((theme) => ({
     fontSize: "1rem",
     textTransform: "none",
     width: "260px",
-    borderRadius: "6px",
+    borderRadius: "8px",
     transition: "all 0.2s ease",
     "&.Mui-selected": {
-      color: "#2c3e50",
+      color: "#1a1a1a",
       backgroundColor: "#ffffff",
-      boxShadow: "0 1px 3px rgba(0, 0, 0, 0.05)",
+      boxShadow: "0 2px 8px rgba(0, 0, 0, 0.04)",
     },
     "&:hover": {
-      color: "#34495e",
+      color: "#333333",
       backgroundColor: "rgba(255, 255, 255, 0.8)",
     },
     [theme.breakpoints.down("sm")]: {
@@ -163,7 +170,7 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   tabIcon: {
-    color: "#546e7a",
+    color: "#666666",
     marginRight: theme.spacing(1),
     fontSize: "1.2rem",
     [theme.breakpoints.down("sm")]: {
@@ -176,16 +183,16 @@ const useStyles = makeStyles()((theme) => ({
     padding: theme.spacing(1.2, 3.5),
     fontSize: "1.1rem",
     fontWeight: 500,
-    borderRadius: "8px",
-    backgroundColor: "#2c3e50",
+    borderRadius: "10px",
+    backgroundColor: "#1a1a1a",
     textTransform: "none",
     color: "#fff",
-    boxShadow: "0 2px 8px rgba(44, 62, 80, 0.15)",
+    boxShadow: "0 2px 8px rgba(0, 0, 0, 0.1)",
     transition: "all 0.2s ease",
     "&:hover": {
-      backgroundColor: "#34495e",
+      backgroundColor: "#333333",
       transform: "translateY(-1px)",
-      boxShadow: "0 4px 12px rgba(44, 62, 80, 0.2)",
+      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
     },
     [theme.breakpoints.down("sm")]: {
       marginTop: theme.spacing(4),
@@ -210,7 +217,8 @@ const useStyles = makeStyles()((theme) => ({
     fontSize: "2rem",
     fontWeight: 600,
     marginBottom: theme.spacing(6),
-    color: "#2c3e50",
+    color: "#1a1a1a",
+    letterSpacing: "-0.02em",
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.6rem",
     },
@@ -218,26 +226,28 @@ const useStyles = makeStyles()((theme) => ({
 
   howCard: {
     height: "260px",
-    borderRadius: "12px",
-    boxShadow: "0 2px 12px rgba(0, 0, 0, 0.04)",
+    borderRadius: "16px",
+    boxShadow: "0 4px 24px rgba(0, 0, 0, 0.06)",
     transition: "all 0.3s ease",
-    background: "#ffffff",
+    background: "rgba(255, 255, 255, 0.98)",
     position: "relative",
     overflow: "hidden",
+    border: "1px solid rgba(0, 0, 0, 0.04)",
+    backdropFilter: "blur(10px)",
     "&::before": {
       content: '""',
       position: "absolute",
       top: 0,
       left: 0,
       right: 0,
-      height: "4px",
-      background: "linear-gradient(90deg, #3498db, #2980b9)",
+      height: "3px",
+      background: "linear-gradient(90deg, #1a1a1a, #333333)",
       opacity: 0,
       transition: "opacity 0.3s ease",
     },
     "&:hover": {
       transform: "translateY(-4px)",
-      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.08)",
+      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08)",
       "&::before": {
         opacity: 1,
       },
@@ -257,7 +267,7 @@ const useStyles = makeStyles()((theme) => ({
 
   howIcon: {
     fontSize: "2.8rem",
-    color: "#3498db",
+    color: "#1a1a1a",
     marginBottom: theme.spacing(2),
     transition: "all 0.2s ease",
   },
@@ -266,12 +276,12 @@ const useStyles = makeStyles()((theme) => ({
     fontWeight: 600,
     fontSize: "1.3rem",
     marginBottom: theme.spacing(1.5),
-    color: "#2c3e50",
+    color: "#1a1a1a",
   },
 
   howText: {
     fontSize: "1rem",
-    color: "#546e7a",
+    color: "#4a4a4a",
     textAlign: "center",
     lineHeight: 1.6,
     [theme.breakpoints.down("sm")]: {
@@ -284,10 +294,10 @@ const useStyles = makeStyles()((theme) => ({
     bottom: theme.spacing(8),
     right: theme.spacing(4),
     zIndex: 1000,
-    backgroundColor: "#2c3e50",
+    backgroundColor: "#1a1a1a",
     color: "white",
     "&:hover": {
-      backgroundColor: "#34495e",
+      backgroundColor: "#333333",
     },
     display: "flex",
   },
