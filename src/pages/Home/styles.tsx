@@ -108,14 +108,16 @@ const useStyles = makeStyles()((theme) => ({
   },
 
   subtitle: {
-    color: "#4a4a4a",
+    color: "#1e293b",
     fontSize: "1.2rem",
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(3),
     lineHeight: 1.6,
+    fontWeight: 500,
     [theme.breakpoints.down("sm")]: {
       fontSize: "1rem",
       marginTop: theme.spacing(2),
+      color: "#334155",
     },
   },
 
@@ -169,17 +171,21 @@ const useStyles = makeStyles()((theme) => ({
     marginTop: theme.spacing(8),
     padding: theme.spacing(1.2, 3.5),
     fontSize: "1.1rem",
-    fontWeight: 500,
+    fontWeight: 600,
     borderRadius: "10px",
     backgroundColor: "#2563eb",
     textTransform: "none",
     color: "#fff",
     boxShadow: "0 2px 8px rgba(37, 99, 235, 0.2)",
-    transition: "all 0.2s ease",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
     "&:hover": {
       backgroundColor: "#1d4ed8",
-      transform: "translateY(-1px)",
+      transform: "translateY(-2px)",
       boxShadow: "0 4px 12px rgba(37, 99, 235, 0.3)",
+    },
+    "&:active": {
+      transform: "translateY(0)",
+      boxShadow: "0 2px 8px rgba(37, 99, 235, 0.2)",
     },
     [theme.breakpoints.down("sm")]: {
       marginTop: theme.spacing(4),

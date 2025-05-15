@@ -77,8 +77,6 @@ import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailMo
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { updatePitchStatusAndNotes } from "../../redux/slices/dashboardSlice";
-import { createReminder } from "../../services/reminderService";
-import { reminderApi } from "../../api/reminderApi";
 
 const WritersDashboard = () => {
   const { classes } = useStyles();
@@ -225,16 +223,6 @@ const WritersDashboard = () => {
         if (!pitch) {
           throw new Error("Pitch not found");
         }
-
-        // Get user email from your auth state or context
-        const userEmail = "user@example.com"; // Replace with actual user email
-
-        await reminderApi.createReminder({
-          pitchId: selectedPitchId,
-          pitchTitle: pitch.title,
-          reminderDate: new Date(reminderDate),
-          userEmail,
-        });
 
         setActivityLog((prevLog) => [
           ...prevLog,
