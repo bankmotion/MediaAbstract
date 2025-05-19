@@ -77,6 +77,8 @@ import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailMo
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { updatePitchStatusAndNotes } from "../../redux/slices/dashboardSlice";
+import { supabase } from "../../utils/supabase";
+import { createReminder, fetchReminders } from "../../services/reminderService";
 
 const WritersDashboard = () => {
   const { classes } = useStyles();
@@ -106,6 +108,10 @@ const WritersDashboard = () => {
   const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
   const [selectedPitchId, setSelectedPitchId] = useState<number | null>(null);
   const [reminderDate, setReminderDate] = useState("");
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [reminderStatuses, setReminderStatuses] = useState<{
+    [key: number]: string;
+  }>({});
 
   const [activityLog, setActivityLog] = useState([
     {
@@ -206,6 +212,7 @@ const WritersDashboard = () => {
   const handleOpenReminderDialog = (pitchId: number) => {
     setSelectedPitchId(pitchId);
     setReminderDate("");
+    setShowConfirm(false);
     setReminderDialogOpen(true);
   };
 
@@ -217,12 +224,35 @@ const WritersDashboard = () => {
   const handleSaveReminder = async () => {
     if (selectedPitchId && reminderDate) {
       try {
+        // Get user info from Supabase auth
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+        if (userError || !user) {
+          throw new Error("User not authenticated");
+        }
         const pitch = dashboardResult.myPitches.find(
           (p) => p.id === selectedPitchId
         );
         if (!pitch) {
           throw new Error("Pitch not found");
         }
+
+        // Create reminder using the service
+        await createReminder({
+          user_id: user.id,
+          pitch_id: selectedPitchId,
+          reminder_date: reminderDate,
+          email: user.email || "",
+          status: "pending",
+        });
+
+        // Update reminder status in the pitch list
+        setReminderStatuses((prev) => ({
+          ...prev,
+          [selectedPitchId]: "pending",
+        }));
 
         setActivityLog((prevLog) => [
           ...prevLog,
@@ -248,6 +278,12 @@ const WritersDashboard = () => {
         setShowError(true);
       }
     }
+  };
+
+  const handleCloseReminderDialog = () => {
+    setReminderDialogOpen(false);
+    setShowConfirm(false);
+    setReminderDate("");
   };
 
   const handleToggleOutlets = (pitchIndex: number) => {
@@ -322,6 +358,7 @@ const WritersDashboard = () => {
     dispatch(fetchDashboardData());
     dispatch(fetchSavedOutlets());
     dispatch(fetchAllOutlets());
+    fetchAndUpdateReminderStatuses();
   }, [dispatch]);
 
   const [editStates, setEditStates] = useState<{
@@ -444,6 +481,30 @@ const WritersDashboard = () => {
     setShowSuccess(false);
     setSuccessMessage("");
   };
+
+  const fetchAndUpdateReminderStatuses = async () => {
+    try {
+      const reminders = await fetchReminders();
+      const newStatuses: { [key: number]: string } = {};
+
+      reminders.forEach((reminder: any) => {
+        if (reminder.pitch_id) {
+          newStatuses[reminder.pitch_id] = reminder.status;
+        }
+      });
+
+      setReminderStatuses(newStatuses);
+    } catch (error) {
+      console.error("Error fetching reminder statuses:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAndUpdateReminderStatuses();
+    // Set up polling every 30 seconds
+    const interval = setInterval(fetchAndUpdateReminderStatuses, 30000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <Box className={classes.wrapper}>
@@ -892,11 +953,30 @@ const WritersDashboard = () => {
                               size="small"
                               className={`${classes.pitchActionButton} secondary`}
                               onClick={() => handleOpenReminderDialog(pitch.id)}
+                              disabled={
+                                !!reminderStatuses[pitch.id] &&
+                                reminderStatuses[pitch.id] !== "sent"
+                              }
                             >
-                              Set Reminder
+                              {reminderStatuses[pitch.id] &&
+                              reminderStatuses[pitch.id] !== "sent"
+                                ? "Reminder Set"
+                                : "Set Reminder"}
                             </Button>
                           </Box>
                         </Box>
+                        {reminderStatuses[pitch.id] && (
+                          <Chip
+                            label={`Reminder: ${reminderStatuses[pitch.id]}`}
+                            color={
+                              reminderStatuses[pitch.id] === "sent"
+                                ? "success"
+                                : "primary"
+                            }
+                            size="small"
+                            sx={{ mt: 1 }}
+                          />
+                        )}
                       </CardContent>
                     </Card>
                   </Grid>
@@ -1108,7 +1188,7 @@ const WritersDashboard = () => {
 
         <Dialog
           open={reminderDialogOpen}
-          onClose={() => setReminderDialogOpen(false)}
+          onClose={handleCloseReminderDialog}
           maxWidth="xs"
           fullWidth
           PaperProps={{
@@ -1133,10 +1213,7 @@ const WritersDashboard = () => {
                 Set Follow-Up Reminder
               </Typography>
             </Box>
-            <IconButton
-              onClick={() => setReminderDialogOpen(false)}
-              size="small"
-            >
+            <IconButton onClick={handleCloseReminderDialog} size="small">
               <Close />
             </IconButton>
           </Box>
@@ -1169,26 +1246,43 @@ const WritersDashboard = () => {
 
           <DialogActions sx={{ px: 3, pb: 2 }}>
             <Button
-              onClick={() => setReminderDialogOpen(false)}
+              onClick={handleCloseReminderDialog}
               variant="text"
               sx={{ textTransform: "none", fontWeight: 500 }}
             >
               Cancel
             </Button>
-            <Button
-              onClick={handleSaveReminder}
-              variant="contained"
-              disabled={!reminderDate}
-              sx={{
-                textTransform: "none",
-                borderRadius: 2,
-                px: 3,
-                fontWeight: 600,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-              }}
-            >
-              Save Reminder
-            </Button>
+            {!showConfirm ? (
+              <Button
+                onClick={() => setShowConfirm(true)}
+                variant="contained"
+                disabled={!reminderDate}
+                sx={{
+                  textTransform: "none",
+                  borderRadius: 2,
+                  px: 3,
+                  fontWeight: 600,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                }}
+              >
+                Save Reminder
+              </Button>
+            ) : (
+              <Button
+                onClick={handleSaveReminder}
+                variant="contained"
+                color="primary"
+                sx={{
+                  textTransform: "none",
+                  borderRadius: 2,
+                  px: 3,
+                  fontWeight: 600,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                }}
+              >
+                Confirm
+              </Button>
+            )}
           </DialogActions>
         </Dialog>
 
