@@ -108,6 +108,7 @@ const WritersDashboard = () => {
   const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
   const [selectedPitchId, setSelectedPitchId] = useState<number | null>(null);
   const [reminderDate, setReminderDate] = useState("");
+  const [reminderTime, setReminderTime] = useState("12:00");
   const [showConfirm, setShowConfirm] = useState(false);
   const [reminderStatuses, setReminderStatuses] = useState<{
     [key: number]: string;
@@ -212,6 +213,7 @@ const WritersDashboard = () => {
   const handleOpenReminderDialog = (pitchId: number) => {
     setSelectedPitchId(pitchId);
     setReminderDate("");
+    setReminderTime("12:00");
     setShowConfirm(false);
     setReminderDialogOpen(true);
   };
@@ -239,11 +241,22 @@ const WritersDashboard = () => {
           throw new Error("Pitch not found");
         }
 
+        // Combine date and time and format as 'YYYY-MM-DD HH:mm:ss'
+        const pad = (n: number) => n.toString().padStart(2, "0");
+        const reminderDateTime = new Date(`${reminderDate}T${reminderTime}`);
+        const formattedDateTime =
+          `${reminderDateTime.getFullYear()}-${pad(
+            reminderDateTime.getMonth() + 1
+          )}-${pad(reminderDateTime.getDate())} ` +
+          `${pad(reminderDateTime.getHours())}:${pad(
+            reminderDateTime.getMinutes()
+          )}:${pad(reminderDateTime.getSeconds())}`;
+
         // Create reminder using the service
         await createReminder({
           user_id: user.id,
           pitch_id: selectedPitchId,
-          reminder_date: reminderDate,
+          reminder_date: formattedDateTime,
           email: user.email || "",
           status: "pending",
         });
@@ -258,12 +271,12 @@ const WritersDashboard = () => {
           ...prevLog,
           {
             id: Date.now(),
-            action: `Reminder set for "${pitch.title}" on ${new Date(
-              reminderDate
-            ).toLocaleDateString()}`,
+            action: `Reminder set for "${
+              pitch.title
+            }" on ${reminderDateTime.toLocaleDateString()} at ${reminderDateTime.toLocaleTimeString()}`,
             type: "reminder",
-            date: new Date(reminderDate).toLocaleDateString(),
-            time: new Date(reminderDate).toLocaleTimeString(),
+            date: reminderDateTime.toLocaleDateString(),
+            time: reminderDateTime.toLocaleTimeString(),
           },
         ]);
 
@@ -284,6 +297,7 @@ const WritersDashboard = () => {
     setReminderDialogOpen(false);
     setShowConfirm(false);
     setReminderDate("");
+    setReminderTime("12:00");
   };
 
   const handleToggleOutlets = (pitchIndex: number) => {
@@ -1264,23 +1278,45 @@ const WritersDashboard = () => {
               mb={1}
               sx={{ margin: "15px" }}
             >
-              Choose the date you'd like to be reminded to follow up.
+              Choose the date and time you'd like to be reminded to follow up.
             </Typography>
 
-            <TextField
-              label="Reminder Date"
-              type="date"
-              value={reminderDate}
-              onChange={(e) => setReminderDate(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              fullWidth
-              InputProps={{
-                sx: {
-                  borderRadius: 2,
-                  backgroundColor: "#f9f9f9",
-                },
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                flexDirection: { xs: "column", sm: "row" },
               }}
-            />
+            >
+              <TextField
+                label="Reminder Date"
+                type="date"
+                value={reminderDate}
+                onChange={(e) => setReminderDate(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+                InputProps={{
+                  sx: {
+                    borderRadius: 2,
+                    backgroundColor: "#f9f9f9",
+                  },
+                }}
+              />
+              <TextField
+                label="Reminder Time"
+                type="time"
+                value={reminderTime}
+                onChange={(e) => setReminderTime(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+                InputProps={{
+                  sx: {
+                    borderRadius: 2,
+                    backgroundColor: "#f9f9f9",
+                  },
+                }}
+              />
+            </Box>
           </DialogContent>
 
           <DialogActions sx={{ px: 3, pb: 2 }}>
