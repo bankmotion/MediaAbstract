@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://146.190.131.130:10000";
-
+const API_URL = process.env.API_URL;
 interface ReminderData {
   user_id: string;
   pitch_id: number;

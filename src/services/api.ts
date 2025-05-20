@@ -4,7 +4,7 @@ import axios from "axios";
 // const API_URL = "https://mediaabstract-backend.onrender.com";
 
 // const API_URL = "http://146.190.131.130:10000";
-const API_URL = "https://backend.writefor.co";
+const API_URL = process.env.API_URL;
 
 export const submitPitch = async (abstract: string, industry: string) => {
   try {
