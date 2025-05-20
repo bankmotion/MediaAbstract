@@ -506,6 +506,45 @@ const WritersDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleLogout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      navigate("/");
+    } catch (error) {
+      console.error("Error logging out:", error);
+    }
+  };
+
+  useEffect(() => {
+    // Check for existing session
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.user) {
+        // If no session, redirect to login
+        navigate("/login");
+        return;
+      }
+    };
+
+    checkSession();
+
+    // Set up auth state listener
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user) {
+        navigate("/login");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
+
   return (
     <Box className={classes.wrapper}>
       <AppBar
@@ -542,11 +581,11 @@ const WritersDashboard = () => {
                 startIcon={<Logout />}
                 color="primary"
                 variant="outlined"
-                onClick={() => navigate("/")}
+                onClick={handleLogout}
                 sx={{ fontWeight: 500 }}
                 className={classes.logoutButton}
               >
-                LogOut
+                Logout
               </Button>
             </Box>
           </>

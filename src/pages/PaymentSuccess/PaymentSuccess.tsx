@@ -9,75 +9,44 @@ const PaymentSuccess: React.FC = () => {
   const navigate = useNavigate();
   const { classes } = useStyles();
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const createUserAccount = async () => {
+    const checkUser = async () => {
       try {
-        // Get the pending registration data from localStorage
-        const registrationDataStr = localStorage.getItem("pendingRegistration");
-        if (!registrationDataStr) {
-          throw new Error("No pending registration found");
+        // Get the current user from Supabase Auth
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+        if (userError || !user) {
+          throw new Error("No user found after payment.");
         }
 
-        const registrationData = JSON.parse(registrationDataStr);
-        console.log("Registration data:", registrationData); // Debug log
-
-        // 1. Sign up with Supabase
-        const { data: authData, error: authError } = await supabase.auth.signUp(
-          {
-            email: registrationData.email,
-            password: registrationData.password,
-            options: {
-              data: {
-                plan_type: registrationData.plan_type,
-                payment_status: "active",
-              },
-            },
-          }
-        );
-
-        if (authError) {
-          console.error("Auth error:", authError); // Debug log
-          throw new Error(authError.message);
-        }
-
-        if (!authData.user) {
-          throw new Error("Failed to create user");
-        }
-
-        console.log("Auth successful, user:", authData.user); // Debug log
-
-        // 2. Create user profile in custom table
-        const { data: profileData, error: profileError } = await supabase
+        // Optionally, check user_profiles table for profile
+        const { data: profile, error: profileError } = await supabase
           .from("user_profiles")
-          .insert([
-            {
-              user_id: authData.user.id,
-              email: registrationData.email,
-              plan_type: registrationData.plan_type,
-              payment_status: "active",
-            },
-          ])
-          .select();
+          .select("*")
+          .eq("user_id", user.id)
+          .single();
 
-        if (profileError) {
-          console.error("Profile error:", profileError); // Debug log
-          throw new Error(profileError.message);
+        if (profileError || !profile) {
+          throw new Error("No user profile found after payment.");
         }
 
-        console.log("Profile created:", profileData); // Debug log
-
-        // Clear the registration data
-        localStorage.removeItem("pendingRegistration");
+        setError(null);
       } catch (err) {
-        console.error("Error in createUserAccount:", err); // Debug log
         setError(
-          err instanceof Error ? err.message : "Failed to create user account"
+          err instanceof Error
+            ? err.message
+            : "Failed to verify user after payment"
         );
+      } finally {
+        setLoading(false);
       }
     };
 
-    createUserAccount();
+    checkUser();
   }, []);
 
   return (
@@ -107,8 +76,8 @@ const PaymentSuccess: React.FC = () => {
 
         <Button
           className={classes.button}
-          onClick={() => navigate("/onboarding")}
-          disabled={!!error}
+          onClick={() => navigate("/login")}
+          disabled={!!error || loading}
         >
           Continue
           <ArrowRight size={20} />

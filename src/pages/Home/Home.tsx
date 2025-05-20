@@ -29,6 +29,7 @@ import AboutModal from "../../components/AboutModal/AboutModal";
 import Cookies from "js-cookie";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { supabase } from "../../utils/supabase";
 
 const Home = () => {
   const { classes } = useStyles();
@@ -39,15 +40,61 @@ const Home = () => {
   const [showAboutModal, setShowAboutModal] = useState(false);
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [showScrollToSaved, setShowScrollToSaved] = useState(false);
+  const [user, setUser] = useState<any>(null);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Check for existing session
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUser(session.user);
+      }
+    };
+
+    checkSession();
+
+    // Set up auth state listener
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser(session.user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  const handleLogoClick = () => {
+    if (user) {
+      navigate("/writers/dashboard");
+    } else {
+      navigate("/");
+    }
+  };
+
+  const handleLoginClick = () => {
+    if (user) {
+      navigate("/writers/dashboard");
+    } else {
+      navigate("/login");
+    }
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setTab(newValue);
   };
 
   const handleGetStarted = () => {
-    if (tab === 0) {
+    if (tab === 1) {
       navigate("/writerintro");
     } else {
       navigate("/agenciesintro");
@@ -91,6 +138,7 @@ const Home = () => {
       setShowAboutModal(true);
     }
   }, []);
+
   return (
     <Box className={classes.wrapper} sx={{ pt: isMobile ? "56px" : "64px" }}>
       <AboutModal
@@ -111,7 +159,7 @@ const Home = () => {
           }}
         >
           <Button
-            onClick={() => navigate("/")}
+            onClick={handleLogoClick}
             className={classes.logoButton}
             disableRipple
           >
@@ -129,11 +177,11 @@ const Home = () => {
               startIcon={<Login />}
               color="primary"
               variant="outlined"
-              onClick={() => navigate("/writers/dashboard")}
+              onClick={handleLoginClick}
               sx={{ fontWeight: 500 }}
               className={classes.loginButton}
             >
-              LogIn
+              {user ? "Dashboard" : "Login"}
             </Button>
           </>
         </Toolbar>

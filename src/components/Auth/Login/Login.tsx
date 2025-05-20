@@ -11,19 +11,44 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../../utils/supabase";
-
 import Navbar from "../../Navbar/Nabvar";
-
 import useStyles from "./styles";
 
 const Login = () => {
   const { classes } = useStyles();
-
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    // Check for existing session
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user) {
+        // If user is logged in, redirect to dashboard
+        navigate("/writers/dashboard");
+      }
+    };
+
+    checkSession();
+
+    // Set up auth state listener
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        navigate("/writers/dashboard");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate]);
 
   const handleLogin = async () => {
     if (!email || !password) {
