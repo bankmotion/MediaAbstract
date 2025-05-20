@@ -74,11 +74,7 @@ const Home = () => {
   }, []);
 
   const handleLogoClick = () => {
-    if (user) {
-      navigate("/writers/dashboard");
-    } else {
-      navigate("/");
-    }
+    navigate("/");
   };
 
   const handleLoginClick = () => {
