@@ -256,15 +256,17 @@ const WritersDashboard = () => {
           throw new Error("Pitch not found");
         }
 
-        // Combine date and time and format as 'YYYY-MM-DD HH:mm:ss'
-        const reminderDateTime = new Date(`${reminderDate}T${reminderTime}`);
+        // Convert to UTC-5
+        const utc5Date = new Date(
+          selectedDateTime.getTime() - 5 * 60 * 60 * 1000
+        );
         const formattedDateTime =
-          `${reminderDateTime.getFullYear()}-${pad(
-            reminderDateTime.getMonth() + 1
-          )}-${pad(reminderDateTime.getDate())} ` +
-          `${pad(reminderDateTime.getHours())}:${pad(
-            reminderDateTime.getMinutes()
-          )}:${pad(reminderDateTime.getSeconds())}`;
+          `${utc5Date.getFullYear()}-${pad(utc5Date.getMonth() + 1)}-${pad(
+            utc5Date.getDate()
+          )} ` +
+          `${pad(utc5Date.getHours())}:${pad(utc5Date.getMinutes())}:${pad(
+            utc5Date.getSeconds()
+          )}`;
 
         // Create reminder using the service
         await createReminder({
@@ -287,10 +289,10 @@ const WritersDashboard = () => {
             id: Date.now(),
             action: `Reminder set for "${
               pitch.title
-            }" on ${reminderDateTime.toLocaleDateString()} at ${reminderDateTime.toLocaleTimeString()}`,
+            }" on ${utc5Date.toLocaleDateString()} at ${utc5Date.toLocaleTimeString()}`,
             type: "reminder",
-            date: reminderDateTime.toLocaleDateString(),
-            time: reminderDateTime.toLocaleTimeString(),
+            date: utc5Date.toLocaleDateString(),
+            time: utc5Date.toLocaleTimeString(),
           },
         ]);
 
