@@ -234,8 +234,13 @@ const WritersDashboard = () => {
   const handleSaveReminder = async () => {
     if (selectedPitchId && reminderDate) {
       // Validation: prevent past date/time
-      const selectedDateTime = new Date(`${reminderDate}T${reminderTime}`);
-      if (selectedDateTime < now) {
+      const now = new Date();
+      // Parse as local time using year, month, day, hour, minute
+      const [year, month, day] = reminderDate.split("-").map(Number);
+      const [hour, minute] = reminderTime.split(":").map(Number);
+      // JS months are 0-based
+      const localDate = new Date(year, month - 1, day, hour, minute, 0, 0);
+      if (localDate < now) {
         setError("Reminder date and time must be in the future.");
         setShowError(true);
         return;
@@ -256,12 +261,9 @@ const WritersDashboard = () => {
           throw new Error("Pitch not found");
         }
 
-        // Convert user's local time to UTC-5 (EST, no DST)
-        // 1. Get the UTC time value of the local input
-        // 2. Subtract 5 hours to get UTC-5
-        const utc5Timestamp = selectedDateTime.getTime() - 5 * 60 * 60 * 1000;
+        // Convert local time to UTC-5
+        const utc5Timestamp = localDate.getTime() - 5 * 60 * 60 * 1000;
         const utc5Date = new Date(utc5Timestamp);
-
         const pad = (n: number) => n.toString().padStart(2, "0");
         const formattedDateTime =
           `${utc5Date.getFullYear()}-${pad(utc5Date.getMonth() + 1)}-${pad(
