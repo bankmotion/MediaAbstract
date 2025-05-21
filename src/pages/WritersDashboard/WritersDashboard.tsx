@@ -262,8 +262,15 @@ const WritersDashboard = () => {
         }
 
         // Convert local time to UTC-5
-        const utc5Timestamp = localDate.getTime() - 5 * 60 * 60 * 1000;
-        const utc5Date = new Date(utc5Timestamp);
+        // First get the local timezone offset in minutes
+        const localOffset = localDate.getTimezoneOffset();
+        // Convert to UTC-5 (which is 300 minutes)
+        const utc5Offset = 300;
+        // Calculate the total offset needed
+        const totalOffset = localOffset + utc5Offset;
+        // Apply the offset to get UTC-5 time
+        const utc5Date = new Date(localDate.getTime() + totalOffset * 60000);
+
         const pad = (n: number) => n.toString().padStart(2, "0");
         const formattedDateTime =
           `${utc5Date.getFullYear()}-${pad(utc5Date.getMonth() + 1)}-${pad(
