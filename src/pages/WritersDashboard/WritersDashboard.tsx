@@ -223,8 +223,23 @@ const WritersDashboard = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
+  // For min date and time
+  const now = new Date();
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  const todayStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
+    now.getDate()
+  )}`;
+  const currentTimeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
   const handleSaveReminder = async () => {
     if (selectedPitchId && reminderDate) {
+      // Validation: prevent past date/time
+      const selectedDateTime = new Date(`${reminderDate}T${reminderTime}`);
+      if (selectedDateTime < now) {
+        setError("Reminder date and time must be in the future.");
+        setShowError(true);
+        return;
+      }
       try {
         // Get user info from Supabase auth
         const {
@@ -242,7 +257,6 @@ const WritersDashboard = () => {
         }
 
         // Combine date and time and format as 'YYYY-MM-DD HH:mm:ss'
-        const pad = (n: number) => n.toString().padStart(2, "0");
         const reminderDateTime = new Date(`${reminderDate}T${reminderTime}`);
         const formattedDateTime =
           `${reminderDateTime.getFullYear()}-${pad(
@@ -1295,6 +1309,7 @@ const WritersDashboard = () => {
                 onChange={(e) => setReminderDate(e.target.value)}
                 InputLabelProps={{ shrink: true }}
                 fullWidth
+                inputProps={{ min: todayStr }}
                 InputProps={{
                   sx: {
                     borderRadius: 2,
@@ -1309,6 +1324,9 @@ const WritersDashboard = () => {
                 onChange={(e) => setReminderTime(e.target.value)}
                 InputLabelProps={{ shrink: true }}
                 fullWidth
+                inputProps={
+                  reminderDate === todayStr ? { min: currentTimeStr } : {}
+                }
                 InputProps={{
                   sx: {
                     borderRadius: 2,
