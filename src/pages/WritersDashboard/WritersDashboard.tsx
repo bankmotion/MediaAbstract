@@ -267,7 +267,7 @@ const WritersDashboard = () => {
         // Convert to UTC-5 (which is 300 minutes)
         const utc5Offset = 300;
         // Calculate the total offset needed
-        const totalOffset = localOffset + utc5Offset;
+        const totalOffset = localOffset - utc5Offset;
         // Apply the offset to get UTC-5 time
         const utc5Date = new Date(localDate.getTime() + totalOffset * 60000);
 
