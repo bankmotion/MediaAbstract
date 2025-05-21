@@ -256,10 +256,13 @@ const WritersDashboard = () => {
           throw new Error("Pitch not found");
         }
 
-        // Convert to UTC-5
-        const utc5Date = new Date(
-          selectedDateTime.getTime() - 5 * 60 * 60 * 1000
-        );
+        // Convert user's local time to UTC-5 (EST, no DST)
+        // 1. Get the UTC time value of the local input
+        // 2. Subtract 5 hours to get UTC-5
+        const utc5Timestamp = selectedDateTime.getTime() - 5 * 60 * 60 * 1000;
+        const utc5Date = new Date(utc5Timestamp);
+
+        const pad = (n: number) => n.toString().padStart(2, "0");
         const formattedDateTime =
           `${utc5Date.getFullYear()}-${pad(utc5Date.getMonth() + 1)}-${pad(
             utc5Date.getDate()
@@ -268,11 +271,10 @@ const WritersDashboard = () => {
             utc5Date.getSeconds()
           )}`;
 
-        // Create reminder using the service
         await createReminder({
           user_id: user.id,
           pitch_id: selectedPitchId,
-          reminder_date: formattedDateTime,
+          reminder_date: formattedDateTime, // UTC-5
           email: user.email || "",
           status: "pending",
         });
