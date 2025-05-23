@@ -4,9 +4,11 @@ import {
   Box,
   Button,
   Typography,
+  Grid,
   Card,
   CardContent,
-  Grid,
+  Avatar,
+  Divider,
   AppBar,
   Toolbar,
   Dialog,
@@ -14,32 +16,128 @@ import {
   DialogActions,
   TextField,
   IconButton,
+  Fab,
+  Zoom,
+  Tooltip,
+  Alert,
+  Badge,
+  DialogTitle,
+  Snackbar,
+  Chip,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Checkbox,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import {
-  People,
-  AddCircleOutline,
   Logout,
-  Assessment,
-  Download,
+  Send,
+  CheckCircle,
   CalendarToday,
   Close,
+  History as HistoryIcon,
+  Send as SendIcon,
+  Edit as EditIcon,
+  Download as DownloadIcon,
+  AccessTime as AccessTimeIcon,
+  NotificationsNone as NotificationIcon,
+  Info,
+  Business,
+  Group,
+  Star,
+  Email,
+  FilterList,
+  Warning,
+  Person as PersonIcon,
+  AddCircleOutline as AddCircleOutlineIcon,
+  LightbulbOutlined as LightbulbOutlinedIcon,
+  ArrowForward as ArrowForwardIcon,
+  EditNote as EditNoteIcon,
+  Search as SearchIcon,
+  Description as DescriptionIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  KeyboardArrowUp as KeyboardArrowUpIcon,
+  Done as DoneIcon,
+  Mail as MailIcon,
+  Update as UpdateIcon,
+  Comment as CommentIcon,
+  Notifications,
+  Download,
 } from "@mui/icons-material";
 
+import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 
 const AgenciesDashboard = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
 
+  // State for plan tier and features
+  const [currentPlan, setCurrentPlan] = useState("$150/month");
+  const [planFeatures, setPlanFeatures] = useState({
+    maxUsers: 3,
+    maxMatchesPerDay: 15,
+    hasCRMExport: true,
+    hasEnhancedTools: true,
+    hasPremiumInsights: false,
+    hasPrioritySupport: false,
+  });
+
+  // State for notifications
+  const [notifications, setNotifications] = useState([
+    {
+      id: 1,
+      type: "new_user",
+      message: "New team member joined: John Doe",
+      date: "2024-03-21",
+      time: "2:30 PM",
+      read: false,
+    },
+    {
+      id: 2,
+      type: "plan_upgrade",
+      message: "Team upgraded to Enterprise plan",
+      date: "2024-03-20",
+      time: "1:45 PM",
+      read: false,
+    },
+  ]);
+
   const [activityLog, setActivityLog] = useState([
-    "3/20/2025: Submitted 'AI & Data Privacy'",
-    "3/21/2025: Exported team pitches",
+    {
+      id: 1,
+      action: "Submitted 'AI & Data Privacy' to Forbes",
+      type: "submission",
+      date: "3/21/2025",
+      time: "2:30 PM",
+    },
+    {
+      id: 2,
+      action: "Exported team pitches for weekly review",
+      type: "export",
+      date: "3/21/2025",
+      time: "11:45 AM",
+    },
+    {
+      id: 3,
+      action: "Updated 'ClimateTech Trends' pitch content",
+      type: "edit",
+      date: "3/20/2025",
+      time: "4:15 PM",
+    },
   ]);
 
   const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
   const [selectedPitchId, setSelectedPitchId] = useState<number | null>(null);
   const [reminderDate, setReminderDate] = useState("");
+  const [reminderTime, setReminderTime] = useState("12:00");
+
+  // State for export options
+  const [exportAnchorEl, setExportAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
+  const [selectedPitches, setSelectedPitches] = useState<number[]>([]);
 
   const teamPitches = [
     {
@@ -50,6 +148,7 @@ const AgenciesDashboard = () => {
       status: "Matched",
       matches: ["Forbes (85%)", "Wired (78%)"],
       followUp: "3/27/2025",
+      contactEmail: "editor@forbes.com",
     },
     {
       id: 2,
@@ -59,19 +158,48 @@ const AgenciesDashboard = () => {
       status: "Submitted",
       matches: ["TechCrunch (70%)"],
       followUp: "3/28/2025",
+      contactEmail: "pitch@techcrunch.com",
     },
   ];
 
-  const currentPlan = "$150/month";
+  const nextStepsData = [
+    {
+      id: 1,
+      icon: <EditNoteIcon />,
+      title: "Create a New Pitch",
+      description: "Craft another compelling pitch to expand your outreach.",
+      action: "/onboarding",
+    },
+    {
+      id: 2,
+      icon: <DescriptionIcon />,
+      title: "Review Team Pitches",
+      description: "Check your team's pitches and find new opportunities.",
+      action: "#my-pitches",
+    },
+  ];
 
-  const handleExportCSV = () => {
-    const headers = ["Pitch", "Client", "Status", "Matches", "Follow-Up"];
-    const rows = teamPitches.map((pitch) => [
+  const handleExportCSV = (type: "all" | "selected" = "all") => {
+    const headers = [
+      "Pitch",
+      "Client",
+      "Status",
+      "Matches",
+      "Follow-Up",
+      "Contact Email",
+    ];
+    const pitchesToExport =
+      type === "all"
+        ? teamPitches
+        : teamPitches.filter((p) => selectedPitches.includes(p.id));
+
+    const rows = pitchesToExport.map((pitch) => [
       pitch.title,
       pitch.client,
       pitch.status,
       pitch.matches.join(" | "),
       pitch.followUp,
+      pitch.contactEmail || "N/A",
     ]);
 
     const csvContent =
@@ -88,39 +216,108 @@ const AgenciesDashboard = () => {
     document.body.removeChild(link);
 
     setActivityLog((prev) => [
-      `Exported team pitches on ${new Date().toLocaleDateString()}`,
+      {
+        id: Date.now(),
+        action: `Exported ${type === "all" ? "all" : "selected"} team pitches`,
+        type: "export",
+        date: new Date().toLocaleDateString(),
+        time: new Date().toLocaleTimeString(),
+      },
       ...prev,
     ]);
   };
 
-  const nextSteps = [
-    "Follow up on 'AI & Data Privacy' with TechCrunch",
-    "Submit another pitch!",
-  ];
+  const handleExportMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setExportAnchorEl(event.currentTarget);
+  };
 
-  // const getStatusColor = (status: string) => {
-  //   return status === "Matched" ? "green" : "blue";
-  // };
+  const handleExportMenuClose = () => {
+    setExportAnchorEl(null);
+  };
+
+  const handleSelectAllPitches = () => {
+    setSelectedPitches(teamPitches.map((p) => p.id));
+  };
+
+  const handleDeselectAllPitches = () => {
+    setSelectedPitches([]);
+  };
+
+  const handlePitchSelection = (pitchId: number) => {
+    setSelectedPitches((prev) =>
+      prev.includes(pitchId)
+        ? prev.filter((id) => id !== pitchId)
+        : [...prev, pitchId]
+    );
+  };
+
+  const handleNextStepClick = (action: string) => {
+    if (action.startsWith("#")) {
+      const element = document.getElementById(action.substring(1));
+      if (element) {
+        const headerOffset = 100;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition =
+          elementPosition + window.pageYOffset - headerOffset;
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: "smooth",
+        });
+      }
+    } else {
+      navigate(action);
+    }
+  };
 
   const handleOpenReminderDialog = (pitchId: number) => {
     setSelectedPitchId(pitchId);
     setReminderDate("");
+    setReminderTime("12:00");
     setReminderDialogOpen(true);
   };
 
   const handleSaveReminder = () => {
     if (selectedPitchId && reminderDate) {
-      setActivityLog((prevLog) => [
-        ...prevLog,
-        `Reminder set for pitch ID ${selectedPitchId} on ${reminderDate}`,
+      setActivityLog((prev) => [
+        {
+          id: Date.now(),
+          action: `Reminder set for pitch ID ${selectedPitchId} on ${reminderDate}`,
+          type: "reminder",
+          date: new Date().toLocaleDateString(),
+          time: new Date().toLocaleTimeString(),
+        },
+        ...prev,
       ]);
       setReminderDialogOpen(false);
     }
   };
 
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
+  const handleScroll = () => {
+    if (window.scrollY > 300) {
+      setShowScrollTop(true);
+    } else {
+      setShowScrollTop(false);
+    }
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <Box className={classes.wrapper}>
       <AppBar
@@ -144,7 +341,24 @@ const AgenciesDashboard = () => {
             </Typography>
           </Button>
 
-          <>
+          <Box className={classes.headerActions}>
+            {planFeatures.hasPrioritySupport && (
+              <Chip
+                icon={<Star />}
+                label="Priority Support"
+                color="primary"
+                variant="outlined"
+                className={classes.prioritySupportChip}
+              />
+            )}
+            <Badge
+              badgeContent={notifications.filter((n) => !n.read).length}
+              color="error"
+            >
+              <IconButton>
+                <Notifications />
+              </IconButton>
+            </Badge>
             <Button
               startIcon={<Logout />}
               color="primary"
@@ -153,192 +367,256 @@ const AgenciesDashboard = () => {
               sx={{ fontWeight: 500 }}
               className={classes.logoutButton}
             >
-              LogOut
+              Logout
             </Button>
-          </>
+          </Box>
         </Toolbar>
       </AppBar>
+
       <Box className={classes.body}>
-        <Grid container spacing={3} className={classes.statsSection}>
-          <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
-            <Card className={classes.statCard}>
-              <CardContent>
-                <Assessment className={classes.statIcon} />
-                <Typography variant="h6">Matches</Typography>
-                <Typography className={classes.statNumber}>15</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={4} className={classes.statGrid}>
-            <Card className={classes.statCard}>
-              <CardContent>
-                <People className={classes.statIcon} />
-                <Typography variant="h6">Clients</Typography>
-                <Typography className={classes.statNumber}>3</Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-
-        <Box sx={{ textAlign: "center", my: 4 }} className={classes.buttonRow}>
-          <Button
-            variant="contained"
-            //color="primary"
-            size="large"
-            className={classes.newPitchBtn}
-            onClick={() => navigate("/onboarding")}
-          >
-            New Client Pitch
-          </Button>
-        </Box>
-
-        {(currentPlan === "$150/month" || currentPlan === "$250/month") && (
-          <Button
-            variant="outlined"
-            color="secondary"
-            startIcon={<AddCircleOutline />}
-            className={classes.addUserBtn}
-            onClick={() => alert("Redirect to Add User functionality")}
-          >
-            Add User
-          </Button>
-        )}
-
-        <Box mb={3} className={classes.nextStepsSection}>
-          <Typography variant="h6" className={classes.sectionHeader}>
-            Next Steps
-          </Typography>
-          {nextSteps.map((step, i) => (
-            <Typography key={i} variant="body1">
-              • {step}
+        <Box className={classes.bodyHeader}>
+          <Box className={classes.userInfo}>
+            <Avatar
+              className={classes.avatar}
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+              alt="Agency Avatar"
+            >
+              <Business />
+            </Avatar>
+            <Typography className={classes.welcomeText}>
+              Welcome back, Agency Team
             </Typography>
-          ))}
+          </Box>
+          <Box className={classes.userStats}>
+            <Box className={classes.statItem}>
+              <Typography className={classes.statValue}>
+                {planFeatures.maxMatchesPerDay}
+              </Typography>
+              <Typography className={classes.statLabel}>Matches/Day</Typography>
+            </Box>
+            <Box className={classes.statItem}>
+              <Typography className={classes.statValue}>
+                {planFeatures.maxUsers}
+              </Typography>
+              <Typography className={classes.statLabel}>
+                Team Members
+              </Typography>
+            </Box>
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              className={classes.newPitchButton}
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => navigate("/onboarding")}
+            >
+              New Pitch
+            </Button>
+          </Box>
         </Box>
 
-        <Box className={classes.sectionHeaderRow}>
-          <Typography variant="h6" className={classes.sectionHeader}>
-            Team Pitches
-          </Typography>
-          <Button
-            startIcon={<Download />}
-            variant="outlined"
-            size="small"
-            className={classes.exportButton}
-            onClick={handleExportCSV}
-          >
-            Export Pitches
-          </Button>
-        </Box>
+        <Divider className={classes.divider} />
 
-        {teamPitches.map((pitch) => (
-          // <Card key={pitch.id} className={classes.pitchCard}>
-          //   <CardContent>
-          //     <Box display="flex" alignItems="center" gap={1}>
-          //       <Tooltip title={pitch.status}>
-          //         <Circle
-          //           fontSize="small"
-          //           style={{ color: getStatusColor(pitch.status) }}
-          //         />
-          //       </Tooltip>
-          //       <Typography variant="h6" className={classes.pitchTitle}>
-          //         {pitch.name}: {pitch.title}
-          //       </Typography>
-          //     </Box>
-          //     <Typography variant="body2">Client: {pitch.client}</Typography>
-          //     <Typography variant="body2">
-          //       Matches: {pitch.matches.join(", ")}
-          //     </Typography>
-          //     <Button
-          //       size="small"
-          //       onClick={() => navigate(`/results/${pitch.id}`)}
-          //       sx={{ textTransform: "none", mt: 1 }}
-          //     >
-          //       See Matches
-          //     </Button>
-          //     <Typography variant="body2" mt={1}>
-          //       Follow-Up: {pitch.followUp}
-          //     </Typography>
-          //     <Button
-          //       size="small"
-          //       onClick={() => alert("Open follow-up date picker")}
-          //       sx={{ textTransform: "none", mt: 1 }}
-          //     >
-          //       Set Reminder
-          //     </Button>
-          //   </CardContent>
-          // </Card>
+        <Box className={classes.dashboardLayout}>
+          <Box className={classes.mainContent}>
+            <Box id="my-pitches" className={classes.buttonContainer}>
+              <Typography variant="h6" className={classes.sectionTitle}>
+                <EditNoteIcon />
+                Team Pitches
+              </Typography>
+            </Box>
 
-          <Card key={pitch.id} className={classes.pitchCard}>
-            <CardContent>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-              >
-                <Typography variant="h6" className={classes.pitchTitle}>
-                  {pitch.name}: {pitch.title}
-                </Typography>
-                <Box display="flex" alignItems="center">
-                  <Box
-                    sx={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: "50%",
-                      backgroundColor:
-                        pitch.status === "Matched" ? "green" : "blue",
-                      marginRight: 1,
-                    }}
-                  />
-                  <Typography variant="body2">{pitch.status}</Typography>
-                </Box>
-              </Box>
-              <Typography variant="body2" color="textSecondary">
-                Client: {pitch.client}
-              </Typography>
-              <Typography variant="body2">
-                Matches: {pitch.matches.join(", ")} |{" "}
-                <Button size="small" onClick={() => navigate("/results")}>
-                  See Matches
-                </Button>
-              </Typography>
-              <Typography variant="body2">
-                Follow-Up: {pitch.followUp} |{" "}
+            {planFeatures.hasEnhancedTools && (
+              <Box className={classes.bulkActions}>
                 <Button
-                  size="small"
-                  onClick={() => handleOpenReminderDialog(pitch.id)}
+                  startIcon={<CheckCircle />}
+                  onClick={handleSelectAllPitches}
+                  disabled={selectedPitches.length === teamPitches.length}
                 >
-                  Set Reminder
+                  Select All
                 </Button>
-              </Typography>
-            </CardContent>
-          </Card>
-        ))}
+                <Button
+                  startIcon={<Close />}
+                  onClick={handleDeselectAllPitches}
+                  disabled={selectedPitches.length === 0}
+                >
+                  Deselect All
+                </Button>
+                {planFeatures.hasCRMExport && (
+                  <Button
+                    startIcon={<Download />}
+                    onClick={handleExportMenuOpen}
+                    disabled={selectedPitches.length === 0}
+                  >
+                    Export Selected
+                  </Button>
+                )}
+              </Box>
+            )}
 
-        {/* Activity Timeline Placeholder */}
-        <Box mt={4}>
-          <Typography variant="h6" className={classes.sectionHeader}>
-            Activity
-          </Typography>
-          <Card className={classes.pitchCard}>
-            <CardContent>
-              {activityLog.map((entry, index) => (
-                <Typography key={index} variant="body2" gutterBottom>
-                  • {entry}
-                </Typography>
+            <Grid container spacing={3} className={classes.pitchGrid}>
+              {teamPitches.map((pitch) => (
+                <Grid item key={pitch.id}>
+                  <Card className={classes.pitchCard}>
+                    <CardContent className={classes.pitchCardContent}>
+                      <Box className={classes.pitchHeader}>
+                        {planFeatures.hasEnhancedTools && (
+                          <Checkbox
+                            checked={selectedPitches.includes(pitch.id)}
+                            onChange={() => handlePitchSelection(pitch.id)}
+                            className={classes.pitchCheckbox}
+                          />
+                        )}
+                        <Typography className={classes.pitchTitle}>
+                          {pitch.name}: {pitch.title}
+                        </Typography>
+                        <Box
+                          className={`${classes.pitchStatus} ${(
+                            pitch.status || ""
+                          )
+                            .replace(/\s+/g, "")
+                            .toLowerCase()}`}
+                        >
+                          <Box
+                            className={`${classes.pitchStatusDot} ${(
+                              pitch.status || ""
+                            )
+                              .replace(/\s+/g, "")
+                              .toLowerCase()}`}
+                          />
+                          {pitch.status || "No Status"}
+                        </Box>
+                      </Box>
+                      <Box className={classes.pitchMatches}>
+                        <Box className={classes.matchList}>
+                          {pitch.matches.map((match, index) => (
+                            <Box key={index} className={classes.matchItem}>
+                              <Typography variant="body2">{match}</Typography>
+                            </Box>
+                          ))}
+                        </Box>
+                        <Box className={classes.pitchActions}>
+                          <Button
+                            variant="text"
+                            size="small"
+                            className={`${classes.pitchActionButton} primary`}
+                            onClick={() => navigate("/results")}
+                          >
+                            See Matches
+                          </Button>
+                          <Button
+                            variant="text"
+                            size="small"
+                            className={`${classes.pitchActionButton} secondary`}
+                            onClick={() => handleOpenReminderDialog(pitch.id)}
+                          >
+                            Set Reminder
+                          </Button>
+                        </Box>
+                      </Box>
+                      {pitch.contactEmail && (
+                        <Typography
+                          variant="body2"
+                          color="textSecondary"
+                          sx={{ mt: 1 }}
+                        >
+                          Contact: {pitch.contactEmail}
+                        </Typography>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Grid>
               ))}
-            </CardContent>
-          </Card>
-          {/* <Timeline>
-            {activityLog.map((activity, i) => (
-              <TimelineItem key={i}>
-                <TimelineSeparator>
-                  <TimelineDot color="primary" />
-                </TimelineSeparator>
-                <TimelineContent>{activity}</TimelineContent>
-              </TimelineItem>
-            ))}
-          </Timeline> */}
+            </Grid>
+
+            {planFeatures.hasPremiumInsights && (
+              <Box className={classes.premiumInsights}>
+                <Card className={classes.insightsCard}>
+                  <CardContent>
+                    <Typography variant="h6" className={classes.insightsTitle}>
+                      Premium Insights
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary">
+                      Coming soon: Predictive insights powered by AI
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Box>
+            )}
+
+            <Box className={classes.nextStepsSection}>
+              <Typography className={classes.sectionHeader}>
+                <LightbulbOutlinedIcon />
+                Next Steps
+              </Typography>
+              {nextStepsData.map((step) => (
+                <Box
+                  key={step.id}
+                  className={classes.nextStepItem}
+                  onClick={() => handleNextStepClick(step.action)}
+                >
+                  <Box className={classes.nextStepIcon}>{step.icon}</Box>
+                  <Box className={classes.nextStepContent}>
+                    <Typography className={classes.nextStepTitle}>
+                      {step.title}
+                    </Typography>
+                    <Typography className={classes.nextStepDescription}>
+                      {step.description}
+                    </Typography>
+                  </Box>
+                  <ArrowForwardIcon className={classes.nextStepArrow} />
+                </Box>
+              ))}
+            </Box>
+          </Box>
+
+          <Box className={classes.activitySidebar}>
+            <Box className={classes.activityHeader}>
+              <HistoryIcon />
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                Recent Activity
+              </Typography>
+            </Box>
+            <Box className={classes.activityContent}>
+              {activityLog.length === 0 ? (
+                <Box className={classes.noActivity}>
+                  <NotificationIcon />
+                  <Typography variant="body1">
+                    No recent activity to show
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Your recent actions will appear here
+                  </Typography>
+                </Box>
+              ) : (
+                activityLog.map((entry) => {
+                  let icon;
+                  if (entry.type === "submission") {
+                    icon = <SendIcon fontSize="small" />;
+                  } else if (entry.type === "export") {
+                    icon = <DownloadIcon fontSize="small" />;
+                  } else {
+                    icon = <EditIcon fontSize="small" />;
+                  }
+
+                  return (
+                    <Box key={entry.id} className={classes.activityItem}>
+                      <Box className={classes.activityIcon}>{icon}</Box>
+                      <Box className={classes.activityText}>
+                        <Typography variant="body2" className="action">
+                          {entry.action}
+                        </Typography>
+                        <Typography variant="body2" className="timestamp">
+                          <AccessTimeIcon sx={{ fontSize: "0.9rem" }} />
+                          {entry.date} at {entry.time}
+                        </Typography>
+                      </Box>
+                    </Box>
+                  );
+                })
+              )}
+            </Box>
+          </Box>
         </Box>
 
         <Dialog
@@ -383,23 +661,45 @@ const AgenciesDashboard = () => {
               mb={1}
               sx={{ margin: "15px" }}
             >
-              Choose the date you'd like to be reminded to follow up.
+              Choose the date and time you'd like to be reminded to follow up.
             </Typography>
 
-            <TextField
-              label="Reminder Date"
-              type="date"
-              value={reminderDate}
-              onChange={(e) => setReminderDate(e.target.value)}
-              InputLabelProps={{ shrink: true }}
-              fullWidth
-              InputProps={{
-                sx: {
-                  borderRadius: 2,
-                  backgroundColor: "#f9f9f9",
-                },
+            <Box
+              sx={{
+                display: "flex",
+                gap: 2,
+                flexDirection: { xs: "column", sm: "row" },
               }}
-            />
+            >
+              <TextField
+                label="Reminder Date"
+                type="date"
+                value={reminderDate}
+                onChange={(e) => setReminderDate(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+                InputProps={{
+                  sx: {
+                    borderRadius: 2,
+                    backgroundColor: "#f9f9f9",
+                  },
+                }}
+              />
+              <TextField
+                label="Reminder Time"
+                type="time"
+                value={reminderTime}
+                onChange={(e) => setReminderTime(e.target.value)}
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+                InputProps={{
+                  sx: {
+                    borderRadius: 2,
+                    backgroundColor: "#f9f9f9",
+                  },
+                }}
+              />
+            </Box>
           </DialogContent>
 
           <DialogActions sx={{ px: 3, pb: 2 }}>
@@ -426,6 +726,51 @@ const AgenciesDashboard = () => {
             </Button>
           </DialogActions>
         </Dialog>
+
+        <Menu
+          anchorEl={exportAnchorEl}
+          open={Boolean(exportAnchorEl)}
+          onClose={handleExportMenuClose}
+        >
+          <MenuItem
+            onClick={() => {
+              handleExportCSV("all");
+              handleExportMenuClose();
+            }}
+          >
+            <ListItemIcon>
+              <Download fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Export All</ListItemText>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              handleExportCSV("selected");
+              handleExportMenuClose();
+            }}
+          >
+            <ListItemIcon>
+              <FilterList fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Export Selected</ListItemText>
+          </MenuItem>
+        </Menu>
+
+        <Zoom in={showScrollTop}>
+          <Fab
+            color="primary"
+            size="medium"
+            onClick={scrollToTop}
+            sx={{
+              position: "fixed",
+              bottom: 60,
+              right: 40,
+              zIndex: 1000,
+            }}
+          >
+            <KeyboardArrowUpIcon />
+          </Fab>
+        </Zoom>
       </Box>
     </Box>
   );

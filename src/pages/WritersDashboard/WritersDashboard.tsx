@@ -503,7 +503,6 @@ const WritersDashboard = () => {
         })
         .catch((error) => {
           console.error("Failed to delete pitch:", error);
-          // You might want to show an error message to the user here
         });
     }
   };

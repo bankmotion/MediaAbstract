@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -6,10 +6,12 @@ import {
   Card,
   CardContent,
   Grid,
+  Container,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import Navbar from "../../components/Navbar/Nabvar";
+import VettingQuestions from "../../components/VettingQuestions/VettingQuestions";
 
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import ChecklistIcon from "@mui/icons-material/Checklist";
@@ -18,10 +20,37 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 const WritersIntro = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
+  const [showVetting, setShowVetting] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  const handleVettingComplete = (isAgency: boolean) => {
+    if (isAgency) {
+      navigate("/agenciesintro");
+    } else {
+      navigate("/signup/writers");
+    }
+  };
+
+  if (showVetting) {
+    return (
+      <>
+        <Navbar />
+        <Box className={classes.introWrapper}>
+          <Typography variant="h4" className={classes.title}>
+            Quick Questions
+          </Typography>
+          <Typography variant="subtitle1" className={classes.subtitle}>
+            Help us understand your needs better
+          </Typography>
+          <VettingQuestions onComplete={handleVettingComplete} />
+        </Box>
+      </>
+    );
+  }
+
   return (
     <>
       <Navbar />
@@ -71,7 +100,7 @@ const WritersIntro = () => {
           <Grid item xs={12} md={6}>
             <Card
               className={classes.pricingCard}
-              onClick={() => navigate("/signup/writers")}
+              onClick={() => setShowVetting(true)}
             >
               <CardContent>
                 <Typography variant="h6" className={classes.planTitle}>
@@ -90,7 +119,7 @@ const WritersIntro = () => {
           variant="contained"
           color="primary"
           className={classes.continueBtn}
-          onClick={() => navigate("/signup/writers")}
+          onClick={() => setShowVetting(true)}
         >
           Continue to Signup
         </Button>
