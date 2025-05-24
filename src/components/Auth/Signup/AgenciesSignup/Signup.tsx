@@ -10,9 +10,8 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../Navbar/Nabvar";
-// import WelcomeModal from "../../../WelcomeModal/WelcomeModal";
 import useStyles from "./styles";
-// import { createCheckSession } from "../../../../services/auth";
+import { supabase } from "../../../../utils/supabase";
 
 const planOptions = [
   {
@@ -41,12 +40,15 @@ const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [plan, setPlan] = useState("");
-  // const [showWelcomeModal, setShowWelcomeModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const handleLoginClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate("/login");
+  };
+
   const handleSignup = async () => {
-    // setShowWelcomeModal(true);
     if (!email || !password || !plan) {
       setError("Please fill in all fields");
       return;
@@ -55,25 +57,79 @@ const Signup = () => {
     try {
       setLoading(true);
       setError(null);
-      const selectedPlan = planOptions.find((opt) => opt.value === plan);
-      if (!selectedPlan) {
-        setError("Invalid plan selection");
+
+      // Check if user profile exists
+      const { data: existingUser, error: checkError } = await supabase
+        .from("user_profiles")
+        .select("email, password")
+        .eq("email", email)
+        .single();
+
+      if (existingUser) {
+        setError(
+          "An account with this email already exists. Please login instead."
+        );
         return;
       }
 
-      // Store user data in localStorage before redirecting
+      // Create user in Supabase auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            plan_type: plan,
+          },
+        },
+      });
+
+      if (authError) {
+        throw authError;
+      }
+
+      if (!authData.user) {
+        throw new Error("Failed to create user account");
+      }
+
+      // Create user profile with email and password
+      const { error: profileError } = await supabase
+        .from("user_profiles")
+        .insert([
+          {
+            email: email,
+            password: password,
+            plan_type: plan,
+            user_id: authData.user.id,
+            payment_status: "beta",
+          },
+        ])
+        .select();
+
+      if (profileError) {
+        console.error("Profile creation error:", profileError);
+        throw profileError;
+      }
+
+      // Store registration data in localStorage
+      const registrationData = {
+        email,
+        password,
+        plan_type: plan,
+      };
       localStorage.setItem(
-        "signup_data",
-        JSON.stringify({
-          email,
-          password,
-          plan: selectedPlan.value,
-        })
+        "pendingRegistration",
+        JSON.stringify(registrationData)
       );
 
-      // Redirect to Stripe checkout
+      // Redirect to Stripe
+      const selectedPlan = planOptions.find((opt) => opt.value === plan);
+      if (!selectedPlan) {
+        throw new Error("Invalid plan selection");
+      }
+
       window.location.href = selectedPlan.checkoutUrl;
     } catch (err) {
+      console.error("Signup error:", err);
       setError(err instanceof Error ? err.message : "An error occurred");
     } finally {
       setLoading(false);
@@ -124,7 +180,7 @@ const Signup = () => {
                 sx={{
                   whiteSpace: "normal",
                   fontSize: {
-                    xs: "0.8rem",
+                    xs: "0.85rem",
                     sm: "0.95rem",
                   },
                   lineHeight: 1.4,
@@ -155,7 +211,7 @@ const Signup = () => {
             Already have an account?{" "}
             <Link
               component="button"
-              onClick={() => navigate("/login")}
+              onClick={handleLoginClick}
               underline="hover"
               sx={{ color: "#007BFF", fontWeight: 500 }}
             >

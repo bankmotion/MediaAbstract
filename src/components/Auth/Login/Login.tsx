@@ -29,8 +29,23 @@ const Login = () => {
         data: { session },
       } = await supabase.auth.getSession();
       if (session?.user) {
-        // If user is logged in, redirect to dashboard
-        navigate("/writers/dashboard");
+        // Get user profile to determine role
+        const { data: profileData } = await supabase
+          .from("user_profiles")
+          .select("plan_type")
+          .eq("user_id", session.user.id)
+          .single();
+
+        if (profileData) {
+          // Redirect based on plan type
+          if (profileData.plan_type === "writer") {
+            navigate("/writers/dashboard");
+          } else if (
+            ["basic", "team", "enterprise"].includes(profileData.plan_type)
+          ) {
+            navigate("/agencies/dashboard");
+          }
+        }
       }
     };
 
@@ -39,9 +54,25 @@ const Login = () => {
     // Set up auth state listener
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
-        navigate("/writers/dashboard");
+        // Get user profile to determine role
+        const { data: profileData } = await supabase
+          .from("user_profiles")
+          .select("plan_type")
+          .eq("user_id", session.user.id)
+          .single();
+
+        if (profileData) {
+          // Redirect based on plan type
+          if (profileData.plan_type === "writer") {
+            navigate("/writers/dashboard");
+          } else if (
+            ["basic", "team", "enterprise"].includes(profileData.plan_type)
+          ) {
+            navigate("/agencies/dashboard");
+          }
+        }
       }
     });
 
@@ -103,7 +134,17 @@ const Login = () => {
           profileData?.payment_status === "beta" ||
           profileData?.payment_status === "active"
         ) {
-          navigate("/writers/dashboard");
+          // Redirect based on plan type
+          if (profileData.plan_type === "writer") {
+            navigate("/writers/dashboard");
+          } else if (
+            ["basic", "team", "enterprise"].includes(profileData.plan_type)
+          ) {
+            navigate("/agencies/dashboard");
+          } else {
+            setError("Invalid user role. Please contact support.");
+            await supabase.auth.signOut();
+          }
         } else {
           // If not a beta tester or active user, sign them out
           await supabase.auth.signOut();
