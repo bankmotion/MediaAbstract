@@ -134,8 +134,7 @@ const AgenciesIntro = () => {
                     </Typography>
                   </Box>
                   <Typography className={classes.planDesc}>
-                    3 users, 15 matches/day, CRM export, enhanced outreach
-                    tools.
+                    3 users, 15 matches/day, upgraded pitch tracking.
                   </Typography>
                 </CardContent>
               </Card>

@@ -183,8 +183,8 @@ const Signup = () => {
               MenuProps: {
                 PaperProps: {
                   sx: {
-                    maxHeight: 300,
-                    width: "350px",
+                    minWidth: "unset",
+                    width: "auto",
                   },
                 },
               },
