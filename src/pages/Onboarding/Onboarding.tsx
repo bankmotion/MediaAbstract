@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
 import ClearPitchDialog from "../../components/ClearPitchDialog/ClearPitchDialog";
 import TipsDialog from "../../components/TipsDialog/TipsDialog";
+import { supabase } from "../../utils/supabase";
 
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
@@ -49,12 +50,68 @@ const Onboarding = () => {
 
   const [abstract, setAbstract] = useState(savedAbstract || "");
   const [industry, setIndustry] = useState(savedIndustry || "");
+  const [userRole, setUserRole] = useState<"writer" | "agency" | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [errors, setErrors] = useState({ abstract: false, industry: false });
 
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [tipsDialogOpen, setTipsDialogOpen] = useState(false);
+
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        if (!session) {
+          // No session, redirect to login
+          navigate("/login");
+          return;
+        }
+
+        // Store user ID
+        setUserId(session.user.id);
+
+        // Get user profile to determine role
+        const { data: profileData, error: profileError } = await supabase
+          .from("user_profiles")
+          .select("plan_type")
+          .eq("user_id", session.user.id)
+          .single();
+
+        if (profileError) {
+          console.error("Error fetching user profile:", profileError);
+          navigate("/login");
+          return;
+        }
+
+        if (profileData) {
+          if (profileData.plan_type === "writer") {
+            setUserRole("writer");
+          } else if (
+            ["basic", "team", "enterprise"].includes(profileData.plan_type)
+          ) {
+            setUserRole("agency");
+          } else {
+            console.error("Invalid user role");
+            navigate("/login");
+          }
+        }
+      } catch (error) {
+        console.error("Session check error:", error);
+        navigate("/login");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkSession();
+  }, [navigate]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -78,11 +135,32 @@ const Onboarding = () => {
   };
 
   const handleSubmit = async () => {
-    if (!validateFields()) return;
-    dispatch(setPitchData({ abstract, industry }));
-    dispatch(fetchPitchResults({ abstract, industry }));
+    if (!validateFields() || !userId) return;
+    console.log("userId:", userId);
+    try {
+      // Store pitch data in Supabase
+      // const { error: pitchError } = await supabase.from("pitches").insert([
+      //   {
+      //     user_id: userId,
+      //     abstract: abstract,
+      //     industry: industry,
+      //     created_at: new Date().toISOString(),
+      //   },
+      // ]);
 
-    navigate("/results");
+      // if (pitchError) {
+      //   console.error("Error storing pitch:", pitchError);
+      //   return;
+      // }
+
+      // Update Redux store and fetch results
+      dispatch(setPitchData({ abstract, industry, userId }));
+      dispatch(fetchPitchResults({ abstract, industry, userId }));
+
+      navigate("/results");
+    } catch (error) {
+      console.error("Error in handleSubmit:", error);
+    }
   };
 
   const handleRefinePitch = () => {
@@ -99,7 +177,11 @@ const Onboarding = () => {
   };
 
   const handleGoToDashboard = () => {
-    navigate("/writers/dashboard");
+    if (userRole === "writer") {
+      navigate("/writers/dashboard");
+    } else if (userRole === "agency") {
+      navigate("/agencies/dashboard");
+    }
   };
 
   useEffect(() => {
@@ -122,6 +204,14 @@ const Onboarding = () => {
       </ul>
     </Box>
   );
+
+  if (isLoading) {
+    return (
+      <Box className={classes.body}>
+        <Typography>Loading...</Typography>
+      </Box>
+    );
+  }
 
   return (
     <>
@@ -235,7 +325,6 @@ const Onboarding = () => {
           color="primary"
           className={classes.subbutton}
           onClick={handleSubmit}
-          // disabled={!abstract.trim() || !industry}
         >
           Submit
         </Button>

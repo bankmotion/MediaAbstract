@@ -66,7 +66,10 @@ import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import { useSelector, useDispatch } from "react-redux";
 import { AppDispatch, RootState } from "../../redux/store";
-import { fetchDashboardData } from "../../redux/slices/dashboardSlice";
+import {
+  fetchDashboardData,
+  setUserId,
+} from "../../redux/slices/dashboardSlice";
 import {
   fetchSavedOutlets,
   deleteSavedPitchAction,
@@ -395,12 +398,48 @@ const WritersDashboard = () => {
     window.scrollTo(0, 0);
   }, []);
 
+  const [userId, setUserId] = useState<string | null>(null);
+
   useEffect(() => {
-    dispatch(fetchDashboardData());
-    dispatch(fetchSavedOutlets());
-    dispatch(fetchAllOutlets());
-    fetchAndUpdateReminderStatuses();
-  }, [dispatch]);
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.user) {
+        navigate("/login");
+        return;
+      }
+      setUserId(session.user.id);
+      dispatch({ type: "dashboard/setUserId", payload: session.user.id });
+    };
+
+    checkSession();
+
+    // Set up auth state listener
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user) {
+        navigate("/login");
+      } else {
+        setUserId(session.user.id);
+        dispatch({ type: "dashboard/setUserId", payload: session.user.id });
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate, dispatch]);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchDashboardData(userId));
+      dispatch(fetchSavedOutlets());
+      dispatch(fetchAllOutlets());
+      fetchAndUpdateReminderStatuses();
+    }
+  }, [dispatch, userId]);
 
   const [editStates, setEditStates] = useState<{
     [pitchId: string]: { status: string; notes: string };
@@ -421,14 +460,21 @@ const WritersDashboard = () => {
   };
 
   const handleSaveStatusAndNotes = (pitch: any) => {
+    if (!userId) return;
+
     const { status, notes } = editStates[pitch.id] || {
       status: pitch.status,
       notes: pitch.notes || "",
     };
     dispatch(
-      updatePitchStatusAndNotes({ pitchId: pitch.id, status, notes })
+      updatePitchStatusAndNotes({
+        pitchId: pitch.id,
+        status,
+        notes,
+        userId,
+      })
     ).then(() => {
-      dispatch(fetchDashboardData());
+      dispatch(fetchDashboardData(userId));
     });
   };
 
@@ -555,35 +601,6 @@ const WritersDashboard = () => {
       console.error("Error logging out:", error);
     }
   };
-
-  useEffect(() => {
-    // Check for existing session
-    const checkSession = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session?.user) {
-        // If no session, redirect to login
-        navigate("/login");
-        return;
-      }
-    };
-
-    checkSession();
-
-    // Set up auth state listener
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!session?.user) {
-        navigate("/login");
-      }
-    });
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [navigate]);
 
   return (
     <Box className={classes.wrapper}>

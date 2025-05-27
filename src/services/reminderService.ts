@@ -25,8 +25,6 @@ export const createReminder = async (reminderData: ReminderData) => {
 export const fetchReminders = async () => {
   try {
     const response = await axios.get(`${API_URL}/get_reminders`);
-    console.log("response:", response);
-    console.log("response.data:", response.data.data);
     return response.data.data;
   } catch (error) {
     console.error("Error fetching reminders:", error);

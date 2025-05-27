@@ -4,6 +4,7 @@ import { submitPitch, updatePitchSubmissionStatus } from "../../services/api";
 interface PitchState {
   abstract: string;
   industry: string;
+  userId: string | null;
   results: any[];
   status: "idle" | "loading" | "succeeded" | "failed";
   error: string | null;
@@ -12,6 +13,7 @@ interface PitchState {
 const initialState: PitchState = {
   abstract: "",
   industry: "",
+  userId: null,
   results: [],
   status: "idle",
   error: null,
@@ -19,8 +21,16 @@ const initialState: PitchState = {
 
 export const fetchPitchResults = createAsyncThunk(
   "pitch/fetchPitchResults",
-  async ({ abstract, industry }: { abstract: string; industry: string }) => {
-    const response = await submitPitch(abstract, industry);
+  async ({
+    abstract,
+    industry,
+    userId,
+  }: {
+    abstract: string;
+    industry: string;
+    userId: string;
+  }) => {
+    const response = await submitPitch(abstract, industry, userId);
     return response;
   }
 );
@@ -39,10 +49,15 @@ const pitchSlice = createSlice({
   reducers: {
     setPitchData: (
       state,
-      action: PayloadAction<{ abstract: string; industry: string }>
+      action: PayloadAction<{
+        abstract: string;
+        industry: string;
+        userId: string;
+      }>
     ) => {
       state.abstract = action.payload.abstract;
       state.industry = action.payload.industry;
+      state.userId = action.payload.userId;
     },
   },
   extraReducers: (builder) => {

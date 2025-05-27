@@ -3,7 +3,11 @@ import axios from "axios";
 // Use environment variable with fallback
 const API_URL = "https://backend.writefor.co";
 
-export const submitPitch = async (abstract: string, industry: string) => {
+export const submitPitch = async (
+  abstract: string,
+  industry: string,
+  userId: string
+) => {
   try {
     const response = await fetch(`${API_URL}/submit_pitch`, {
       method: "POST",
@@ -11,7 +15,7 @@ export const submitPitch = async (abstract: string, industry: string) => {
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ abstract, industry }),
+      body: JSON.stringify({ abstract, industry, userId }),
     });
 
     if (!response.ok) {
@@ -46,10 +50,17 @@ export const updatePitchSubmissionStatus = async (
   }
 };
 
-export const fetchDashboardDataAPI = async () => {
-  const response = await axios.get(`${API_URL}/get_dashboard_data`);
-  console.log("Dashboard Data:", response.data);
-  return response.data;
+export const fetchDashboardDataAPI = async (userId: string) => {
+  try {
+    const response = await axios.get(`${API_URL}/get_dashboard_data`, {
+      params: { userId },
+    });
+    console.log("==Dashboard Data:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching dashboard data:", error);
+    throw error;
+  }
 };
 
 export const fetchSavedOutletsAPI = async () => {
@@ -79,7 +90,8 @@ export const fetchAllOutletsAPI = async () => {
 export const updatePitchStatusAndNotes = async (
   pitchId: string,
   status: string,
-  notes: string
+  notes: string,
+  userId: string
 ) => {
   try {
     const response = await axios.put(
@@ -88,6 +100,7 @@ export const updatePitchStatusAndNotes = async (
         pitchId,
         status,
         notes,
+        userId,
       }
     );
     console.log("Response:", response.data);

@@ -8,6 +8,7 @@ interface DashboardState {
   myPitches: any[];
   loading: boolean;
   matches_outlets: any[];
+  userId: string | null;
 }
 
 const initialState: DashboardState = {
@@ -16,13 +17,16 @@ const initialState: DashboardState = {
   myPitches: [],
   loading: false,
   matches_outlets: [],
+  userId: null,
 };
 
 export const fetchDashboardData = createAsyncThunk(
   "dashboard/fetchDashboardData",
-
-  async () => {
-    return await fetchDashboardDataAPI();
+  async (userId: string) => {
+    if (!userId) {
+      throw new Error("User ID is required to fetch dashboard data");
+    }
+    return await fetchDashboardDataAPI(userId);
   }
 );
 
@@ -32,19 +36,25 @@ export const updatePitchStatusAndNotes = createAsyncThunk(
     pitchId,
     status,
     notes,
+    userId,
   }: {
     pitchId: string;
     status: string;
     notes: string;
+    userId: string;
   }) => {
-    return await updatePitchStatusAndNotesAPI(pitchId, status, notes);
+    return await updatePitchStatusAndNotesAPI(pitchId, status, notes, userId);
   }
 );
 
 const dashboardSlice = createSlice({
   name: "dashboard",
   initialState,
-  reducers: {},
+  reducers: {
+    setUserId: (state, action: { payload: string }) => {
+      state.userId = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchDashboardData.pending, (state) => {
@@ -55,7 +65,6 @@ const dashboardSlice = createSlice({
         state.matchesFound = action.payload.matches_found;
         state.myPitches = action.payload.my_pitches;
         state.matches_outlets = action.payload.my_pitches.matches_outlets;
-
         state.loading = false;
       })
       .addCase(fetchDashboardData.rejected, (state) => {
@@ -74,4 +83,5 @@ const dashboardSlice = createSlice({
   },
 });
 
+export const { setUserId } = dashboardSlice.actions;
 export default dashboardSlice.reducer;
