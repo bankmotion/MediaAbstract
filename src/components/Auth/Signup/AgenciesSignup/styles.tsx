@@ -11,6 +11,9 @@ const styles = makeStyles()((theme: any) => ({
     [theme.breakpoints.down("sm")]: {
       padding: theme.spacing(8, 2),
     },
+    [theme.breakpoints.down("xs")]: {
+      padding: theme.spacing(3, 0.5),
+    },
   },
   content: {
     width: "100%",
@@ -28,7 +31,13 @@ const styles = makeStyles()((theme: any) => ({
     [theme.breakpoints.down("sm")]: {
       margin: theme.spacing(8, 2),
       padding: theme.spacing(3),
-      maxWidth: "90%",
+      maxWidth: "95%",
+    },
+    [theme.breakpoints.down("xs")]: {
+      margin: theme.spacing(2, 0.5),
+      padding: theme.spacing(2, 0.5),
+      maxWidth: "100%",
+      minWidth: 0,
     },
   },
   title: {
@@ -40,21 +49,43 @@ const styles = makeStyles()((theme: any) => ({
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.5rem",
     },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "1.2rem",
+    },
   },
   email: {
     marginBottom: theme.spacing(2),
     width: "100%",
     maxWidth: 420,
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "100%",
+    },
+    [theme.breakpoints.down("xs")]: {
+      maxWidth: "100%",
+    },
   },
   password: {
     marginBottom: theme.spacing(2),
     width: "100%",
     maxWidth: 420,
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "100%",
+    },
+    [theme.breakpoints.down("xs")]: {
+      maxWidth: "100%",
+    },
   },
   plan: {
     marginBottom: theme.spacing(3),
     width: "100%",
-    maxWidth: 420,
+    // maxWidth: 350,
+    // minWidth: 350,
+    // [theme.breakpoints.down("sm")]: {
+    //   maxWidth: "100%",
+    // },
+    // [theme.breakpoints.down("xs")]: {
+    //   maxWidth: "100%",
+    // },
   },
   signupButton: {
     padding: theme.spacing(1.3),
@@ -70,6 +101,11 @@ const styles = makeStyles()((theme: any) => ({
     },
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.95rem",
+      maxWidth: "100%",
+    },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "0.9rem",
+      maxWidth: "100%",
     },
   },
   noteText: {
@@ -80,6 +116,9 @@ const styles = makeStyles()((theme: any) => ({
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.85rem",
     },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "0.8rem",
+    },
   },
   error: {
     color: "#d32f2f",
@@ -88,6 +127,9 @@ const styles = makeStyles()((theme: any) => ({
     fontSize: "0.9rem",
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.85rem",
+    },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "0.8rem",
     },
   },
 }));

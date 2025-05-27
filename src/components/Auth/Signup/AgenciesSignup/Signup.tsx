@@ -16,19 +16,26 @@ import { supabase } from "../../../../utils/supabase";
 const planOptions = [
   {
     priceId: "basic",
-    label: "Agency & Team - $50: 1 user, 5 matches",
+    label: "Basic Plan",
+    price: "$50/month",
+    description: "1 user, 5 matches/day, basic media guidelines",
     value: "basic",
     checkoutUrl: "https://buy.stripe.com/test_fZe17B67waPjaRi4gk",
   },
   {
     priceId: "team",
-    label: "Agency & Team - $120: 3 users, 15 matches",
+    label: "Team Plan",
+    price: "$120/month",
+    description: "3 users, 15 matches/day, enhanced outreach tools",
     value: "team",
     checkoutUrl: "https://buy.stripe.com/test_5kA4jN1Rg5uZbVmfZ3",
   },
   {
     priceId: "enterprise",
-    label: "Agency & Team - $200: unlimited, priority",
+    label: "Enterprise Plan",
+    price: "$200/month",
+    description:
+      "Unlimited users and matches, premium insights, priority support",
     value: "enterprise",
     checkoutUrl: "https://buy.stripe.com/test_8wMdUn9jI6z3cZq7sy",
   },
@@ -172,6 +179,16 @@ const Signup = () => {
             className={classes.plan}
             value={plan}
             onChange={(e) => setPlan(e.target.value)}
+            SelectProps={{
+              MenuProps: {
+                PaperProps: {
+                  sx: {
+                    maxHeight: 300,
+                    width: "350px",
+                  },
+                },
+              },
+            }}
           >
             {planOptions.map((opt) => (
               <MenuItem
@@ -179,20 +196,30 @@ const Signup = () => {
                 value={opt.value}
                 sx={{
                   whiteSpace: "normal",
-                  fontSize: {
-                    xs: "0.85rem",
-                    sm: "0.95rem",
-                  },
-                  lineHeight: 1.4,
                   paddingY: 1,
+                  paddingX: 1,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-start",
                   "&:hover": {
                     backgroundColor: "#f0f4ff",
-                    transform: "scale(1.015)",
-                    fontWeight: 500,
                   },
                 }}
               >
-                {opt.label}
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+                    {opt.label}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ fontWeight: 600, color: "primary.main" }}
+                  >
+                    {opt.price}
+                  </Typography>
+                </Box>
+                <Typography variant="body2" color="text.secondary">
+                  {opt.description}
+                </Typography>
               </MenuItem>
             ))}
           </TextField>
