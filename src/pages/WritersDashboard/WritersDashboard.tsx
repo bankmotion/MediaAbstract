@@ -435,7 +435,7 @@ const WritersDashboard = () => {
   useEffect(() => {
     if (userId) {
       dispatch(fetchDashboardData(userId));
-      dispatch(fetchSavedOutlets());
+      dispatch(fetchSavedOutlets(userId));
       dispatch(fetchAllOutlets());
       fetchAndUpdateReminderStatuses();
     }
@@ -538,14 +538,14 @@ const WritersDashboard = () => {
   };
 
   const handleConfirmDelete = () => {
-    if (pitchToDelete) {
-      dispatch(deleteSavedPitchAction(pitchToDelete))
+    if (pitchToDelete && userId) {
+      dispatch(deleteSavedPitchAction({ ...pitchToDelete, userId }))
         .unwrap()
         .then(() => {
           setDeleteDialogOpen(false);
           setPitchToDelete(null);
           // Refresh the saved outlets list
-          dispatch(fetchSavedOutlets());
+          dispatch(fetchSavedOutlets(userId));
         })
         .catch((error) => {
           console.error("Failed to delete pitch:", error);

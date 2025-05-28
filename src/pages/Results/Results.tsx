@@ -36,6 +36,7 @@ import ConfirmationModal from "../../components/ConfirmationModal/ConfirmationMo
 import SubmissionDialog from "../../components/SubmissionDialog/SubmissionDialog";
 
 import useStyles from "./styles";
+import { supabase } from "../../utils/supabase";
 
 const Results = () => {
   const { classes } = useStyles();
@@ -61,6 +62,9 @@ const Results = () => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const [userId, setUserId] = useState<string | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
 
   // Calculate Pagination
   const indexOfLastOutlet = currentPage * outletsPerPage;
@@ -98,19 +102,21 @@ const Results = () => {
   };
 
   const handleSaveOutlets = () => {
-    if (selectedOutlets.length > 0) {
+    if (selectedOutlets.length > 0 && userId) {
       setIsConfirmDialogOpen(true);
     }
   };
 
-  const handleConfirmSave = () => {
-    dispatch(
+  const handleConfirmSave = async () => {
+    if (!userId) return;
+    // Save selected outlets with userId for session-based distinction
+    await dispatch(
       saveSelectedOutlets({
         description: abstract,
         outlets: selectedOutlets,
+        userId, // Pass userId to the action
       })
     );
-
     setIsConfirmDialogOpen(false);
     setShowSuccessMessage(true);
   };
@@ -136,8 +142,43 @@ const Results = () => {
     handleMenuClose();
   };
 
-  const handleGoToDashboard = () => {
-    navigate("/writers/dashboard");
+  const handleGoToDashboard = async () => {
+    // Use userRole to route to the correct dashboard
+    if (!userRole) {
+      // Fallback: fetch userRole if not set
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from("user_profiles")
+          .select("plan_type")
+          .eq("user_id", session.user.id)
+          .single();
+        if (profile) {
+          setUserRole(profile.plan_type);
+          if (profile.plan_type === "writer") {
+            navigate("/writers/dashboard");
+            return;
+          } else if (
+            ["basic", "team", "enterprise"].includes(profile.plan_type)
+          ) {
+            navigate("/agencies/dashboard");
+            return;
+          }
+        }
+      }
+    } else {
+      if (userRole === "writer") {
+        navigate("/writers/dashboard");
+        return;
+      } else if (["basic", "team", "enterprise"].includes(userRole)) {
+        navigate("/agencies/dashboard");
+        return;
+      }
+    }
+    // Default fallback
+    navigate("/");
   };
 
   const handlePitchAgain = () => {
@@ -177,6 +218,26 @@ const Results = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    // Get current user session and role
+    const fetchUser = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUserId(session.user.id);
+        // Fetch user role (plan_type)
+        const { data: profile } = await supabase
+          .from("user_profiles")
+          .select("plan_type")
+          .eq("user_id", session.user.id)
+          .single();
+        if (profile) setUserRole(profile.plan_type);
+      }
+    };
+    fetchUser();
   }, []);
 
   return (

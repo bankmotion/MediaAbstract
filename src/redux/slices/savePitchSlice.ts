@@ -31,19 +31,21 @@ export const saveSelectedOutlets = createAsyncThunk(
   async ({
     description,
     outlets,
+    userId,
   }: {
     description: string;
     outlets: string[];
+    userId: string;
   }) => {
-    const response = await saveSelectedOutletsAPI(description, outlets);
+    const response = await saveSelectedOutletsAPI(description, outlets, userId);
     return response.data;
   }
 );
 
 export const fetchSavedOutlets = createAsyncThunk(
   "savedOutlets/fetchSavedOutlets",
-  async () => {
-    return await fetchSavedOutletsAPI();
+  async (userId: string) => {
+    return await fetchSavedOutletsAPI(userId);
   }
 );
 
@@ -52,11 +54,13 @@ export const deleteSavedPitchAction = createAsyncThunk(
   async ({
     description,
     selected_date,
+    userId,
   }: {
     description: string;
     selected_date: string;
+    userId: string;
   }) => {
-    const response = await deleteSavedPitch(description, selected_date);
+    const response = await deleteSavedPitch(description, selected_date, userId);
     return response;
   }
 );

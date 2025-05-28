@@ -63,19 +63,22 @@ export const fetchDashboardDataAPI = async (userId: string) => {
   }
 };
 
-export const fetchSavedOutletsAPI = async () => {
-  const response = await axios.get(`${API_URL}/get_saved_outlets`);
-
+export const fetchSavedOutletsAPI = async (userId: string) => {
+  const response = await axios.get(`${API_URL}/get_saved_outlets`, {
+    params: { userId },
+  });
   return response.data;
 };
 
 export const saveSelectedOutletsAPI = async (
   description: string,
-  outlets: string[]
+  outlets: string[],
+  userId: string
 ) => {
   const response = await axios.post(`${API_URL}/save_selected_outlets`, {
     description: description,
     outlets: outlets,
+    userId: userId,
   });
 
   return response.data;
@@ -112,11 +115,12 @@ export const updatePitchStatusAndNotes = async (
 
 export const deleteSavedPitch = async (
   description: string,
-  selected_date: string
+  selected_date: string,
+  userId: string
 ) => {
   try {
     const response = await axios.delete(`${API_URL}/delete_saved_pitch`, {
-      data: { description, selected_date },
+      data: { description, selected_date, userId },
     });
     return response.data;
   } catch (error) {
