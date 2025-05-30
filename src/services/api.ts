@@ -6,7 +6,8 @@ const API_URL = "https://backend.writefor.co";
 export const submitPitch = async (
   abstract: string,
   industry: string,
-  userId: string
+  userId: string,
+  planType?: string
 ) => {
   try {
     const response = await fetch(`${API_URL}/submit_pitch`, {
@@ -15,7 +16,7 @@ export const submitPitch = async (
         "Content-Type": "application/json",
         Accept: "application/json",
       },
-      body: JSON.stringify({ abstract, industry, userId }),
+      body: JSON.stringify({ abstract, industry, userId, planType }),
     });
 
     if (!response.ok) {

@@ -625,6 +625,130 @@ const useStyles = makeStyles()((theme) => ({
     color: theme.palette.text.primary,
     marginBottom: theme.spacing(1),
   },
+  savedOutletsSection: {
+    marginTop: theme.spacing(4),
+    padding: theme.spacing(3),
+    background: "#ffffff",
+    borderRadius: "16px",
+    boxShadow: "0 4px 24px rgba(0, 0, 0, 0.06)",
+    transition: "all 0.3s ease",
+    border: "1px solid rgba(0, 0, 0, 0.04)",
+    "&:hover": {
+      boxShadow: "0 8px 32px rgba(37, 99, 235, 0.1)",
+    },
+  },
+  savedOutletsTitle: {
+    fontSize: "1.5rem",
+    fontWeight: 600,
+    marginBottom: theme.spacing(3),
+    color: "#1a1a1a",
+    letterSpacing: "-0.02em",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "1.2rem",
+      marginBottom: theme.spacing(2),
+    },
+  },
+  savedOutletsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+    gap: theme.spacing(3),
+    marginTop: theme.spacing(3),
+  },
+  savedPitchCard: {
+    backgroundColor: "#ffffff",
+    borderRadius: "12px",
+    padding: theme.spacing(2),
+    boxShadow: "0 4px 24px rgba(0, 0, 0, 0.06)",
+    border: "1px solid rgba(0, 0, 0, 0.04)",
+  },
+  savedPitchHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: theme.spacing(1),
+    marginBottom: theme.spacing(2),
+  },
+  savedPitchIcon: {
+    color: "#2563eb",
+  },
+  savedPitchTitle: {
+    flex: 1,
+    fontWeight: 500,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    display: "-webkit-box",
+    WebkitLineClamp: 1,
+    WebkitBoxOrient: "vertical",
+    lineHeight: 1.4,
+  },
+  savedPitchDropdown: {
+    transition: "transform 0.2s ease",
+    "&.expanded": {
+      transform: "rotate(180deg)",
+    },
+  },
+  savedOutletsList: {
+    display: "none",
+    "&.expanded": {
+      display: "block",
+    },
+  },
+  savedOutletItem: {
+    padding: theme.spacing(1),
+    "&:hover": {
+      backgroundColor: "#f8fafc",
+      borderRadius: "4px",
+    },
+  },
+  savedOutletName: {
+    cursor: "pointer",
+    color: "#2563eb",
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
+  moreButton: {
+    display: "flex",
+    alignItems: "center",
+    gap: theme.spacing(1),
+    cursor: "pointer",
+    padding: theme.spacing(1),
+    marginTop: theme.spacing(1),
+    color: "#2563eb",
+  },
+  moreButtonText: {
+    fontSize: "0.875rem",
+    fontWeight: 500,
+  },
+  moreButtonIcon: {
+    transition: "transform 0.2s ease",
+    "&.expanded": {
+      transform: "rotate(180deg)",
+    },
+  },
+  emptyStateCard: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: theme.spacing(4),
+    backgroundColor: "#ffffff",
+    borderRadius: "12px",
+    boxShadow: "0 4px 24px rgba(0, 0, 0, 0.06)",
+    border: "1px solid rgba(0, 0, 0, 0.04)",
+  },
+  emptyStateIcon: {
+    fontSize: "3rem",
+    color: "#94a3b8",
+    marginBottom: theme.spacing(2),
+  },
+  emptyStateText: {
+    textAlign: "center",
+    color: "#64748b",
+  },
+  savedDate: {
+    fontSize: "0.875rem",
+    color: "#64748b",
+    marginTop: theme.spacing(1),
+  },
 }));
 
 export default useStyles;

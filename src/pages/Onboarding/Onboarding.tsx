@@ -51,6 +51,7 @@ const Onboarding = () => {
   const [abstract, setAbstract] = useState(savedAbstract || "");
   const [industry, setIndustry] = useState(savedIndustry || "");
   const [userRole, setUserRole] = useState<"writer" | "agency" | null>(null);
+  const [planType, setPlanType] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const [errors, setErrors] = useState({ abstract: false, industry: false });
@@ -91,6 +92,7 @@ const Onboarding = () => {
         }
 
         if (profileData) {
+          setPlanType(profileData.plan_type || null);
           if (profileData.plan_type === "writer") {
             setUserRole("writer");
           } else if (
@@ -136,27 +138,17 @@ const Onboarding = () => {
 
   const handleSubmit = async () => {
     if (!validateFields() || !userId) return;
-    console.log("userId:", userId);
     try {
-      // Store pitch data in Supabase
-      // const { error: pitchError } = await supabase.from("pitches").insert([
-      //   {
-      //     user_id: userId,
-      //     abstract: abstract,
-      //     industry: industry,
-      //     created_at: new Date().toISOString(),
-      //   },
-      // ]);
-
-      // if (pitchError) {
-      //   console.error("Error storing pitch:", pitchError);
-      //   return;
-      // }
-
       // Update Redux store and fetch results
       dispatch(setPitchData({ abstract, industry, userId }));
-      dispatch(fetchPitchResults({ abstract, industry, userId }));
-
+      dispatch(
+        fetchPitchResults({
+          abstract,
+          industry,
+          userId,
+          planType: planType || undefined,
+        })
+      );
       navigate("/results");
     } catch (error) {
       console.error("Error in handleSubmit:", error);

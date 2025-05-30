@@ -25,12 +25,14 @@ export const fetchPitchResults = createAsyncThunk(
     abstract,
     industry,
     userId,
+    planType,
   }: {
     abstract: string;
     industry: string;
     userId: string;
+    planType?: string;
   }) => {
-    const response = await submitPitch(abstract, industry, userId);
+    const response = await submitPitch(abstract, industry, userId, planType);
     return response;
   }
 );

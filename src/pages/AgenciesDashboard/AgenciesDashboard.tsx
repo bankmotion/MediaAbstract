@@ -18,22 +18,16 @@ import {
   IconButton,
   Fab,
   Zoom,
-  Tooltip,
-  Alert,
   Badge,
-  DialogTitle,
-  Snackbar,
   Chip,
-  Menu,
   MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Checkbox,
+  FormControl,
+  InputLabel,
+  Select,
+  Collapse,
 } from "@mui/material";
 import {
   Logout,
-  Send,
-  CheckCircle,
   CalendarToday,
   Close,
   History as HistoryIcon,
@@ -41,13 +35,8 @@ import {
   Edit as EditIcon,
   AccessTime as AccessTimeIcon,
   NotificationsNone as NotificationIcon,
-  Info,
   Business,
-  Group,
   Star,
-  Email,
-  FilterList,
-  Warning,
   Person as PersonIcon,
   AddCircleOutline as AddCircleOutlineIcon,
   LightbulbOutlined as LightbulbOutlinedIcon,
@@ -62,14 +51,56 @@ import {
   Update as UpdateIcon,
   Comment as CommentIcon,
   Notifications,
+  Close as CloseIcon,
 } from "@mui/icons-material";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
+import { useSelector, useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "../../redux/store";
+import {
+  fetchDashboardData,
+  setUserId,
+  updatePitchStatusAndNotes,
+} from "../../redux/slices/dashboardSlice";
+import {
+  fetchSavedOutlets,
+  deleteSavedPitchAction,
+} from "../../redux/slices/savePitchSlice";
+import { fetchAllOutlets } from "../../redux/slices/outletsSlice";
+import { Outlet } from "../../redux/slices/outletsSlice";
+import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
+import { supabase } from "../../utils/supabase";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { createReminder, fetchReminders } from "../../services/reminderService";
 
 const AgenciesDashboard = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
+  const dispatch = useDispatch<AppDispatch>();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+
+  const allOutlets = useSelector(
+    (state: RootState) => state.allOutlets.outlets
+  );
+  const dashboardResult = useSelector((state: RootState) => state.dashboard);
+  const savedPitchesRaw = useSelector(
+    (state: RootState) => state.savedOutlets.results
+  );
+  const savedPitches = Array.isArray(savedPitchesRaw) ? savedPitchesRaw : [];
+
+  const [userId, setUserIdState] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedOutlet, setSelectedOutlet] = useState<Outlet | null>(null);
+  const [expandedOutlets, setExpandedOutlets] = useState<number[]>([]);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [pitchToDelete, setPitchToDelete] = useState<{
+    description: string;
+    selected_date: string;
+  } | null>(null);
 
   // State for plan tier and features
   const [currentPlan, setCurrentPlan] = useState("$150/month");
@@ -123,29 +154,6 @@ const AgenciesDashboard = () => {
   const [reminderDate, setReminderDate] = useState("");
   const [reminderTime, setReminderTime] = useState("12:00");
 
-  const teamPitches = [
-    {
-      id: 1,
-      name: "Sarah",
-      client: "GreenTech Ltd",
-      title: "Sustainable Energy",
-      status: "Matched",
-      matches: ["Forbes (85%)", "Wired (78%)"],
-      followUp: "3/27/2025",
-      contactEmail: "editor@forbes.com",
-    },
-    {
-      id: 2,
-      name: "John",
-      client: "MedAI Group",
-      title: "AI & Data Privacy",
-      status: "Submitted",
-      matches: ["TechCrunch (70%)"],
-      followUp: "3/28/2025",
-      contactEmail: "pitch@techcrunch.com",
-    },
-  ];
-
   const nextStepsData = [
     {
       id: 1,
@@ -162,6 +170,184 @@ const AgenciesDashboard = () => {
       action: "#my-pitches",
     },
   ];
+
+  const [editStates, setEditStates] = useState<{
+    [pitchId: string]: { status: string; notes: string };
+  }>({});
+
+  const [statusSaved, setStatusSaved] = useState<{
+    [pitchId: string]: boolean;
+  }>({});
+
+  const [openNotes, setOpenNotes] = useState<{ [pitchId: string]: boolean }>(
+    {}
+  );
+
+  const statusOptions = [
+    {
+      value: "Submitted",
+      label: "Submitted",
+      icon: <MailIcon fontSize="small" color="primary" />,
+    },
+    {
+      value: "Followed Up",
+      label: "Followed Up",
+      icon: <UpdateIcon fontSize="small" color="info" />,
+    },
+    {
+      value: "Accepted",
+      label: "Accepted",
+      icon: <DoneIcon fontSize="small" color="success" />,
+    },
+    {
+      value: "Rejected",
+      label: "Rejected",
+      icon: <CloseIcon fontSize="small" color="error" />,
+    },
+  ];
+
+  const [reminderStatuses, setReminderStatuses] = useState<{
+    [key: number]: string;
+  }>({});
+
+  const handleEditChange = (
+    pitchId: string,
+    field: "status" | "notes",
+    value: string
+  ) => {
+    setEditStates((prev) => ({
+      ...prev,
+      [pitchId]: {
+        ...prev[pitchId],
+        [field]: value,
+      },
+    }));
+  };
+
+  const handleSaveStatusAndNotes = (pitch: any) => {
+    if (!userId) return;
+
+    const { status, notes } = editStates[pitch.id] || {
+      status: pitch.status,
+      notes: pitch.notes || "",
+    };
+    dispatch(
+      updatePitchStatusAndNotes({
+        pitchId: pitch.id,
+        status,
+        notes,
+        userId,
+      })
+    ).then(() => {
+      dispatch(fetchDashboardData(userId));
+    });
+  };
+
+  const statusChipColor = (status: string) => {
+    switch (status) {
+      case "Accepted":
+        return "success";
+      case "Rejected":
+        return "error";
+      case "Followed Up":
+        return "warning";
+      case "Submitted":
+        return "primary";
+      default:
+        return "default";
+    }
+  };
+
+  const handleOpenMatchesModal = (pitch: any) => {
+    navigate("/matches", {
+      state: {
+        pitchTitle: pitch.title,
+        matches: pitch.matched_outlets,
+        pitchId: pitch.id,
+      },
+    });
+  };
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!session?.user) {
+        navigate("/login");
+        return;
+      }
+      setUserIdState(session.user.id);
+      dispatch(setUserId(session.user.id));
+    };
+    checkSession();
+    // Set up auth state listener
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session?.user) {
+        navigate("/login");
+      } else {
+        setUserIdState(session.user.id);
+        dispatch(setUserId(session.user.id));
+      }
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [navigate, dispatch]);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchDashboardData(userId));
+      dispatch(fetchSavedOutlets(userId));
+      dispatch(fetchAllOutlets());
+    }
+  }, [dispatch, userId]);
+
+  const handleOpenModal = (outletName: string) => {
+    const outlet = allOutlets.find((p) => p.name === outletName);
+    if (outlet) {
+      setSelectedOutlet(outlet);
+      setModalOpen(true);
+    }
+  };
+  const handleCloseModal = () => {
+    setSelectedOutlet(null);
+    setModalOpen(false);
+  };
+  const handleToggleOutlets = (pitchIndex: number) => {
+    setExpandedOutlets((prev) =>
+      prev.includes(pitchIndex)
+        ? prev.filter((index) => index !== pitchIndex)
+        : [...prev, pitchIndex]
+    );
+  };
+  const handleDeleteClick = (pitch: {
+    description: string;
+    selected_date: string;
+  }) => {
+    setPitchToDelete(pitch);
+    setDeleteDialogOpen(true);
+  };
+  const handleConfirmDelete = () => {
+    if (pitchToDelete && userId) {
+      dispatch(deleteSavedPitchAction({ ...pitchToDelete, userId }))
+        .unwrap()
+        .then(() => {
+          setDeleteDialogOpen(false);
+          setPitchToDelete(null);
+          dispatch(fetchSavedOutlets(userId));
+        })
+        .catch((error) => {
+          console.error("Failed to delete pitch:", error);
+        });
+    }
+  };
+  const handleCancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setPitchToDelete(null);
+  };
 
   const handleNextStepClick = (action: string) => {
     if (action.startsWith("#")) {
@@ -228,6 +414,30 @@ const AgenciesDashboard = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  const fetchAndUpdateReminderStatuses = async () => {
+    try {
+      const reminders = await fetchReminders();
+      const newStatuses: { [key: number]: string } = {};
+
+      reminders.forEach((reminder: any) => {
+        if (reminder.pitch_id) {
+          newStatuses[reminder.pitch_id] = reminder.status;
+        }
+      });
+
+      setReminderStatuses(newStatuses);
+    } catch (error) {
+      console.error("Error fetching reminder statuses:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAndUpdateReminderStatuses();
+    // Set up polling every 30 seconds
+    const interval = setInterval(fetchAndUpdateReminderStatuses, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -339,72 +549,426 @@ const AgenciesDashboard = () => {
             </Box>
 
             <Grid container spacing={3} className={classes.pitchGrid}>
-              {teamPitches.map((pitch) => (
-                <Grid item key={pitch.id}>
-                  <Card className={classes.pitchCard}>
-                    <CardContent className={classes.pitchCardContent}>
-                      <Box className={classes.pitchHeader}>
-                        <Typography className={classes.pitchTitle}>
-                          {pitch.name}: {pitch.title}
-                        </Typography>
-                        <Box
-                          className={`${classes.pitchStatus} ${(
-                            pitch.status || ""
-                          )
-                            .replace(/\s+/g, "")
-                            .toLowerCase()}`}
-                        >
+              {dashboardResult.myPitches.map((pitch) => {
+                const editable = [
+                  "Submitted",
+                  "Followed Up",
+                  "Accepted",
+                  "Rejected",
+                ].includes(pitch.status);
+                return (
+                  <Grid item key={pitch.id}>
+                    <Card className={classes.pitchCard}>
+                      <CardContent className={classes.pitchCardContent}>
+                        {editable && (
                           <Box
-                            className={`${classes.pitchStatusDot} ${(
+                            sx={{
+                              mb: 1,
+                              p: 1,
+                              background: "#f7fafd",
+                              borderRadius: 2,
+                              border: "1px solid #e3e8ee",
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <Box
+                              sx={{
+                                display: isMobile ? "block" : "flex",
+                                alignItems: isMobile ? undefined : "center",
+                                gap: isMobile ? 1.5 : 2,
+                                flexWrap: "wrap",
+                                width: "100%",
+                              }}
+                            >
+                              <FormControl
+                                size="small"
+                                sx={{
+                                  minWidth: 160,
+                                  flex: "1 1 160px",
+                                  width: isMobile ? "100%" : undefined,
+                                  mb: 1.5,
+                                  fontSize: "0.85rem",
+                                }}
+                              >
+                                <InputLabel
+                                  size="small"
+                                  sx={{ fontSize: "0.85rem" }}
+                                >
+                                  Status
+                                </InputLabel>
+                                <Select
+                                  label="Status"
+                                  value={
+                                    editStates[pitch.id]?.status || pitch.status
+                                  }
+                                  onChange={(e) => {
+                                    handleEditChange(
+                                      pitch.id,
+                                      "status",
+                                      e.target.value
+                                    );
+                                  }}
+                                  sx={{
+                                    background: "#fff",
+                                    borderRadius: 1,
+                                    "& .MuiSelect-select": {
+                                      paddingRight: "32px !important",
+                                      fontSize: "0.85rem",
+                                    },
+                                    fontSize: "0.85rem",
+                                  }}
+                                  MenuProps={{
+                                    PaperProps: {
+                                      sx: {
+                                        mt: 0.5,
+                                        fontSize: "0.85rem",
+                                      },
+                                    },
+                                    disablePortal: false,
+                                  }}
+                                >
+                                  {statusOptions.map((opt) => (
+                                    <MenuItem
+                                      key={opt.value}
+                                      value={opt.value}
+                                      sx={{ fontSize: "0.85rem" }}
+                                    >
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          gap: 1,
+                                          fontSize: "0.85rem",
+                                        }}
+                                      >
+                                        {opt.icon} {opt.label}
+                                      </Box>
+                                    </MenuItem>
+                                  ))}
+                                </Select>
+                              </FormControl>
+                              <IconButton
+                                onClick={() =>
+                                  setOpenNotes((prev) => ({
+                                    ...prev,
+                                    [pitch.id]: !prev[pitch.id],
+                                  }))
+                                }
+                                color={
+                                  openNotes[pitch.id] ||
+                                  (editStates[pitch.id]?.notes ?? pitch.notes)
+                                    ? "primary"
+                                    : "inherit"
+                                }
+                                sx={{ minWidth: 40, mb: isMobile ? 1.5 : 0 }}
+                              >
+                                <Badge
+                                  color="secondary"
+                                  variant="dot"
+                                  invisible={
+                                    !(
+                                      editStates[pitch.id]?.notes ?? pitch.notes
+                                    )
+                                  }
+                                >
+                                  <CommentIcon />
+                                </Badge>
+                              </IconButton>
+                              <Chip
+                                label={
+                                  editStates[pitch.id]?.status || pitch.status
+                                }
+                                size="small"
+                                variant="outlined"
+                                color={
+                                  statusChipColor(
+                                    editStates[pitch.id]?.status || pitch.status
+                                  ) as any
+                                }
+                                sx={{
+                                  fontWeight: 600,
+                                  letterSpacing: 0.5,
+                                  mb: isMobile ? 1.5 : 0,
+                                }}
+                              />
+                            </Box>
+                            <Collapse in={openNotes[pitch.id]}>
+                              <Box
+                                sx={{
+                                  background: "#f4f7fb",
+                                  borderRadius: 1,
+                                  border: "1px solid #e0e5ec",
+                                }}
+                              >
+                                <TextField
+                                  label="Notes (optional)"
+                                  value={
+                                    editStates[pitch.id]?.notes ??
+                                    pitch.notes ??
+                                    ""
+                                  }
+                                  onChange={(e) =>
+                                    handleEditChange(
+                                      pitch.id,
+                                      "notes",
+                                      e.target.value
+                                    )
+                                  }
+                                  multiline
+                                  minRows={2}
+                                  fullWidth
+                                  sx={{ mb: 0 }}
+                                />
+                              </Box>
+                            </Collapse>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                justifyContent: isMobile
+                                  ? "stretch"
+                                  : "flex-end",
+                                alignItems: "center",
+                                gap: 1,
+                                mt: isMobile ? 1 : 2,
+                              }}
+                            >
+                              <Button
+                                variant="contained"
+                                size="small"
+                                fullWidth={isMobile}
+                                onClick={() => handleSaveStatusAndNotes(pitch)}
+                                disabled={
+                                  (editStates[pitch.id]?.status === undefined ||
+                                    editStates[pitch.id]?.status ===
+                                      pitch.status) &&
+                                  (editStates[pitch.id]?.notes === undefined ||
+                                    editStates[pitch.id]?.notes ===
+                                      (pitch.notes ?? ""))
+                                }
+                                sx={{
+                                  minWidth: isMobile ? undefined : 60,
+                                  fontWeight: 600,
+                                  fontSize: "0.85rem",
+                                  px: 1.5,
+                                  py: 0.5,
+                                  height: 28,
+                                }}
+                              >
+                                Save
+                              </Button>
+                              {statusSaved[pitch.id] && (
+                                <Chip
+                                  label="Saved"
+                                  color="success"
+                                  size="small"
+                                  icon={<CheckCircleIcon />}
+                                  sx={{ fontWeight: 500 }}
+                                />
+                              )}
+                            </Box>
+                          </Box>
+                        )}
+                        <Divider sx={{ mb: 2 }} />
+                        <Box className={classes.pitchHeader}>
+                          <Typography className={classes.pitchTitle}>
+                            {pitch.title}
+                          </Typography>
+                          <Box
+                            className={`${classes.pitchStatus} ${(
                               pitch.status || ""
                             )
                               .replace(/\s+/g, "")
                               .toLowerCase()}`}
-                          />
-                          {pitch.status || "No Status"}
+                          >
+                            <Box
+                              className={`${classes.pitchStatusDot} ${(
+                                pitch.status || ""
+                              )
+                                .replace(/\s+/g, "")
+                                .toLowerCase()}`}
+                            />
+                            {pitch.status || "No Status"}
+                          </Box>
                         </Box>
+                        <Box className={classes.pitchMatches}>
+                          <Box className={classes.matchList}>
+                            {Array.isArray(pitch.matched_outlets) &&
+                              pitch.matched_outlets
+                                .slice(0, 3)
+                                .map((matched_outlet: any, index: number) => (
+                                  <Box
+                                    key={index}
+                                    className={classes.matchItem}
+                                  >
+                                    <Typography variant="body2">
+                                      {matched_outlet.name}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                      {matched_outlet.match_percentage}%
+                                    </Typography>
+                                  </Box>
+                                ))}
+                          </Box>
+                          <Box className={classes.pitchActions}>
+                            <Button
+                              variant="text"
+                              size="small"
+                              className={`${classes.pitchActionButton} primary`}
+                              onClick={() => handleOpenMatchesModal(pitch)}
+                            >
+                              See Matches
+                            </Button>
+                            <Button
+                              variant="text"
+                              size="small"
+                              className={`${classes.pitchActionButton} secondary`}
+                              onClick={() => handleOpenReminderDialog(pitch.id)}
+                              disabled={
+                                !!reminderStatuses[pitch.id] &&
+                                reminderStatuses[pitch.id] !== "sent"
+                              }
+                            >
+                              {reminderStatuses[pitch.id] &&
+                              reminderStatuses[pitch.id] !== "sent"
+                                ? "Reminder Set"
+                                : "Set Reminder"}
+                            </Button>
+                          </Box>
+                        </Box>
+                        {reminderStatuses[pitch.id] && (
+                          <Chip
+                            label={`Reminder: ${reminderStatuses[pitch.id]}`}
+                            color={
+                              reminderStatuses[pitch.id] === "sent"
+                                ? "success"
+                                : "primary"
+                            }
+                            size="small"
+                            sx={{ mt: 1 }}
+                          />
+                        )}
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                );
+              })}
+            </Grid>
+
+            {/* Saved Outlets Section */}
+            <Box className={classes.savedOutletsSection}>
+              <Typography variant="h5" className={classes.savedOutletsTitle}>
+                Outlets You've Saved for Future Pitches
+              </Typography>
+              <Box className={classes.savedOutletsGrid}>
+                {savedPitches.map((pitch, pitchIndex) => (
+                  <Box key={pitchIndex} className={classes.savedPitchCard}>
+                    <Box
+                      className={classes.savedPitchHeader}
+                      onClick={() =>
+                        isMobile && handleToggleOutlets(pitchIndex)
+                      }
+                    >
+                      <DescriptionIcon className={classes.savedPitchIcon} />
+                      <Typography className={classes.savedPitchTitle}>
+                        {pitch.description}
+                      </Typography>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
+                        {isMobile && (
+                          <KeyboardArrowDownIcon
+                            className={`${classes.savedPitchDropdown} ${
+                              expandedOutlets.includes(pitchIndex)
+                                ? "expanded"
+                                : ""
+                            }`}
+                          />
+                        )}
+                        <IconButton
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteClick(pitch);
+                          }}
+                          sx={{
+                            color: "error.main",
+                            "&:hover": {
+                              backgroundColor: "error.light",
+                              color: "error.contrastText",
+                            },
+                          }}
+                        >
+                          <CloseIcon fontSize="small" />
+                        </IconButton>
                       </Box>
-                      <Box className={classes.pitchMatches}>
-                        <Box className={classes.matchList}>
-                          {pitch.matches.map((match, index) => (
-                            <Box key={index} className={classes.matchItem}>
-                              <Typography variant="body2">{match}</Typography>
+                    </Box>
+                    <Box
+                      className={`${classes.savedOutletsList} ${
+                        !isMobile || expandedOutlets.includes(pitchIndex)
+                          ? "expanded"
+                          : ""
+                      }`}
+                    >
+                      {Array.isArray(pitch.outlets) &&
+                        pitch.outlets
+                          .slice(
+                            0,
+                            isMobile || expandedOutlets.includes(pitchIndex)
+                              ? pitch.outlets.length
+                              : 2
+                          )
+                          .map((outlet, outletIndex) => (
+                            <Box
+                              key={outletIndex}
+                              className={classes.savedOutletItem}
+                            >
+                              <Typography
+                                className={classes.savedOutletName}
+                                onClick={() => handleOpenModal(outlet)}
+                              >
+                                {outlet}
+                              </Typography>
                             </Box>
                           ))}
-                        </Box>
-                        <Box className={classes.pitchActions}>
-                          <Button
-                            variant="text"
-                            size="small"
-                            className={`${classes.pitchActionButton} primary`}
-                            onClick={() => navigate("/results")}
-                          >
-                            See Matches
-                          </Button>
-                          <Button
-                            variant="text"
-                            size="small"
-                            className={`${classes.pitchActionButton} secondary`}
-                            onClick={() => handleOpenReminderDialog(pitch.id)}
-                          >
-                            Set Reminder
-                          </Button>
-                        </Box>
-                      </Box>
-                      {pitch.contactEmail && (
-                        <Typography
-                          variant="body2"
-                          color="textSecondary"
-                          sx={{ mt: 1 }}
+
+                      {!isMobile && pitch.outlets.length > 2 && (
+                        <Box
+                          className={classes.moreButton}
+                          onClick={() => handleToggleOutlets(pitchIndex)}
                         >
-                          Contact: {pitch.contactEmail}
-                        </Typography>
+                          <Typography className={classes.moreButtonText}>
+                            {expandedOutlets.includes(pitchIndex)
+                              ? "Show Less"
+                              : `Show ${pitch.outlets.length - 2} More`}
+                          </Typography>
+                          <KeyboardArrowDownIcon
+                            className={`${classes.moreButtonIcon} ${
+                              expandedOutlets.includes(pitchIndex)
+                                ? "expanded"
+                                : ""
+                            }`}
+                          />
+                        </Box>
                       )}
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
+                    </Box>
+                    <Typography className={classes.savedDate}>
+                      Saved on:{" "}
+                      {new Date(pitch.selected_date).toLocaleDateString()}
+                    </Typography>
+                  </Box>
+                ))}
+                {savedPitches.length === 0 && (
+                  <Box className={classes.emptyStateCard}>
+                    <DescriptionIcon className={classes.emptyStateIcon} />
+                    <Typography variant="h6" className={classes.emptyStateText}>
+                      No saved outlets yet. Start by saving some outlets to your
+                      pitches!
+                    </Typography>
+                  </Box>
+                )}
+              </Box>
+            </Box>
 
             {planFeatures.hasPremiumInsights && (
               <Box className={classes.premiumInsights}>
