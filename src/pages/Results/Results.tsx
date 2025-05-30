@@ -413,7 +413,7 @@ const Results = () => {
                         <strong>Outlet</strong>
                       </TableCell>
                       <TableCell>
-                        <strong>Contact Email</strong>
+                        <strong>Contact Email/Online Form</strong>
                       </TableCell>
                       {userRole === "basic" && (
                         <TableCell>
