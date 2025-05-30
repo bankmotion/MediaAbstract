@@ -312,140 +312,90 @@ const Results = () => {
               <Box className={classes.mobileList}>
                 {currentOutlets.map((outlet, index) => (
                   <Paper key={index} className={classes.mobileCard}>
-                    <Box
-                      display="flex"
-                      justifyContent="space-between"
-                      alignItems="center"
-                    >
-                      <Typography
-                        className={classes.name}
-                        onClick={() => handleOpenModal(outlet.outlet.name)}
-                        style={{ cursor: "pointer", color: "#1976d2" }}
-                      >
-                        {outlet.outlet.name}
-                      </Typography>
-                      <Checkbox
-                        size="small"
-                        checked={selectedOutlets.includes(outlet.outlet.name)}
-                        onChange={() =>
-                          handleCheckboxChange(outlet.outlet.name)
-                        }
-                      />
-                    </Box>
-                    {outlet.outlet.ai_partnered === "Yes" ? (
-                      <Box display="flex" alignItems="center" gap={0.5}>
-                        <span className={classes.tooltip}>✓ AI Partnered</span>
-                        <Tooltip
-                          title={
-                            <Box>
-                              <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 600, mb: 1 }}
-                              >
-                                AI Partnered
-                              </Typography>
-                              <Typography variant="body2">
-                                This outlet has a confirmed partnership with an
-                                AI platform like OpenAI. Publishing here may
-                                increase your story's visibility in AI-generated
-                                search results, summaries, and tools like
-                                ChatGPT or Perplexity.
-                              </Typography>
-                            </Box>
-                          }
-                          arrow
-                          classes={{ tooltip: classes.matchExplanationTooltip }}
-                        >
-                          <Info className={classes.matchExplanationIcon} />
-                        </Tooltip>
-                      </Box>
+                    {userRole === "basic" ? (
+                      <>
+                        <Typography className={classes.name}>
+                          {outlet.outlet.name}
+                        </Typography>
+                        <Typography className={classes.guide}>
+                          Contact: {outlet.outlet.contact_email}
+                        </Typography>
+                        <Typography className={classes.guide}>
+                          Guidelines: {outlet.outlet.guidelines}
+                        </Typography>
+                      </>
                     ) : (
-                      <Box display="flex" alignItems="center" gap={0.5}>
-                        <span
-                          className={classes.tooltip}
-                          style={{ color: "#666" }}
+                      <>
+                        <Box
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
                         >
-                          Unknown
-                        </span>
-                        <Tooltip
-                          title={
-                            <Box>
-                              <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 600, mb: 1 }}
-                              >
-                                AI Partnership Unknown
-                              </Typography>
-                              <Typography variant="body2">
-                                We couldn't confirm an AI partnership for this
-                                outlet. Status may change over time as more
-                                media organizations sign licensing agreements
-                                with AI platforms.
-                              </Typography>
-                            </Box>
-                          }
-                          arrow
-                          classes={{ tooltip: classes.matchExplanationTooltip }}
-                        >
-                          <Info className={classes.matchExplanationIcon} />
-                        </Tooltip>
-                      </Box>
-                    )}
-                    <Typography className={classes.guide}>
-                      Contact: {outlet.outlet.contact_email}
-                    </Typography>
-                    <Typography className={classes.score}>
-                      {outlet.match_confidence} Match
-                      <Tooltip
-                        title={
-                          <Box>
-                            <Typography
-                              variant="body2"
-                              sx={{ fontWeight: 600, mb: 1 }}
-                            >
-                              Why This Match?
-                            </Typography>
-                            <Typography variant="body2">
-                              {outlet.match_explanation ||
-                                "No match explanation available"}
-                            </Typography>
+                          <Typography
+                            className={classes.name}
+                            onClick={() => handleOpenModal(outlet.outlet.name)}
+                            style={{ cursor: "pointer", color: "#1976d2" }}
+                          >
+                            {outlet.outlet.name}
+                          </Typography>
+                          <Checkbox
+                            size="small"
+                            checked={selectedOutlets.includes(
+                              outlet.outlet.name
+                            )}
+                            onChange={() =>
+                              handleCheckboxChange(outlet.outlet.name)
+                            }
+                          />
+                        </Box>
+                        <Typography className={classes.score}>
+                          {outlet.match_confidence} Match
+                        </Typography>
+                        {outlet.outlet.ai_partnered === "Yes" ? (
+                          <Box display="flex" alignItems="center" gap={0.5}>
+                            <span className={classes.tooltip}>
+                              ✓ AI Partnered
+                            </span>
                           </Box>
-                        }
-                        arrow
-                        classes={{ tooltip: classes.matchExplanationTooltip }}
-                      >
-                        <HelpOutline className={classes.matchExplanationIcon} />
-                      </Tooltip>
-                    </Typography>
-                    <a
-                      href={outlet.outlet.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      onClick={(e) =>
-                        handlePitchLinkClick(
-                          {
-                            name: outlet.outlet.name,
-                            url: outlet.outlet.url,
-                            pitchId: outlet.pitch_id,
-                          },
-                          e
-                        )
-                      }
-                      style={{
-                        display: "block",
-                        textAlign: "center",
-                        marginTop: "8px",
-                        color: theme.palette.primary.main,
-                        textDecoration: "underline",
-                      }}
-                    >
-                      <Tooltip
-                        title="View submission guidelines for this outlet"
-                        arrow
-                      >
-                        <span>View Pitch Link</span>
-                      </Tooltip>
-                    </a>
+                        ) : (
+                          <Box display="flex" alignItems="center" gap={0.5}>
+                            <span
+                              className={classes.tooltip}
+                              style={{ color: "#666" }}
+                            >
+                              Unknown
+                            </span>
+                          </Box>
+                        )}
+                        <Typography className={classes.guide}>
+                          Contact: {outlet.outlet.contact_email}
+                        </Typography>
+                        <a
+                          href={outlet.outlet.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) =>
+                            handlePitchLinkClick(
+                              {
+                                name: outlet.outlet.name,
+                                url: outlet.outlet.url,
+                                pitchId: outlet.pitch_id,
+                              },
+                              e
+                            )
+                          }
+                          style={{
+                            display: "block",
+                            textAlign: "center",
+                            marginTop: "8px",
+                            color: theme.palette.primary.main,
+                            textDecoration: "underline",
+                          }}
+                        >
+                          <span>View Pitch Link</span>
+                        </a>
+                      </>
+                    )}
                   </Paper>
                 ))}
               </Box>
@@ -458,39 +408,30 @@ const Results = () => {
                 <Table>
                   <TableHead>
                     <TableRow>
+                      <TableCell>Select</TableCell>
                       <TableCell>
-                        <Box display="flex" alignItems="center">
-                          <Typography variant="body1">Select</Typography>
-                          <IconButton onClick={handleMenuOpen}>
-                            <MoreVert />
-                          </IconButton>
-                          <Menu
-                            anchorEl={anchorEl}
-                            open={Boolean(anchorEl)}
-                            onClose={handleMenuClose}
-                          >
-                            <MenuItem onClick={handleSelectAll}>
-                              {selectAll ? "Deselect All" : "Select All"}
-                            </MenuItem>
-                          </Menu>
-                        </Box>
-                      </TableCell>
-                      <TableCell className={classes.tableCell}>
                         <strong>Outlet</strong>
                       </TableCell>
-                      <TableCell className={classes.tableCell}>
-                        <strong>Contact Email/Online Form</strong>
+                      <TableCell>
+                        <strong>Contact Email</strong>
                       </TableCell>
-                      <TableCell
-                        className={`${classes.tableCell} ${classes.pitchLinkCell}`}
-                      >
+                      {userRole === "basic" && (
+                        <TableCell>
+                          <strong>Guidelines</strong>
+                        </TableCell>
+                      )}
+                      {userRole === "team" && (
+                        <>
+                          <TableCell>
+                            <strong>Match Confidence</strong>
+                          </TableCell>
+                          <TableCell>
+                            <strong>AI Partnered</strong>
+                          </TableCell>
+                        </>
+                      )}
+                      <TableCell>
                         <strong>Pitch Link</strong>
-                      </TableCell>
-                      <TableCell className={classes.tableCell}>
-                        <strong>Match Confidence</strong>
-                      </TableCell>
-                      <TableCell className={classes.tableCell}>
-                        <strong>AI Partnered</strong>
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -517,129 +458,49 @@ const Results = () => {
                           </Typography>
                         </TableCell>
                         <TableCell>{outlet.outlet.contact_email}</TableCell>
+                        {userRole === "basic" && (
+                          <TableCell>{outlet.outlet.guidelines}</TableCell>
+                        )}
+                        {userRole === "team" && (
+                          <>
+                            <TableCell>
+                              <Box display="flex" alignItems="center">
+                                {outlet.match_confidence}% Match
+                              </Box>
+                            </TableCell>
+                            <TableCell>
+                              {outlet.outlet.ai_partnered === "Yes" ? (
+                                <span className={classes.tooltip}>
+                                  ✓ AI Partnered
+                                </span>
+                              ) : (
+                                <span
+                                  className={classes.tooltip}
+                                  style={{ color: "#666" }}
+                                >
+                                  Unknown
+                                </span>
+                              )}
+                            </TableCell>
+                          </>
+                        )}
                         <TableCell>
-                          <Tooltip
-                            title="View submission guidelines for this outlet"
-                            arrow
+                          <a
+                            href={outlet.outlet.url}
+                            onClick={(e) =>
+                              handlePitchLinkClick(
+                                {
+                                  name: outlet.outlet.name,
+                                  url: outlet.outlet.url,
+                                  pitchId: outlet.pitch_id,
+                                },
+                                e
+                              )
+                            }
+                            style={{ color: theme.palette.primary.main }}
                           >
-                            <a
-                              href={outlet.outlet.url}
-                              onClick={(e) =>
-                                handlePitchLinkClick(
-                                  {
-                                    name: outlet.outlet.name,
-                                    url: outlet.outlet.url,
-                                    pitchId: outlet.pitch_id,
-                                  },
-                                  e
-                                )
-                              }
-                              style={{ color: theme.palette.primary.main }}
-                            >
-                              View Pitch Link
-                            </a>
-                          </Tooltip>
-                        </TableCell>
-                        <TableCell>
-                          <Box display="flex" alignItems="center">
-                            {outlet.match_confidence}% Match
-                            <Tooltip
-                              title={
-                                <Box>
-                                  <Typography
-                                    variant="body2"
-                                    sx={{ fontWeight: 600, mb: 1 }}
-                                  >
-                                    Why This Match?
-                                  </Typography>
-                                  <Typography variant="body2">
-                                    {outlet.match_explanation ||
-                                      "No match explanation available"}
-                                  </Typography>
-                                </Box>
-                              }
-                              arrow
-                              classes={{
-                                tooltip: classes.matchExplanationTooltip,
-                              }}
-                            >
-                              <HelpOutline
-                                className={classes.matchExplanationIcon}
-                              />
-                            </Tooltip>
-                          </Box>
-                        </TableCell>
-                        <TableCell>
-                          {outlet.outlet.ai_partnered === "Yes" ? (
-                            <Box display="flex" alignItems="center" gap={0.5}>
-                              <span className={classes.tooltip}>
-                                ✓ AI Partnered
-                              </span>
-                              <Tooltip
-                                title={
-                                  <Box>
-                                    <Typography
-                                      variant="body2"
-                                      sx={{ fontWeight: 600, mb: 1 }}
-                                    >
-                                      AI Partnered
-                                    </Typography>
-                                    <Typography variant="body2">
-                                      This outlet has a confirmed partnership
-                                      with an AI platform like OpenAI.
-                                      Publishing here may increase your story's
-                                      visibility in AI-generated search results,
-                                      summaries, and tools like ChatGPT or
-                                      Perplexity.
-                                    </Typography>
-                                  </Box>
-                                }
-                                arrow
-                                classes={{
-                                  tooltip: classes.matchExplanationTooltip,
-                                }}
-                              >
-                                <Info
-                                  className={classes.matchExplanationIcon}
-                                />
-                              </Tooltip>
-                            </Box>
-                          ) : (
-                            <Box display="flex" alignItems="center" gap={0.5}>
-                              <span
-                                className={classes.tooltip}
-                                style={{ color: "#666" }}
-                              >
-                                Unknown
-                              </span>
-                              <Tooltip
-                                title={
-                                  <Box>
-                                    <Typography
-                                      variant="body2"
-                                      sx={{ fontWeight: 600, mb: 1 }}
-                                    >
-                                      AI Partnership Unknown
-                                    </Typography>
-                                    <Typography variant="body2">
-                                      We couldn't confirm an AI partnership for
-                                      this outlet. Status may change over time
-                                      as more media organizations sign licensing
-                                      agreements with AI platforms.
-                                    </Typography>
-                                  </Box>
-                                }
-                                arrow
-                                classes={{
-                                  tooltip: classes.matchExplanationTooltip,
-                                }}
-                              >
-                                <Info
-                                  className={classes.matchExplanationIcon}
-                                />
-                              </Tooltip>
-                            </Box>
-                          )}
+                            View Pitch Link
+                          </a>
                         </TableCell>
                       </TableRow>
                     ))}

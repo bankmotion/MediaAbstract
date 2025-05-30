@@ -451,7 +451,7 @@ const Matches: React.FC = () => {
                   <strong>Outlet</strong>
                 </TableCell>
                 <TableCell className={classes.tableCell}>
-                  <strong>Contact Email</strong>
+                  <strong>Contact Email/Online Form</strong>
                 </TableCell>
                 <TableCell className={classes.tableCell}>
                   <strong>Pitch Link</strong>
