@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -43,6 +43,7 @@ import { Outlet } from "../../redux/slices/outletsSlice";
 import useStyles from "./styles";
 import OutletDetailModal from "../../components/OutletDetailModal/OutletDetailModal";
 import SubmissionDialog from "../../components/SubmissionDialog/SubmissionDialog";
+import { supabase } from "../../utils/supabase";
 
 interface Match {
   name: string;
@@ -84,6 +85,8 @@ const Matches: React.FC = () => {
     url: string;
     pitchId: string;
   } | null>(null);
+
+  const [planType, setPlanType] = useState<string | null>(null);
 
   const outletsPerPage = isMobile ? 3 : 5;
   const indexOfLastOutlet = currentPage * outletsPerPage;
@@ -194,6 +197,23 @@ const Matches: React.FC = () => {
     }
     setSubmissionDialogOpen(false);
   };
+
+  useEffect(() => {
+    const fetchPlanType = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from("user_profiles")
+          .select("plan_type")
+          .eq("user_id", session.user.id)
+          .single();
+        if (profile) setPlanType(profile.plan_type);
+      }
+    };
+    fetchPlanType();
+  }, []);
 
   if (!matches || !pitchTitle) {
     return (
@@ -309,87 +329,8 @@ const Matches: React.FC = () => {
                     onChange={() => handleSelectOutlet(outlet.name)}
                   />
                 </Box>
-                {outlet.ai_partnered === "Yes" ? (
-                  <Box display="flex" alignItems="center" gap={0.5}>
-                    <span className={classes.tooltip}>✓ AI Partnered</span>
-                    <Tooltip
-                      title={
-                        <Box>
-                          <Typography
-                            variant="body2"
-                            sx={{ fontWeight: 600, mb: 1 }}
-                          >
-                            AI Partnered
-                          </Typography>
-                          <Typography variant="body2">
-                            This outlet has a confirmed partnership with an AI
-                            platform like OpenAI. Publishing here may increase
-                            your story's visibility in AI-generated search
-                            results, summaries, and tools like ChatGPT or
-                            Perplexity.
-                          </Typography>
-                        </Box>
-                      }
-                      arrow
-                      classes={{ tooltip: classes.matchExplanationTooltip }}
-                    >
-                      <Info className={classes.matchExplanationIcon} />
-                    </Tooltip>
-                  </Box>
-                ) : (
-                  <Box display="flex" alignItems="center" gap={0.5}>
-                    <span className={classes.tooltip} style={{ color: "#666" }}>
-                      Unknown
-                    </span>
-                    <Tooltip
-                      title={
-                        <Box>
-                          <Typography
-                            variant="body2"
-                            sx={{ fontWeight: 600, mb: 1 }}
-                          >
-                            AI Partnership Unknown
-                          </Typography>
-                          <Typography variant="body2">
-                            We couldn't confirm an AI partnership for this
-                            outlet. Status may change over time as more media
-                            organizations sign licensing agreements with AI
-                            platforms.
-                          </Typography>
-                        </Box>
-                      }
-                      arrow
-                      classes={{ tooltip: classes.matchExplanationTooltip }}
-                    >
-                      <Info className={classes.matchExplanationIcon} />
-                    </Tooltip>
-                  </Box>
-                )}
                 <Typography className={classes.guide}>
                   Contact: {outlet.email}
-                </Typography>
-                <Typography className={classes.score}>
-                  {outlet.match_percentage} Match
-                  <Tooltip
-                    title={
-                      <Box>
-                        <Typography
-                          variant="body2"
-                          sx={{ fontWeight: 600, mb: 1 }}
-                        >
-                          Why This Match?
-                        </Typography>
-                        <Typography variant="body2">
-                          {outlet.match_explanation ||
-                            "No match explanation available"}
-                        </Typography>
-                      </Box>
-                    }
-                    arrow
-                    classes={{ tooltip: classes.matchExplanationTooltip }}
-                  >
-                    <HelpOutline className={classes.matchExplanationIcon} />
-                  </Tooltip>
                 </Typography>
                 <a
                   href={outlet.url}
@@ -413,13 +354,49 @@ const Matches: React.FC = () => {
                     textDecoration: "underline",
                   }}
                 >
-                  <Tooltip
-                    title="View submission guidelines for this outlet"
-                    arrow
-                  >
-                    <span>View Pitch Link</span>
-                  </Tooltip>
+                  <span>View Pitch Link</span>
                 </a>
+                {planType !== "basic" && (
+                  <>
+                    <Typography className={classes.score}>
+                      {outlet.match_percentage} Match
+                      <Tooltip
+                        title={
+                          <Box>
+                            <Typography
+                              variant="body2"
+                              sx={{ fontWeight: 600, mb: 1 }}
+                            >
+                              Why This Match?
+                            </Typography>
+                            <Typography variant="body2">
+                              {outlet.match_explanation ||
+                                "No match explanation available"}
+                            </Typography>
+                          </Box>
+                        }
+                        arrow
+                        classes={{ tooltip: classes.matchExplanationTooltip }}
+                      >
+                        <HelpOutline className={classes.matchExplanationIcon} />
+                      </Tooltip>
+                    </Typography>
+                    {outlet.ai_partnered === "Yes" ? (
+                      <Box display="flex" alignItems="center" gap={0.5}>
+                        <span className={classes.tooltip}>✓ AI Partnered</span>
+                      </Box>
+                    ) : (
+                      <Box display="flex" alignItems="center" gap={0.5}>
+                        <span
+                          className={classes.tooltip}
+                          style={{ color: "#666" }}
+                        >
+                          Unknown
+                        </span>
+                      </Box>
+                    )}
+                  </>
+                )}
               </Paper>
             ))}
           </Box>
@@ -456,12 +433,16 @@ const Matches: React.FC = () => {
                 <TableCell className={classes.tableCell}>
                   <strong>Pitch Link</strong>
                 </TableCell>
-                <TableCell className={classes.tableCell}>
-                  <strong>Match Confidence</strong>
-                </TableCell>
-                <TableCell className={classes.tableCell}>
-                  <strong>AI Partnered</strong>
-                </TableCell>
+                {planType !== "basic" && (
+                  <>
+                    <TableCell className={classes.tableCell}>
+                      <strong>Match Confidence</strong>
+                    </TableCell>
+                    <TableCell className={classes.tableCell}>
+                      <strong>AI Partnered</strong>
+                    </TableCell>
+                  </>
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -484,114 +465,70 @@ const Matches: React.FC = () => {
                   </TableCell>
                   <TableCell>{outlet.email}</TableCell>
                   <TableCell>
-                    <Tooltip
-                      title="View submission guidelines for this outlet"
-                      arrow
+                    <a
+                      href={outlet.url}
+                      onClick={(e) =>
+                        handlePitchLinkClick(
+                          {
+                            name: outlet.name,
+                            url: outlet.url,
+                            pitchId: pitchId,
+                          },
+                          e
+                        )
+                      }
+                      style={{ color: theme.palette.primary.main }}
                     >
-                      <a
-                        href={outlet.url}
-                        onClick={(e) =>
-                          handlePitchLinkClick(
-                            {
-                              name: outlet.name,
-                              url: outlet.url,
-                              pitchId: pitchId,
-                            },
-                            e
-                          )
-                        }
-                        style={{ color: theme.palette.primary.main }}
-                      >
-                        View Pitch Link
-                      </a>
-                    </Tooltip>
+                      View Pitch Link
+                    </a>
                   </TableCell>
-                  <TableCell>
-                    <Box display="flex" alignItems="center">
-                      {outlet.match_percentage} Match
-                      <Tooltip
-                        title={
-                          <Box>
-                            <Typography
-                              variant="body2"
-                              sx={{ fontWeight: 600, mb: 1 }}
-                            >
-                              Why This Match?
-                            </Typography>
-                            <Typography variant="body2">
-                              {outlet.match_explanation ||
-                                "No match explanation available"}
-                            </Typography>
-                          </Box>
-                        }
-                        arrow
-                        classes={{ tooltip: classes.matchExplanationTooltip }}
-                      >
-                        <HelpOutline className={classes.matchExplanationIcon} />
-                      </Tooltip>
-                    </Box>
-                  </TableCell>
-                  <TableCell>
-                    {outlet.ai_partnered === "Yes" ? (
-                      <Box display="flex" alignItems="center" gap={0.5}>
-                        <span className={classes.tooltip}>✓ AI Partnered</span>
-                        <Tooltip
-                          title={
-                            <Box>
-                              <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 600, mb: 1 }}
-                              >
-                                AI Partnered
-                              </Typography>
-                              <Typography variant="body2">
-                                This outlet has a confirmed partnership with an
-                                AI platform like OpenAI. Publishing here may
-                                increase your story's visibility in AI-generated
-                                search results, summaries, and tools like
-                                ChatGPT or Perplexity.
-                              </Typography>
-                            </Box>
-                          }
-                          arrow
-                          classes={{ tooltip: classes.matchExplanationTooltip }}
-                        >
-                          <Info className={classes.matchExplanationIcon} />
-                        </Tooltip>
-                      </Box>
-                    ) : (
-                      <Box display="flex" alignItems="center" gap={0.5}>
-                        <span
-                          className={classes.tooltip}
-                          style={{ color: "#666" }}
-                        >
-                          Unknown
-                        </span>
-                        <Tooltip
-                          title={
-                            <Box>
-                              <Typography
-                                variant="body2"
-                                sx={{ fontWeight: 600, mb: 1 }}
-                              >
-                                AI Partnership Unknown
-                              </Typography>
-                              <Typography variant="body2">
-                                We couldn't confirm an AI partnership for this
-                                outlet. Status may change over time as more
-                                media organizations sign licensing agreements
-                                with AI platforms.
-                              </Typography>
-                            </Box>
-                          }
-                          arrow
-                          classes={{ tooltip: classes.matchExplanationTooltip }}
-                        >
-                          <Info className={classes.matchExplanationIcon} />
-                        </Tooltip>
-                      </Box>
-                    )}
-                  </TableCell>
+                  {planType !== "basic" && (
+                    <>
+                      <TableCell>
+                        <Box display="flex" alignItems="center">
+                          {outlet.match_percentage} Match
+                          <Tooltip
+                            title={
+                              <Box>
+                                <Typography
+                                  variant="body2"
+                                  sx={{ fontWeight: 600, mb: 1 }}
+                                >
+                                  Why This Match?
+                                </Typography>
+                                <Typography variant="body2">
+                                  {outlet.match_explanation ||
+                                    "No match explanation available"}
+                                </Typography>
+                              </Box>
+                            }
+                            arrow
+                            classes={{
+                              tooltip: classes.matchExplanationTooltip,
+                            }}
+                          >
+                            <HelpOutline
+                              className={classes.matchExplanationIcon}
+                            />
+                          </Tooltip>
+                        </Box>
+                      </TableCell>
+                      <TableCell>
+                        {outlet.ai_partnered === "Yes" ? (
+                          <span className={classes.tooltip}>
+                            ✓ AI Partnered
+                          </span>
+                        ) : (
+                          <span
+                            className={classes.tooltip}
+                            style={{ color: "#666" }}
+                          >
+                            Unknown
+                          </span>
+                        )}
+                      </TableCell>
+                    </>
+                  )}
                 </TableRow>
               ))}
             </TableBody>

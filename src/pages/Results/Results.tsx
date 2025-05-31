@@ -320,9 +320,30 @@ const Results = () => {
                         <Typography className={classes.guide}>
                           Contact: {outlet.outlet.contact_email}
                         </Typography>
-                        <Typography className={classes.guide}>
-                          Guidelines: {outlet.outlet.guidelines}
-                        </Typography>
+                        <a
+                          href={outlet.outlet.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={(e) =>
+                            handlePitchLinkClick(
+                              {
+                                name: outlet.outlet.name,
+                                url: outlet.outlet.url,
+                                pitchId: outlet.pitch_id,
+                              },
+                              e
+                            )
+                          }
+                          style={{
+                            display: "block",
+                            textAlign: "center",
+                            marginTop: "8px",
+                            color: theme.palette.primary.main,
+                            textDecoration: "underline",
+                          }}
+                        >
+                          <span>View Pitch Link</span>
+                        </a>
                       </>
                     ) : (
                       <>
@@ -415,11 +436,6 @@ const Results = () => {
                       <TableCell>
                         <strong>Contact Email/Online Form</strong>
                       </TableCell>
-                      {userRole === "basic" && (
-                        <TableCell>
-                          <strong>Guidelines</strong>
-                        </TableCell>
-                      )}
                       {userRole === "team" && (
                         <>
                           <TableCell>
@@ -458,9 +474,6 @@ const Results = () => {
                           </Typography>
                         </TableCell>
                         <TableCell>{outlet.outlet.contact_email}</TableCell>
-                        {userRole === "basic" && (
-                          <TableCell>{outlet.outlet.guidelines}</TableCell>
-                        )}
                         {userRole === "team" && (
                           <>
                             <TableCell>
