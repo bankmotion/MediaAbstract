@@ -77,9 +77,30 @@ const Home = () => {
     navigate("/");
   };
 
-  const handleLoginClick = () => {
+  const handleLoginClick = async () => {
     if (user) {
-      navigate("/writers/dashboard");
+      // Fetch user's plan type from Supabase
+      const { data: profile } = await supabase
+        .from("user_profiles")
+        .select("plan_type")
+        .eq("user_id", user.id)
+        .single();
+
+      if (profile) {
+        if (profile.plan_type === "writer") {
+          navigate("/writers/dashboard");
+        } else if (
+          ["basic", "team", "enterprise"].includes(profile.plan_type)
+        ) {
+          navigate("/agencies/dashboard");
+        } else {
+          // Fallback to writers dashboard if plan type is unknown
+          navigate("/writers/dashboard");
+        }
+      } else {
+        // Fallback to writers dashboard if no profile found
+        navigate("/writers/dashboard");
+      }
     } else {
       navigate("/login");
     }

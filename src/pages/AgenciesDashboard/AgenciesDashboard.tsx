@@ -210,6 +210,8 @@ const AgenciesDashboard = () => {
     [key: number]: string;
   }>({});
 
+  const [planType, setPlanType] = useState<string | null>(null);
+
   const handleEditChange = (
     pitchId: string,
     field: "status" | "notes",
@@ -279,6 +281,17 @@ const AgenciesDashboard = () => {
       }
       setUserIdState(session.user.id);
       dispatch(setUserId(session.user.id));
+
+      // Fetch user's plan type
+      const { data: profile } = await supabase
+        .from("user_profiles")
+        .select("plan_type")
+        .eq("user_id", session.user.id)
+        .single();
+
+      if (profile) {
+        setPlanType(profile.plan_type);
+      }
     };
     checkSession();
     // Set up auth state listener
@@ -485,7 +498,10 @@ const AgenciesDashboard = () => {
               startIcon={<Logout />}
               color="primary"
               variant="outlined"
-              onClick={() => navigate("/")}
+              onClick={async () => {
+                await supabase.auth.signOut();
+                navigate("/");
+              }}
               sx={{ fontWeight: 500 }}
               className={classes.logoutButton}
             >
@@ -550,12 +566,11 @@ const AgenciesDashboard = () => {
 
             <Grid container spacing={3} className={classes.pitchGrid}>
               {dashboardResult.myPitches.map((pitch) => {
-                const editable = [
-                  "Submitted",
-                  "Followed Up",
-                  "Accepted",
-                  "Rejected",
-                ].includes(pitch.status);
+                const editable =
+                  planType !== "basic" &&
+                  ["Submitted", "Followed Up", "Accepted", "Rejected"].includes(
+                    pitch.status
+                  );
                 return (
                   <Grid item key={pitch.id}>
                     <Card className={classes.pitchCard}>
@@ -774,22 +789,24 @@ const AgenciesDashboard = () => {
                           <Typography className={classes.pitchTitle}>
                             {pitch.title}
                           </Typography>
-                          <Box
-                            className={`${classes.pitchStatus} ${(
-                              pitch.status || ""
-                            )
-                              .replace(/\s+/g, "")
-                              .toLowerCase()}`}
-                          >
+                          {planType !== "basic" && (
                             <Box
-                              className={`${classes.pitchStatusDot} ${(
+                              className={`${classes.pitchStatus} ${(
                                 pitch.status || ""
                               )
                                 .replace(/\s+/g, "")
                                 .toLowerCase()}`}
-                            />
-                            {pitch.status || "No Status"}
-                          </Box>
+                            >
+                              <Box
+                                className={`${classes.pitchStatusDot} ${(
+                                  pitch.status || ""
+                                )
+                                  .replace(/\s+/g, "")
+                                  .toLowerCase()}`}
+                              />
+                              {pitch.status || "No Status"}
+                            </Box>
+                          )}
                         </Box>
                         <Box className={classes.pitchMatches}>
                           <Box className={classes.matchList}>
@@ -1059,130 +1076,6 @@ const AgenciesDashboard = () => {
             </Box>
           </Box>
         </Box>
-
-        <Dialog
-          open={reminderDialogOpen}
-          onClose={() => setReminderDialogOpen(false)}
-          maxWidth="xs"
-          fullWidth
-          PaperProps={{
-            sx: {
-              borderRadius: 3,
-              p: 2,
-              boxShadow: 10,
-              background: "#fff",
-            },
-          }}
-        >
-          <Box
-            display="flex"
-            justifyContent="space-between"
-            alignItems="center"
-            px={2}
-            pt={1}
-          >
-            <Box display="flex" alignItems="center" sx={{ margin: "10px" }}>
-              <CalendarToday sx={{ mr: 1, color: "primary.main" }} />
-              <Typography variant="h6" fontWeight={600}>
-                Set Follow-Up Reminder
-              </Typography>
-            </Box>
-            <IconButton
-              onClick={() => setReminderDialogOpen(false)}
-              size="small"
-            >
-              <Close />
-            </IconButton>
-          </Box>
-
-          <DialogContent sx={{ mt: 2, marginBottom: "15px" }}>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              mb={1}
-              sx={{ margin: "15px" }}
-            >
-              Choose the date and time you'd like to be reminded to follow up.
-            </Typography>
-
-            <Box
-              sx={{
-                display: "flex",
-                gap: 2,
-                flexDirection: { xs: "column", sm: "row" },
-              }}
-            >
-              <TextField
-                label="Reminder Date"
-                type="date"
-                value={reminderDate}
-                onChange={(e) => setReminderDate(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-                fullWidth
-                InputProps={{
-                  sx: {
-                    borderRadius: 2,
-                    backgroundColor: "#f9f9f9",
-                  },
-                }}
-              />
-              <TextField
-                label="Reminder Time"
-                type="time"
-                value={reminderTime}
-                onChange={(e) => setReminderTime(e.target.value)}
-                InputLabelProps={{ shrink: true }}
-                fullWidth
-                InputProps={{
-                  sx: {
-                    borderRadius: 2,
-                    backgroundColor: "#f9f9f9",
-                  },
-                }}
-              />
-            </Box>
-          </DialogContent>
-
-          <DialogActions sx={{ px: 3, pb: 2 }}>
-            <Button
-              onClick={() => setReminderDialogOpen(false)}
-              variant="text"
-              sx={{ textTransform: "none", fontWeight: 500 }}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleSaveReminder}
-              variant="contained"
-              disabled={!reminderDate}
-              sx={{
-                textTransform: "none",
-                borderRadius: 2,
-                px: 3,
-                fontWeight: 600,
-                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
-              }}
-            >
-              Save Reminder
-            </Button>
-          </DialogActions>
-        </Dialog>
-
-        <Zoom in={showScrollTop}>
-          <Fab
-            color="primary"
-            size="medium"
-            onClick={scrollToTop}
-            sx={{
-              position: "fixed",
-              bottom: 60,
-              right: 40,
-              zIndex: 1000,
-            }}
-          >
-            <KeyboardArrowUpIcon />
-          </Fab>
-        </Zoom>
       </Box>
     </Box>
   );
