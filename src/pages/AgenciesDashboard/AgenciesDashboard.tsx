@@ -11,13 +11,8 @@ import {
   Divider,
   AppBar,
   Toolbar,
-  Dialog,
-  DialogContent,
-  DialogActions,
   TextField,
   IconButton,
-  Fab,
-  Zoom,
   Badge,
   Chip,
   MenuItem,
@@ -28,8 +23,6 @@ import {
 } from "@mui/material";
 import {
   Logout,
-  CalendarToday,
-  Close,
   History as HistoryIcon,
   Send as SendIcon,
   Edit as EditIcon,
@@ -266,6 +259,7 @@ const AgenciesDashboard = () => {
         pitchTitle: pitch.title,
         matches: pitch.matched_outlets,
         pitchId: pitch.id,
+        planType: planType || "basic",
       },
     });
   };
@@ -822,7 +816,7 @@ const AgenciesDashboard = () => {
                                       {matched_outlet.name}
                                     </Typography>
                                     <Typography variant="body2">
-                                      {matched_outlet.match_percentage}%
+                                      {matched_outlet.match_percentage}
                                     </Typography>
                                   </Box>
                                 ))}

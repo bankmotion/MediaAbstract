@@ -53,6 +53,9 @@ const Onboarding = () => {
   const [userRole, setUserRole] = useState<"writer" | "agency" | null>(null);
   const [planType, setPlanType] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [matchesPerDay, setMatchesPerDay] = useState<string | number>("");
+  const [submissionsToday, setSubmissionsToday] = useState<number>(0);
+  const [limitReached, setLimitReached] = useState(false);
 
   const [errors, setErrors] = useState({ abstract: false, industry: false });
 
@@ -93,6 +96,15 @@ const Onboarding = () => {
 
         if (profileData) {
           setPlanType(profileData.plan_type || null);
+          if (profileData.plan_type === "basic") {
+            setMatchesPerDay(5);
+          } else if (profileData.plan_type === "team") {
+            setMatchesPerDay(15);
+          } else if (profileData.plan_type === "enterprise") {
+            setMatchesPerDay("Unlimited");
+          } else {
+            setMatchesPerDay("");
+          }
           if (profileData.plan_type === "writer") {
             setUserRole("writer");
           } else if (
@@ -102,6 +114,27 @@ const Onboarding = () => {
           } else {
             console.error("Invalid user role");
             navigate("/login");
+          }
+
+          // Fetch submissions in the last 24 hours
+          if (["basic", "team", "enterprise"].includes(profileData.plan_type)) {
+            const { data: submissions, error: submissionsError } =
+              await supabase
+                .from("pitches")
+                .select("id, created_at")
+                .eq("user_id", session.user.id)
+                .gte(
+                  "created_at",
+                  new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
+                );
+            if (!submissionsError && submissions) {
+              setSubmissionsToday(submissions.length);
+              let limit = 0;
+              if (profileData.plan_type === "basic") limit = 5;
+              else if (profileData.plan_type === "team") limit = 15;
+              else if (profileData.plan_type === "enterprise") limit = Infinity;
+              setLimitReached(submissions.length >= limit);
+            }
           }
         }
       } catch (error) {
@@ -317,9 +350,21 @@ const Onboarding = () => {
           color="primary"
           className={classes.subbutton}
           onClick={handleSubmit}
+          disabled={limitReached}
         >
           Submit
         </Button>
+        {limitReached && (
+          <Typography variant="body2" sx={{ color: "#d32f2f", mt: 1, mb: 2 }}>
+            You have reached your daily match limit. Please try again in 24
+            hours.
+          </Typography>
+        )}
+        {matchesPerDay && (
+          <Typography variant="body2" sx={{ mt: 1, mb: 2, color: "#64748b" }}>
+            Matches per day: <b>{matchesPerDay}</b>
+          </Typography>
+        )}
         <Button
           variant="text"
           color="secondary"

@@ -47,7 +47,7 @@ import { supabase } from "../../utils/supabase";
 
 interface Match {
   name: string;
-  email: string;
+  contact_email: string;
   url: string;
   ai_partnered: string;
   match_percentage: number;
@@ -65,9 +65,14 @@ const Matches: React.FC = () => {
   const allOutlets = useSelector(
     (state: RootState) => state.allOutlets.outlets
   );
-  // Get pitch data from location state
-  const { pitchTitle, matches, pitchId } = location.state || {};
-
+  // Get pitch data and plan type from location state
+  const {
+    pitchTitle,
+    matches,
+    pitchId,
+    planType = "basic",
+  } = location.state || {};
+  console.log("matches:", matches);
   const [selectedOutlets, setSelectedOutlets] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -86,8 +91,6 @@ const Matches: React.FC = () => {
     pitchId: string;
   } | null>(null);
 
-  const [planType, setPlanType] = useState<string | null>(null);
-
   const outletsPerPage = isMobile ? 3 : 5;
   const indexOfLastOutlet = currentPage * outletsPerPage;
   const indexOfFirstOutlet = indexOfLastOutlet - outletsPerPage;
@@ -101,7 +104,7 @@ const Matches: React.FC = () => {
     indexOfFirstOutlet,
     indexOfLastOutlet
   );
-  //   console.log("currentOutlets:", currentOutlets);
+  console.log("currentOutlets:", currentOutlets);
   const totalPages = Math.ceil(filteredMatches.length / outletsPerPage);
 
   const handlePageChange = (
@@ -197,23 +200,6 @@ const Matches: React.FC = () => {
     }
     setSubmissionDialogOpen(false);
   };
-
-  useEffect(() => {
-    const fetchPlanType = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from("user_profiles")
-          .select("plan_type")
-          .eq("user_id", session.user.id)
-          .single();
-        if (profile) setPlanType(profile.plan_type);
-      }
-    };
-    fetchPlanType();
-  }, []);
 
   if (!matches || !pitchTitle) {
     return (
@@ -330,7 +316,7 @@ const Matches: React.FC = () => {
                   />
                 </Box>
                 <Typography className={classes.guide}>
-                  Contact: {outlet.email}
+                  Contact: {outlet.contact_email}
                 </Typography>
                 <a
                   href={outlet.url}
@@ -356,47 +342,6 @@ const Matches: React.FC = () => {
                 >
                   <span>View Pitch Link</span>
                 </a>
-                {planType !== "basic" && (
-                  <>
-                    <Typography className={classes.score}>
-                      {outlet.match_percentage} Match
-                      <Tooltip
-                        title={
-                          <Box>
-                            <Typography
-                              variant="body2"
-                              sx={{ fontWeight: 600, mb: 1 }}
-                            >
-                              Why This Match?
-                            </Typography>
-                            <Typography variant="body2">
-                              {outlet.match_explanation ||
-                                "No match explanation available"}
-                            </Typography>
-                          </Box>
-                        }
-                        arrow
-                        classes={{ tooltip: classes.matchExplanationTooltip }}
-                      >
-                        <HelpOutline className={classes.matchExplanationIcon} />
-                      </Tooltip>
-                    </Typography>
-                    {outlet.ai_partnered === "Yes" ? (
-                      <Box display="flex" alignItems="center" gap={0.5}>
-                        <span className={classes.tooltip}>✓ AI Partnered</span>
-                      </Box>
-                    ) : (
-                      <Box display="flex" alignItems="center" gap={0.5}>
-                        <span
-                          className={classes.tooltip}
-                          style={{ color: "#666" }}
-                        >
-                          Unknown
-                        </span>
-                      </Box>
-                    )}
-                  </>
-                )}
               </Paper>
             ))}
           </Box>
@@ -433,7 +378,7 @@ const Matches: React.FC = () => {
                 <TableCell className={classes.tableCell}>
                   <strong>Pitch Link</strong>
                 </TableCell>
-                {planType !== "basic" && (
+                {(planType === "team" || planType === "enterprise") && (
                   <>
                     <TableCell className={classes.tableCell}>
                       <strong>Match Confidence</strong>
@@ -463,7 +408,7 @@ const Matches: React.FC = () => {
                       {outlet.name}
                     </Typography>
                   </TableCell>
-                  <TableCell>{outlet.email}</TableCell>
+                  <TableCell>{outlet.contact_email}</TableCell>
                   <TableCell>
                     <a
                       href={outlet.url}
@@ -482,7 +427,7 @@ const Matches: React.FC = () => {
                       View Pitch Link
                     </a>
                   </TableCell>
-                  {planType !== "basic" && (
+                  {(planType === "team" || planType === "enterprise") && (
                     <>
                       <TableCell>
                         <Box display="flex" alignItems="center">

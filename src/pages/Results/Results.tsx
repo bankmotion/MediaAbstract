@@ -64,7 +64,6 @@ const Results = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const [userId, setUserId] = useState<string | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
 
   // Calculate Pagination
   const indexOfLastOutlet = currentPage * outletsPerPage;
@@ -143,42 +142,7 @@ const Results = () => {
   };
 
   const handleGoToDashboard = async () => {
-    // Use userRole to route to the correct dashboard
-    if (!userRole) {
-      // Fallback: fetch userRole if not set
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from("user_profiles")
-          .select("plan_type")
-          .eq("user_id", session.user.id)
-          .single();
-        if (profile) {
-          setUserRole(profile.plan_type);
-          if (profile.plan_type === "writer") {
-            navigate("/writers/dashboard");
-            return;
-          } else if (
-            ["basic", "team", "enterprise"].includes(profile.plan_type)
-          ) {
-            navigate("/agencies/dashboard");
-            return;
-          }
-        }
-      }
-    } else {
-      if (userRole === "writer") {
-        navigate("/writers/dashboard");
-        return;
-      } else if (["basic", "team", "enterprise"].includes(userRole)) {
-        navigate("/agencies/dashboard");
-        return;
-      }
-    }
-    // Default fallback
-    navigate("/");
+    navigate("/agencies/dashboard");
   };
 
   const handlePitchAgain = () => {
@@ -228,13 +192,6 @@ const Results = () => {
       } = await supabase.auth.getSession();
       if (session?.user) {
         setUserId(session.user.id);
-        // Fetch user role (plan_type)
-        const { data: profile } = await supabase
-          .from("user_profiles")
-          .select("plan_type")
-          .eq("user_id", session.user.id)
-          .single();
-        if (profile) setUserRole(profile.plan_type);
       }
     };
     fetchUser();
@@ -312,111 +269,74 @@ const Results = () => {
               <Box className={classes.mobileList}>
                 {currentOutlets.map((outlet, index) => (
                   <Paper key={index} className={classes.mobileCard}>
-                    {userRole === "basic" ? (
-                      <>
-                        <Typography className={classes.name}>
+                    <>
+                      <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                      >
+                        <Typography
+                          className={classes.name}
+                          onClick={() => handleOpenModal(outlet.outlet.name)}
+                          style={{ cursor: "pointer", color: "#1976d2" }}
+                        >
                           {outlet.outlet.name}
                         </Typography>
-                        <Typography className={classes.guide}>
-                          Contact: {outlet.outlet.contact_email}
-                        </Typography>
-                        <a
-                          href={outlet.outlet.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          onClick={(e) =>
-                            handlePitchLinkClick(
-                              {
-                                name: outlet.outlet.name,
-                                url: outlet.outlet.url,
-                                pitchId: outlet.pitch_id,
-                              },
-                              e
-                            )
+                        <Checkbox
+                          size="small"
+                          checked={selectedOutlets.includes(outlet.outlet.name)}
+                          onChange={() =>
+                            handleCheckboxChange(outlet.outlet.name)
                           }
-                          style={{
-                            display: "block",
-                            textAlign: "center",
-                            marginTop: "8px",
-                            color: theme.palette.primary.main,
-                            textDecoration: "underline",
-                          }}
-                        >
-                          <span>View Pitch Link</span>
-                        </a>
-                      </>
-                    ) : (
-                      <>
-                        <Box
-                          display="flex"
-                          justifyContent="space-between"
-                          alignItems="center"
-                        >
-                          <Typography
-                            className={classes.name}
-                            onClick={() => handleOpenModal(outlet.outlet.name)}
-                            style={{ cursor: "pointer", color: "#1976d2" }}
-                          >
-                            {outlet.outlet.name}
-                          </Typography>
-                          <Checkbox
-                            size="small"
-                            checked={selectedOutlets.includes(
-                              outlet.outlet.name
-                            )}
-                            onChange={() =>
-                              handleCheckboxChange(outlet.outlet.name)
-                            }
-                          />
+                        />
+                      </Box>
+                      <Typography className={classes.score}>
+                        {outlet.match_confidence} Match
+                      </Typography>
+                      {outlet.outlet.ai_partnered === "Yes" ? (
+                        <Box display="flex" alignItems="center" gap={0.5}>
+                          <span className={classes.tooltip}>
+                            ✓ AI Partnered
+                          </span>
                         </Box>
-                        <Typography className={classes.score}>
-                          {outlet.match_confidence} Match
-                        </Typography>
-                        {outlet.outlet.ai_partnered === "Yes" ? (
-                          <Box display="flex" alignItems="center" gap={0.5}>
-                            <span className={classes.tooltip}>
-                              ✓ AI Partnered
-                            </span>
-                          </Box>
-                        ) : (
-                          <Box display="flex" alignItems="center" gap={0.5}>
-                            <span
-                              className={classes.tooltip}
-                              style={{ color: "#666" }}
-                            >
-                              Unknown
-                            </span>
-                          </Box>
-                        )}
-                        <Typography className={classes.guide}>
-                          Contact: {outlet.outlet.contact_email}
-                        </Typography>
-                        <a
-                          href={outlet.outlet.url}
-                          target="_blank"
-                          rel="noreferrer"
-                          onClick={(e) =>
-                            handlePitchLinkClick(
-                              {
-                                name: outlet.outlet.name,
-                                url: outlet.outlet.url,
-                                pitchId: outlet.pitch_id,
-                              },
-                              e
-                            )
-                          }
-                          style={{
-                            display: "block",
-                            textAlign: "center",
-                            marginTop: "8px",
-                            color: theme.palette.primary.main,
-                            textDecoration: "underline",
-                          }}
-                        >
-                          <span>View Pitch Link</span>
-                        </a>
-                      </>
-                    )}
+                      ) : (
+                        <Box display="flex" alignItems="center" gap={0.5}>
+                          <span
+                            className={classes.tooltip}
+                            style={{ color: "#666" }}
+                          >
+                            Unknown
+                          </span>
+                        </Box>
+                      )}
+                      <Typography className={classes.guide}>
+                        Contact: {outlet.outlet.contact_email}
+                      </Typography>
+                      <a
+                        href={outlet.outlet.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        onClick={(e) =>
+                          handlePitchLinkClick(
+                            {
+                              name: outlet.outlet.name,
+                              url: outlet.outlet.url,
+                              pitchId: outlet.pitch_id,
+                            },
+                            e
+                          )
+                        }
+                        style={{
+                          display: "block",
+                          textAlign: "center",
+                          marginTop: "8px",
+                          color: theme.palette.primary.main,
+                          textDecoration: "underline",
+                        }}
+                      >
+                        <span>View Pitch Link</span>
+                      </a>
+                    </>
                   </Paper>
                 ))}
               </Box>
@@ -436,16 +356,6 @@ const Results = () => {
                       <TableCell>
                         <strong>Contact Email/Online Form</strong>
                       </TableCell>
-                      {userRole === "team" && (
-                        <>
-                          <TableCell>
-                            <strong>Match Confidence</strong>
-                          </TableCell>
-                          <TableCell>
-                            <strong>AI Partnered</strong>
-                          </TableCell>
-                        </>
-                      )}
                       <TableCell>
                         <strong>Pitch Link</strong>
                       </TableCell>
@@ -474,29 +384,6 @@ const Results = () => {
                           </Typography>
                         </TableCell>
                         <TableCell>{outlet.outlet.contact_email}</TableCell>
-                        {userRole === "team" && (
-                          <>
-                            <TableCell>
-                              <Box display="flex" alignItems="center">
-                                {outlet.match_confidence}% Match
-                              </Box>
-                            </TableCell>
-                            <TableCell>
-                              {outlet.outlet.ai_partnered === "Yes" ? (
-                                <span className={classes.tooltip}>
-                                  ✓ AI Partnered
-                                </span>
-                              ) : (
-                                <span
-                                  className={classes.tooltip}
-                                  style={{ color: "#666" }}
-                                >
-                                  Unknown
-                                </span>
-                              )}
-                            </TableCell>
-                          </>
-                        )}
                         <TableCell>
                           <a
                             href={outlet.outlet.url}
