@@ -17,6 +17,7 @@ import AgenciesDashboard from "./pages/AgenciesDashboard/AgenciesDashboard";
 import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
 import Matches from "./pages/Matches/Matches";
 import UserProfile from "./pages/UserProfile/UserProfile";
+import Payment from "./pages/Payment/Payment";
 
 import "./App.css";
 
@@ -36,6 +37,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup/agencies" element={<AgenciesSignup />} />
           <Route path="/signup/writers" element={<WritersSignup />} />
+          <Route path="/payment" element={<Payment />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/profile" element={<UserProfile />} />

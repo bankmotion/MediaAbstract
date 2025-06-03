@@ -12,41 +12,44 @@ const PaymentSuccess: React.FC = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const checkUser = async () => {
+    const updateUserAfterPayment = async () => {
       try {
         // Get the current user from Supabase Auth
         const {
           data: { user },
           error: userError,
         } = await supabase.auth.getUser();
-        if (userError || !user) {
-          throw new Error("No user found after payment.");
-        }
+        if (userError || !user) throw new Error("No user found after payment.");
 
-        // Optionally, check user_profiles table for profile
-        const { data: profile, error: profileError } = await supabase
+        // Get plan type from session storage
+        const planType = sessionStorage.getItem("selectedPlan");
+        if (!planType) throw new Error("No plan type found after payment.");
+
+        // Update user profile with plan_type, payment_status, and team_role as 'admin'
+        const { error: updateError } = await supabase
           .from("user_profiles")
-          .select("*")
-          .eq("user_id", user.id)
-          .single();
+          .update({
+            plan_type: planType,
+            payment_status: "beta",
+            team_role: "admin",
+          })
+          .eq("user_id", user.id);
 
-        if (profileError || !profile) {
-          throw new Error("No user profile found after payment.");
-        }
+        if (updateError) throw updateError;
 
         setError(null);
       } catch (err) {
         setError(
           err instanceof Error
             ? err.message
-            : "Failed to verify user after payment"
+            : "Failed to update user after payment"
         );
       } finally {
         setLoading(false);
       }
     };
 
-    checkUser();
+    updateUserAfterPayment();
   }, []);
 
   return (

@@ -749,6 +749,26 @@ const useStyles = makeStyles()((theme) => ({
     color: "#64748b",
     marginTop: theme.spacing(1),
   },
+  teamMembersButton: {
+    padding: theme.spacing(1.2, 3.5),
+    fontSize: "1.1rem",
+    fontWeight: 600,
+    borderRadius: "10px",
+    textTransform: "none",
+    color: "#2563eb",
+    borderColor: "#2563eb",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    "&:hover": {
+      backgroundColor: "rgba(37, 99, 235, 0.1)",
+      transform: "translateY(-2px)",
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      marginTop: theme.spacing(2),
+      fontSize: "1rem",
+      padding: theme.spacing(1, 3),
+    },
+  },
 }));
 
 export default useStyles;

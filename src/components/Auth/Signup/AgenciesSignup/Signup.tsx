@@ -1,52 +1,15 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  MenuItem,
-  TextField,
-  Typography,
-  Link,
-  Paper,
-} from "@mui/material";
+import { Box, Button, TextField, Typography, Link, Paper } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../Navbar/Nabvar";
 import useStyles from "./styles";
 import { supabase } from "../../../../utils/supabase";
-
-const planOptions = [
-  {
-    priceId: "basic",
-    label: "Basic Plan",
-    price: "$50/month",
-    description: "1 user, 5 matches/day, basic media guidelines",
-    value: "basic",
-    checkoutUrl: "https://buy.stripe.com/test_fZe17B67waPjaRi4gk",
-  },
-  {
-    priceId: "team",
-    label: "Team Plan",
-    price: "$120/month",
-    description: "3 users, 15 matches/day, enhanced outreach tools",
-    value: "team",
-    checkoutUrl: "https://buy.stripe.com/test_5kA4jN1Rg5uZbVmfZ3",
-  },
-  {
-    priceId: "enterprise",
-    label: "Enterprise Plan",
-    price: "$200/month",
-    description:
-      "Unlimited users and matches, premium insights, priority support",
-    value: "enterprise",
-    checkoutUrl: "https://buy.stripe.com/test_8wMdUn9jI6z3cZq7sy",
-  },
-];
 
 const Signup = () => {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [plan, setPlan] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -56,7 +19,7 @@ const Signup = () => {
   };
 
   const handleSignup = async () => {
-    if (!email || !password || !plan) {
+    if (!email || !password) {
       setError("Please fill in all fields");
       return;
     }
@@ -68,26 +31,68 @@ const Signup = () => {
       // Check if user profile exists
       const { data: existingUser, error: checkError } = await supabase
         .from("user_profiles")
-        .select("email, password")
+        .select("*")
         .eq("email", email)
         .single();
 
       if (existingUser) {
-        setError(
-          "An account with this email already exists. Please login instead."
-        );
-        return;
+        // If the user was pre-added by admin and has a valid plan and payment_status
+        if (
+          (existingUser.plan_type === "basic" ||
+            existingUser.plan_type === "team" ||
+            existingUser.plan_type === "enterprise" ||
+            existingUser.plan_type === "writer") &&
+          (existingUser.payment_status === "beta" ||
+            existingUser.payment_status === "active")
+        ) {
+          // Create user in Supabase auth
+          const { data: authData, error: authError } =
+            await supabase.auth.signUp({
+              email,
+              password,
+            });
+
+          if (authError) {
+            throw authError;
+          }
+
+          if (!authData.user) {
+            throw new Error("Failed to create user account");
+          }
+
+          // Update user_profiles with user_id and password
+          const { error: profileError } = await supabase
+            .from("user_profiles")
+            .update({
+              user_id: authData.user.id,
+              password: password,
+            })
+            .eq("email", email);
+
+          if (profileError) {
+            console.error("Profile creation error:", profileError);
+            throw profileError;
+          }
+
+          // Redirect to dashboard based on plan_type
+          if (existingUser.plan_type === "writer") {
+            navigate("/writers/dashboard");
+          } else {
+            navigate("/agencies/dashboard");
+          }
+          return;
+        } else {
+          setError(
+            "An account with this email already exists. Please login instead."
+          );
+          return;
+        }
       }
 
       // Create user in Supabase auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          data: {
-            plan_type: plan,
-          },
-        },
       });
 
       if (authError) {
@@ -98,16 +103,14 @@ const Signup = () => {
         throw new Error("Failed to create user account");
       }
 
-      // Create user profile with email and password
+      // Create user profile with email and password ONLY
       const { error: profileError } = await supabase
         .from("user_profiles")
         .insert([
           {
             email: email,
             password: password,
-            plan_type: plan,
             user_id: authData.user.id,
-            payment_status: "beta",
           },
         ])
         .select();
@@ -117,24 +120,23 @@ const Signup = () => {
         throw profileError;
       }
 
-      // Store registration data in localStorage
-      const registrationData = {
-        email,
-        password,
-        plan_type: plan,
-      };
-      localStorage.setItem(
-        "pendingRegistration",
-        JSON.stringify(registrationData)
+      // Store user data in session storage for payment page
+      sessionStorage.setItem(
+        "signupData",
+        JSON.stringify({
+          email,
+          userId: authData.user.id,
+        })
       );
 
-      // Redirect to Stripe
-      const selectedPlan = planOptions.find((opt) => opt.value === plan);
-      if (!selectedPlan) {
-        throw new Error("Invalid plan selection");
-      }
-
-      window.location.href = selectedPlan.checkoutUrl;
+      // Navigate to payment page
+      navigate("/payment", {
+        state: {
+          email,
+          userId: authData.user.id,
+        },
+        replace: true, // Replace the current route to prevent going back to signup
+      });
     } catch (err) {
       console.error("Signup error:", err);
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -172,57 +174,6 @@ const Signup = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <TextField
-            select
-            label="Select Plan"
-            fullWidth
-            className={classes.plan}
-            value={plan}
-            onChange={(e) => setPlan(e.target.value)}
-            SelectProps={{
-              MenuProps: {
-                PaperProps: {
-                  sx: {
-                    minWidth: "unset",
-                    width: "auto",
-                  },
-                },
-              },
-            }}
-          >
-            {planOptions.map((opt) => (
-              <MenuItem
-                key={opt.value}
-                value={opt.value}
-                sx={{
-                  whiteSpace: "normal",
-                  paddingY: 1,
-                  paddingX: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "flex-start",
-                  "&:hover": {
-                    backgroundColor: "#f0f4ff",
-                  },
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
-                    {opt.label}
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{ fontWeight: 600, color: "primary.main" }}
-                  >
-                    {opt.price}
-                  </Typography>
-                </Box>
-                <Typography variant="body2" color="text.secondary">
-                  {opt.description}
-                </Typography>
-              </MenuItem>
-            ))}
-          </TextField>
           <Button
             variant="contained"
             color="primary"
@@ -247,12 +198,6 @@ const Signup = () => {
           </Typography>
         </Paper>
       </Box>
-
-      {/* <WelcomeModal
-        open={showWelcomeModal}
-        onClose={handleCloseModal}
-        onContinue={handleContinue}
-      /> */}
     </>
   );
 };

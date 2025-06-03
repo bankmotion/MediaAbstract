@@ -68,6 +68,7 @@ import { supabase } from "../../utils/supabase";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { createReminder, fetchReminders } from "../../services/reminderService";
+import TeamMembersModal from "../../components/TeamMembersModal/TeamMembersModal";
 
 const AgenciesDashboard = () => {
   const { classes } = useStyles();
@@ -205,6 +206,10 @@ const AgenciesDashboard = () => {
 
   const [planType, setPlanType] = useState<string | null>(null);
 
+  const [teamMembersModalOpen, setTeamMembersModalOpen] = useState(false);
+
+  const [teamRole, setTeamRole] = useState<string | null>(null);
+
   const handleEditChange = (
     pitchId: string,
     field: "status" | "notes",
@@ -276,15 +281,16 @@ const AgenciesDashboard = () => {
       setUserIdState(session.user.id);
       dispatch(setUserId(session.user.id));
 
-      // Fetch user's plan type
+      // Fetch user's plan type and team_role
       const { data: profile } = await supabase
         .from("user_profiles")
-        .select("plan_type")
+        .select("plan_type, team_role")
         .eq("user_id", session.user.id)
         .single();
 
       if (profile) {
         setPlanType(profile.plan_type);
+        setTeamRole(profile.team_role);
       }
     };
     checkSession();
@@ -480,14 +486,6 @@ const AgenciesDashboard = () => {
                 className={classes.prioritySupportChip}
               />
             )}
-            <Badge
-              badgeContent={notifications.filter((n) => !n.read).length}
-              color="error"
-            >
-              <IconButton>
-                <Notifications />
-              </IconButton>
-            </Badge>
             <Button
               startIcon={<Logout />}
               color="primary"
@@ -526,7 +524,16 @@ const AgenciesDashboard = () => {
               </Typography>
               <Typography className={classes.statLabel}>Matches/Day</Typography>
             </Box>
-            <Box className={classes.statItem}>
+            <Box
+              className={classes.statItem}
+              style={{
+                cursor: teamRole === "admin" ? "pointer" : "not-allowed",
+                opacity: teamRole === "admin" ? 1 : 0.5,
+              }}
+              onClick={() => {
+                if (teamRole === "admin") setTeamMembersModalOpen(true);
+              }}
+            >
               <Typography className={classes.statValue}>
                 {planFeatures.maxUsers}
               </Typography>
@@ -1071,6 +1078,15 @@ const AgenciesDashboard = () => {
           </Box>
         </Box>
       </Box>
+
+      <TeamMembersModal
+        open={teamMembersModalOpen}
+        onClose={() => setTeamMembersModalOpen(false)}
+        userId={userId || ""}
+        planType={planType || "basic"}
+        maxUsers={planFeatures.maxUsers}
+        isAdmin={teamRole === "admin"}
+      />
     </Box>
   );
 };

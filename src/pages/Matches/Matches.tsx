@@ -72,7 +72,7 @@ const Matches: React.FC = () => {
     pitchId,
     planType = "basic",
   } = location.state || {};
-  console.log("matches:", matches);
+  // console.log("matches:", matches);
   const [selectedOutlets, setSelectedOutlets] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -104,7 +104,7 @@ const Matches: React.FC = () => {
     indexOfFirstOutlet,
     indexOfLastOutlet
   );
-  console.log("currentOutlets:", currentOutlets);
+  // console.log("currentOutlets:", currentOutlets);
   const totalPages = Math.ceil(filteredMatches.length / outletsPerPage);
 
   const handlePageChange = (

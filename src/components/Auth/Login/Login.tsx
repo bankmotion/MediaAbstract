@@ -129,26 +129,33 @@ const Login = () => {
           return;
         }
 
-        // Check if user is a beta tester or has active subscription
+        // Check payment status
         if (
-          profileData?.payment_status === "beta" ||
-          profileData?.payment_status === "active"
+          !profileData?.payment_status ||
+          (profileData?.payment_status !== "beta" &&
+            profileData?.payment_status !== "active")
         ) {
-          // Redirect based on plan type
-          if (profileData.plan_type === "writer") {
-            navigate("/writers/dashboard");
-          } else if (
-            ["basic", "team", "enterprise"].includes(profileData.plan_type)
-          ) {
-            navigate("/agencies/dashboard");
-          } else {
-            setError("Invalid user role. Please contact support.");
-            await supabase.auth.signOut();
-          }
+          // If no payment status or not active/beta, redirect to payment page
+          navigate("/payment", {
+            state: {
+              email: data.user.email,
+              userId: data.user.id,
+            },
+            replace: true,
+          });
+          return;
+        }
+
+        // If payment status is active or beta, redirect to appropriate dashboard
+        if (profileData.plan_type === "writer") {
+          navigate("/writers/dashboard");
+        } else if (
+          ["basic", "team", "enterprise"].includes(profileData.plan_type)
+        ) {
+          navigate("/agencies/dashboard");
         } else {
-          // If not a beta tester or active user, sign them out
+          setError("Invalid user role. Please contact support.");
           await supabase.auth.signOut();
-          setError("Your account is not active. Please sign up first.");
         }
       }
     } catch (err) {
