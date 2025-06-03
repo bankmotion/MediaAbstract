@@ -531,7 +531,9 @@ const AgenciesDashboard = () => {
                 opacity: teamRole === "admin" ? 1 : 0.5,
               }}
               onClick={() => {
-                if (teamRole === "admin") setTeamMembersModalOpen(true);
+                if (teamRole === "admin") {
+                  setTeamMembersModalOpen(true);
+                }
               }}
             >
               <Typography className={classes.statValue}>
@@ -1086,6 +1088,7 @@ const AgenciesDashboard = () => {
         planType={planType || "basic"}
         maxUsers={planFeatures.maxUsers}
         isAdmin={teamRole === "admin"}
+        teamId={userId || ""}
       />
     </Box>
   );

@@ -22,6 +22,7 @@ interface TeamMembersModalProps {
   planType: string;
   maxUsers: number;
   isAdmin: boolean;
+  teamId: string;
 }
 
 const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
@@ -31,6 +32,7 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
   planType,
   maxUsers,
   isAdmin,
+  teamId,
 }) => {
   const { classes } = useStyles();
 
@@ -38,6 +40,22 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [teamMembers, setTeamMembers] = useState<
+    { email: string; team_role: string }[]
+  >([]);
+
+  // Fetch team members on open or teamId change
+  React.useEffect(() => {
+    if (!teamId) return;
+    const fetchMembers = async () => {
+      const { data, error } = await supabase
+        .from("user_profiles")
+        .select("email, team_role")
+        .eq("team_id", teamId);
+      if (!error && data) setTeamMembers(data);
+    };
+    fetchMembers();
+  }, [teamId, open]);
 
   const handleAddMember = async () => {
     if (!email) {
@@ -50,7 +68,7 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
       setError(null);
       setSuccess(null);
 
-      // Add to user_profiles
+      // Upsert with team_id
       const { error: userProfileError } = await supabase
         .from("user_profiles")
         .upsert(
@@ -59,6 +77,8 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
               email: email.toLowerCase(),
               plan_type: planType,
               payment_status: "beta",
+              team_id: teamId,
+              team_role: "member",
             },
           ],
           { onConflict: "email" }
@@ -68,6 +88,12 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
 
       setSuccess("Team member added successfully");
       setEmail("");
+      // Refresh team members list
+      const { data } = await supabase
+        .from("user_profiles")
+        .select("email, team_role")
+        .eq("team_id", teamId);
+      if (data) setTeamMembers(data);
     } catch (err) {
       console.error("Error adding team member:", err);
       setError("Failed to add team member");
@@ -114,6 +140,31 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
       </DialogTitle>
 
       <DialogContent dividers>
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="subtitle2" sx={{ mb: 1 }}>
+            Current Team Members:
+          </Typography>
+          {teamMembers.length === 0 ? (
+            <Typography color="textSecondary">No team members yet.</Typography>
+          ) : (
+            <Box>
+              {teamMembers.map((member) => (
+                <Box
+                  key={member.email}
+                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
+                >
+                  <PersonIcon fontSize="small" />
+                  <Typography>{member.email}</Typography>
+                  {member.team_role === "admin" && (
+                    <Typography color="primary" sx={{ ml: 1, fontWeight: 600 }}>
+                      (Admin)
+                    </Typography>
+                  )}
+                </Box>
+              ))}
+            </Box>
+          )}
+        </Box>
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -124,7 +175,6 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
             {success}
           </Alert>
         )}
-
         {isAdmin ? (
           <Box sx={{ mb: 3 }}>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 1 }}>
@@ -157,7 +207,6 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
           </Box>
         )}
       </DialogContent>
-
       <DialogActions sx={{ p: 2 }}>
         <Button onClick={onClose} variant="outlined">
           Close
