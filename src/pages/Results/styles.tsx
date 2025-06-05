@@ -78,14 +78,16 @@ const styles = makeStyles()((theme: Theme) => ({
     width: "100%",
     maxWidth: "100%",
     marginBottom: theme.spacing(4),
-
     [theme.breakpoints.down("sm")]: {
       maxWidth: "100vw",
       overflow: "auto",
     },
-
     "& .MuiTableCell-root": {
       padding: theme.spacing(1.5),
+      maxWidth: 320,
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
     },
   },
 
@@ -95,9 +97,16 @@ const styles = makeStyles()((theme: Theme) => ({
       fontWeight: 600,
     },
   },
-
+  contactCell: {
+    maxWidth: 260,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    whiteSpace: "nowrap",
+  },
   pitchLinkCell: {
-    minWidth: "150px",
+    maxWidth: 180,
+    overflow: "hidden",
+    textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
 
