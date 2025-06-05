@@ -38,10 +38,17 @@ export const fetchPitchResults = createAsyncThunk(
 );
 
 export const updatePitchStatus = createAsyncThunk(
-  "pitch/updatePitchStatus",
-  async ({ pitchId, outletName }: { pitchId: string; outletName: string }) => {
-    const response = await updatePitchSubmissionStatus(pitchId, outletName);
-    return response;
+  "pitch/updateStatus",
+  async ({
+    pitchId,
+    outletName,
+    userId,
+  }: {
+    pitchId: string;
+    outletName: string;
+    userId: string;
+  }) => {
+    return await updatePitchSubmissionStatus(pitchId, outletName, userId);
   }
 );
 

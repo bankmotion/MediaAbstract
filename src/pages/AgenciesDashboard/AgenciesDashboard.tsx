@@ -138,22 +138,26 @@ const AgenciesDashboard = () => {
     },
   ]);
 
-  const [activityLog, setActivityLog] = useState([
-    {
-      id: 1,
-      action: "Submitted 'AI & Data Privacy' to Forbes",
-      type: "submission",
-      date: "3/21/2025",
-      time: "2:30 PM",
-    },
-    {
-      id: 2,
-      action: "Updated 'ClimateTech Trends' pitch content",
-      type: "edit",
-      date: "3/20/2025",
-      time: "4:15 PM",
-    },
-  ]);
+  const [activityLog, setActivityLog] = useState<any[]>([]);
+
+  // Fetch activity log from Supabase
+  useEffect(() => {
+    const fetchActivityLog = async () => {
+      if (!userId) return; // Only run if userId is set
+      console.log("userID:", userId);
+      const { data, error } = await supabase
+        .from("activity_log")
+        .select("id, created_at, action")
+        .eq("user_id", userId)
+        .order("created_at", { ascending: false });
+      if (error) {
+        console.error("Supabase error:", error);
+      }
+      console.log("data:", data);
+      setActivityLog(data || []);
+    };
+    fetchActivityLog();
+  }, [userId]);
 
   const [reminderDialogOpen, setReminderDialogOpen] = useState(false);
   const [selectedPitchId, setSelectedPitchId] = useState<number | null>(null);
@@ -1091,25 +1095,18 @@ const AgenciesDashboard = () => {
                 </Box>
               ) : (
                 activityLog.map((entry) => {
-                  let icon;
-                  if (entry.type === "submission") {
-                    icon = <SendIcon fontSize="small" />;
-                  } else if (entry.type === "edit") {
-                    icon = <EditIcon fontSize="small" />;
-                  } else {
-                    icon = <EditIcon fontSize="small" />;
-                  }
-
                   return (
                     <Box key={entry.id} className={classes.activityItem}>
-                      <Box className={classes.activityIcon}>{icon}</Box>
+                      <Box className={classes.activityIcon}>
+                        <SendIcon fontSize="small" />
+                      </Box>
                       <Box className={classes.activityText}>
                         <Typography variant="body2" className="action">
                           {entry.action}
                         </Typography>
                         <Typography variant="body2" className="timestamp">
                           <AccessTimeIcon sx={{ fontSize: "0.9rem" }} />
-                          {entry.date} at {entry.time}
+                          {new Date(entry.created_at).toLocaleString()}
                         </Typography>
                       </Box>
                     </Box>

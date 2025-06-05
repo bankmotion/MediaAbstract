@@ -91,6 +91,8 @@ const Matches: React.FC = () => {
     pitchId: string;
   } | null>(null);
 
+  const [userId, setUserId] = useState<string | null>(null);
+
   const outletsPerPage = isMobile ? 3 : 5;
   const indexOfLastOutlet = currentPage * outletsPerPage;
   const indexOfFirstOutlet = indexOfLastOutlet - outletsPerPage;
@@ -175,26 +177,37 @@ const Matches: React.FC = () => {
   const handleCloseSuccess = () => {
     setShowSuccessMessage(false);
   };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session?.user) {
+        setUserId(session.user.id);
+      }
+    };
+    fetchUser();
+  }, []);
+
   const handleSubmissionConfirm = async () => {
-    if (selectedSubmissionOutlet) {
+    if (selectedSubmissionOutlet && userId) {
       // Open the submission URL
       window.open(selectedSubmissionOutlet.url);
 
       try {
-        // Update the pitch status to "Submitted"
+        // Update the pitch status to "Submitted" with userId
         await dispatch(
           updatePitchStatus({
             pitchId: selectedSubmissionOutlet.pitchId,
             outletName: selectedSubmissionOutlet.name,
+            userId: userId,
           })
         ).unwrap();
 
         // Show success message
         setShowSuccessMessage(true);
-
-        // Add to activity log or handle success as needed
       } catch (error) {
-        // Handle error - maybe show an error message
         console.error("Failed to update pitch status:", error);
       }
     }

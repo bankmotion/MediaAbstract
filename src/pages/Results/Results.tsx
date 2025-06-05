@@ -159,7 +159,7 @@ const Results = () => {
   };
 
   const handleSubmissionConfirm = async () => {
-    if (selectedSubmissionOutlet) {
+    if (selectedSubmissionOutlet && userId) {
       // Open the submission URL
       window.open(selectedSubmissionOutlet.url, "_blank");
 
@@ -169,6 +169,7 @@ const Results = () => {
           updatePitchStatus({
             pitchId: selectedSubmissionOutlet.pitchId,
             outletName: selectedSubmissionOutlet.name,
+            userId: userId,
           })
         ).unwrap();
 

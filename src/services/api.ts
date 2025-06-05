@@ -38,12 +38,14 @@ export const submitPitch = async (
 
 export const updatePitchSubmissionStatus = async (
   pitchId: string,
-  outletName: string
+  outletName: string,
+  userId: string
 ) => {
   try {
     const response = await axios.put(`${API_URL}/update_pitch_status`, {
       pitchId,
       outletName,
+      userId,
       status: "Submitted",
     });
     return response.data;
