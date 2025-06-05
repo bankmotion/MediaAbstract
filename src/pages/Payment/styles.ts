@@ -17,7 +17,7 @@ const styles = makeStyles()((theme: any) => ({
     textAlign: "center",
     maxWidth: 600,
     margin: "0 auto",
-    marginBottom: theme.spacing(6),
+    marginBottom: theme.spacing(3),
   },
   title: {
     marginBottom: theme.spacing(2),
@@ -42,11 +42,11 @@ const styles = makeStyles()((theme: any) => ({
     color: theme.palette.error.main,
   },
   plansGrid: {
-    marginBottom: theme.spacing(6),
+    marginBottom: theme.spacing(2),
   },
   planCard: {
     height: "100%",
-    minHeight: 540,
+    minHeight: 380,
     display: "flex",
     flexDirection: "column",
     justifyContent: "stretch",
@@ -78,19 +78,19 @@ const styles = makeStyles()((theme: any) => ({
   planContent: {
     display: "flex",
     flexDirection: "column",
-    padding: theme.spacing(4),
+    padding: theme.spacing(2.5),
   },
   planTitle: {
     fontWeight: 700,
-    marginBottom: theme.spacing(2),
-    fontSize: "1.5rem",
+    marginBottom: theme.spacing(1.2),
+    fontSize: "1.2rem",
     color: theme.palette.text.primary,
   },
   planPrice: {
     fontWeight: 800,
     color: theme.palette.primary.main,
-    marginBottom: theme.spacing(3),
-    fontSize: "2.5rem",
+    marginBottom: theme.spacing(2),
+    fontSize: "2rem",
     "& span": {
       fontSize: "1rem",
       fontWeight: 500,
@@ -107,13 +107,13 @@ const styles = makeStyles()((theme: any) => ({
     listStyle: "none",
     padding: 0,
     margin: 0,
-    marginTop: theme.spacing(2),
-    marginBottom: theme.spacing(3),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1.5),
   },
   featureItem: {
     display: "flex",
     alignItems: "center",
-    marginBottom: theme.spacing(1.5),
+    marginBottom: theme.spacing(1),
     color: theme.palette.text.secondary,
     "& svg": {
       color: theme.palette.primary.main,
@@ -124,8 +124,9 @@ const styles = makeStyles()((theme: any) => ({
   actions: {
     display: "flex",
     justifyContent: "center",
-    marginTop: "auto",
-    paddingTop: theme.spacing(4),
+    marginTop: theme.spacing(2),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(5),
   },
   paymentButton: {
     minWidth: 240,
