@@ -98,6 +98,7 @@ const AgenciesDashboard = () => {
 
   // State for plan tier and features
   const [currentPlan, setCurrentPlan] = useState("$150/month");
+  const [planType, setPlanType] = useState<string | null>(null);
   const [planFeatures, setPlanFeatures] = useState({
     maxUsers: 3,
     maxMatchesPerDay: 15,
@@ -105,6 +106,17 @@ const AgenciesDashboard = () => {
     hasPremiumInsights: false,
     hasPrioritySupport: false,
   });
+
+  // Update maxUsers based on plan type
+  useEffect(() => {
+    if (planType === "basic") {
+      setPlanFeatures((prev) => ({ ...prev, maxUsers: 1 }));
+    } else if (planType === "team") {
+      setPlanFeatures((prev) => ({ ...prev, maxUsers: 3 }));
+    } else if (planType === "enterprise") {
+      setPlanFeatures((prev) => ({ ...prev, maxUsers: Infinity }));
+    }
+  }, [planType]);
 
   // State for notifications
   const [notifications, setNotifications] = useState([
@@ -204,11 +216,11 @@ const AgenciesDashboard = () => {
     [key: number]: string;
   }>({});
 
-  const [planType, setPlanType] = useState<string | null>(null);
-
   const [teamMembersModalOpen, setTeamMembersModalOpen] = useState(false);
 
   const [teamRole, setTeamRole] = useState<string | null>(null);
+
+  const [teamMembersCount, setTeamMembersCount] = useState<number>(0);
 
   const handleEditChange = (
     pitchId: string,
@@ -453,6 +465,32 @@ const AgenciesDashboard = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // Fetch team members count when modal opens or userId changes
+  useEffect(() => {
+    const fetchTeamMembersCount = async () => {
+      if (!userId) return;
+
+      // Get the team_id for the current user
+      const { data: userProfile } = await supabase
+        .from("user_profiles")
+        .select("team_id")
+        .eq("user_id", userId)
+        .single();
+
+      if (!userProfile?.team_id) return;
+
+      // Count team members using the team_id
+      const { count } = await supabase
+        .from("user_profiles")
+        .select("id", { count: "exact", head: true })
+        .eq("team_id", userProfile.team_id);
+
+      setTeamMembersCount(count || 0);
+    };
+
+    fetchTeamMembersCount();
+  }, [userId]);
+
   return (
     <Box className={classes.wrapper}>
       <AppBar
@@ -527,8 +565,9 @@ const AgenciesDashboard = () => {
             <Box
               className={classes.statItem}
               style={{
-                cursor: teamRole === "admin" ? "pointer" : "not-allowed",
+                cursor: teamRole === "admin" ? "pointer" : "default",
                 opacity: teamRole === "admin" ? 1 : 0.5,
+                backgroundColor: teamRole === "admin" ? "#ffffff" : "#f8fafc",
               }}
               onClick={() => {
                 if (teamRole === "admin") {
@@ -537,7 +576,8 @@ const AgenciesDashboard = () => {
               }}
             >
               <Typography className={classes.statValue}>
-                {planFeatures.maxUsers}
+                {teamMembersCount}/
+                {planType === "enterprise" ? "∞" : planFeatures.maxUsers}
               </Typography>
               <Typography className={classes.statLabel}>
                 Team Members

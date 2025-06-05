@@ -11,7 +11,11 @@ import {
   IconButton,
   Alert,
 } from "@mui/material";
-import { Close as CloseIcon, Person as PersonIcon } from "@mui/icons-material";
+import {
+  Close as CloseIcon,
+  Person as PersonIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
 import { supabase } from "../../utils/supabase";
 import useStyles from "./styles";
 
@@ -94,9 +98,85 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
         .select("email, team_role")
         .eq("team_id", teamId);
       if (data) setTeamMembers(data);
+      // Hide the success alert after 3 seconds
+      setTimeout(() => setSuccess(null), 3000);
     } catch (err) {
       console.error("Error adding team member:", err);
       setError("Failed to add team member");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteMember = async (memberEmail: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+      setSuccess(null);
+      console.log("memberEmail:", memberEmail);
+      console.log("teamId:", teamId);
+
+      // First check if the member exists
+      const { data: existingMember, error: checkError } = await supabase
+        .from("user_profiles")
+        .select("*")
+        .match({
+          email: memberEmail,
+          team_id: teamId,
+        })
+        .single();
+
+      if (checkError) {
+        console.error("Error checking member:", checkError);
+        throw new Error("Failed to verify team member");
+      }
+
+      console.log("Existing member data:", existingMember);
+
+      if (!existingMember) {
+        throw new Error("Member not found in team");
+      }
+
+      // Update the member's record
+      const { data: updateData, error: updateError } = await supabase
+        .from("user_profiles")
+        .update({
+          team_id: null,
+          team_role: null,
+          plan_type: null,
+          payment_status: null,
+        })
+        .match({
+          email: memberEmail,
+          team_id: teamId,
+        })
+        .select();
+
+      console.log("Update query conditions:", {
+        email: memberEmail,
+        team_id: teamId,
+      });
+      console.log("Update result:", updateData);
+
+      if (updateError) {
+        console.error("Update error:", updateError);
+        throw updateError;
+      }
+
+      if (!updateData || updateData.length === 0) {
+        throw new Error("No records were updated");
+      }
+
+      setSuccess("Team member removed successfully");
+      // Remove the member from the local state immediately
+      setTeamMembers((prev) =>
+        prev.filter((member) => member.email !== memberEmail)
+      );
+      // Hide the success alert after 3 seconds
+      setTimeout(() => setSuccess(null), 3000);
+    } catch (err) {
+      console.error("Error removing team member:", err);
+      setError("Failed to remove team member. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -151,14 +231,35 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
               {teamMembers.map((member) => (
                 <Box
                   key={member.email}
-                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    mb: 1,
+                    justifyContent: "space-between",
+                  }}
                 >
-                  <PersonIcon fontSize="small" />
-                  <Typography>{member.email}</Typography>
-                  {member.team_role === "admin" && (
-                    <Typography color="primary" sx={{ ml: 1, fontWeight: 600 }}>
-                      (Admin)
-                    </Typography>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <PersonIcon fontSize="small" />
+                    <Typography>{member.email}</Typography>
+                    {member.team_role === "admin" && (
+                      <Typography
+                        color="primary"
+                        sx={{ ml: 1, fontWeight: 600 }}
+                      >
+                        (Admin)
+                      </Typography>
+                    )}
+                  </Box>
+                  {isAdmin && member.team_role !== "admin" && (
+                    <IconButton
+                      size="small"
+                      onClick={() => handleDeleteMember(member.email)}
+                      disabled={loading}
+                      color="error"
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
                   )}
                 </Box>
               ))}
@@ -192,11 +293,16 @@ const TeamMembersModal: React.FC<TeamMembersModalProps> = ({
               <Button
                 variant="contained"
                 onClick={handleAddMember}
-                disabled={loading || !email}
+                disabled={loading || !email || teamMembers.length >= maxUsers}
               >
                 Add
               </Button>
             </Box>
+            {teamMembers.length >= maxUsers && (
+              <Alert severity="warning" sx={{ mt: 1 }}>
+                Maximum team members limit reached ({maxUsers} members)
+              </Alert>
+            )}
           </Box>
         ) : (
           <Box sx={{ mb: 3 }}>
