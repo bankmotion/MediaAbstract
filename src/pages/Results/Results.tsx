@@ -64,6 +64,7 @@ const Results = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const [userId, setUserId] = useState<string | null>(null);
+  const [planType, setPlanType] = useState("basic");
 
   // Calculate Pagination
   const indexOfLastOutlet = currentPage * outletsPerPage;
@@ -193,6 +194,15 @@ const Results = () => {
       } = await supabase.auth.getSession();
       if (session?.user) {
         setUserId(session.user.id);
+        // Fetch plan_type from user_profiles
+        const { data: profile } = await supabase
+          .from("user_profiles")
+          .select("plan_type")
+          .eq("user_id", session.user.id)
+          .single();
+        if (profile?.plan_type) {
+          setPlanType(profile.plan_type);
+        }
       }
     };
     fetchUser();
@@ -291,25 +301,6 @@ const Results = () => {
                           }
                         />
                       </Box>
-                      <Typography className={classes.score}>
-                        {outlet.match_confidence} Match
-                      </Typography>
-                      {outlet.outlet.ai_partnered === "Yes" ? (
-                        <Box display="flex" alignItems="center" gap={0.5}>
-                          <span className={classes.tooltip}>
-                            ✓ AI Partnered
-                          </span>
-                        </Box>
-                      ) : (
-                        <Box display="flex" alignItems="center" gap={0.5}>
-                          <span
-                            className={classes.tooltip}
-                            style={{ color: "#666" }}
-                          >
-                            Unknown
-                          </span>
-                        </Box>
-                      )}
                       <Typography className={classes.guide}>
                         Contact: {outlet.outlet.contact_email}
                       </Typography>
@@ -337,6 +328,51 @@ const Results = () => {
                       >
                         <span>View Pitch Link</span>
                       </a>
+                      {(planType === "team" || planType === "enterprise") && (
+                        <>
+                          <Typography className={classes.score}>
+                            {outlet.match_confidence || outlet.match_percentage}{" "}
+                            Match
+                            <Tooltip
+                              title={
+                                <Box>
+                                  <Typography
+                                    variant="body2"
+                                    sx={{ fontWeight: 600, mb: 1 }}
+                                  >
+                                    Why This Match?
+                                  </Typography>
+                                  <Typography variant="body2">
+                                    {outlet.match_explanation ||
+                                      "No match explanation available"}
+                                  </Typography>
+                                </Box>
+                              }
+                              arrow
+                              classes={{
+                                tooltip: classes.matchExplanationTooltip,
+                              }}
+                            >
+                              <HelpOutline
+                                className={classes.matchExplanationIcon}
+                              />
+                            </Tooltip>
+                          </Typography>
+                          <Box display="flex" alignItems="center" gap={0.5}>
+                            <span
+                              style={
+                                outlet.outlet?.ai_partnered === "Yes"
+                                  ? { color: "#1976d2", fontWeight: 600 }
+                                  : { color: "#666" }
+                              }
+                            >
+                              {outlet.outlet?.ai_partnered === "Yes"
+                                ? "✓ AI Partnered"
+                                : "Unknown"}
+                            </span>
+                          </Box>
+                        </>
+                      )}
                     </>
                   </Paper>
                 ))}
@@ -360,6 +396,16 @@ const Results = () => {
                       <TableCell>
                         <strong>Pitch Link</strong>
                       </TableCell>
+                      {(planType === "team" || planType === "enterprise") && (
+                        <>
+                          <TableCell>
+                            <strong>Match Confidence</strong>
+                          </TableCell>
+                          <TableCell>
+                            <strong>AI Partnered</strong>
+                          </TableCell>
+                        </>
+                      )}
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -384,8 +430,10 @@ const Results = () => {
                             {outlet.outlet.name}
                           </Typography>
                         </TableCell>
-                        <TableCell>{outlet.outlet.contact_email}</TableCell>
-                        <TableCell>
+                        <TableCell className={classes.contactCell}>
+                          {outlet.outlet.contact_email}
+                        </TableCell>
+                        <TableCell className={classes.pitchLinkCell}>
                           <a
                             href={outlet.outlet.url}
                             onClick={(e) =>
@@ -403,6 +451,52 @@ const Results = () => {
                             View Pitch Link
                           </a>
                         </TableCell>
+                        {(planType === "team" || planType === "enterprise") && (
+                          <>
+                            <TableCell>
+                              <Box display="flex" alignItems="center">
+                                {outlet.match_confidence ||
+                                  outlet.match_percentage}{" "}
+                                Match
+                                <Tooltip
+                                  title={
+                                    <Box>
+                                      <Typography
+                                        variant="body2"
+                                        sx={{ fontWeight: 600, mb: 1 }}
+                                      >
+                                        Why This Match?
+                                      </Typography>
+                                      <Typography variant="body2">
+                                        {outlet.match_explanation ||
+                                          "No match explanation available"}
+                                      </Typography>
+                                    </Box>
+                                  }
+                                  arrow
+                                  classes={{
+                                    tooltip: classes.matchExplanationTooltip,
+                                  }}
+                                >
+                                  <HelpOutline
+                                    className={classes.matchExplanationIcon}
+                                  />
+                                </Tooltip>
+                              </Box>
+                            </TableCell>
+                            <TableCell>
+                              {outlet.outlet?.ai_partnered === "Yes" ? (
+                                <span
+                                  style={{ color: "#1976d2", fontWeight: 600 }}
+                                >
+                                  ✓ AI Partnered
+                                </span>
+                              ) : (
+                                <span style={{ color: "#666" }}>Unknown</span>
+                              )}
+                            </TableCell>
+                          </>
+                        )}
                       </TableRow>
                     ))}
                   </TableBody>

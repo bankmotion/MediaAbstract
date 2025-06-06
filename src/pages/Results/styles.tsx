@@ -64,9 +64,11 @@ const styles = makeStyles()((theme: Theme) => ({
     borderRadius: "10px",
     boxShadow: "0 4px 10px rgba(0,0,0,0.08)",
     transition: "0.3s ease",
-    "&:hover": {
-      transform: "translateY(-3px)",
-      boxShadow: "0 6px 20px rgba(0,0,0,0.12)",
+    marginBottom: theme.spacing(1),
+    wordBreak: "break-word",
+    "& a, & .MuiTypography-root": {
+      wordBreak: "break-word",
+      fontSize: "0.97rem",
     },
   },
 
@@ -141,11 +143,12 @@ const styles = makeStyles()((theme: Theme) => ({
   },
 
   name: {
-    fontSize: "1.2rem",
+    fontSize: "1.1rem",
     fontWeight: 600,
     color: "#1a1a1a",
     marginBottom: theme.spacing(1),
     textDecoration: "underline",
+    wordBreak: "break-word",
 
     [theme.breakpoints.down("sm")]: {
       fontSize: "1.1rem",
@@ -156,6 +159,7 @@ const styles = makeStyles()((theme: Theme) => ({
     marginTop: theme.spacing(1),
     fontSize: "0.95rem",
     color: "#555",
+    wordBreak: "break-word",
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.9rem",
     },
@@ -166,6 +170,7 @@ const styles = makeStyles()((theme: Theme) => ({
     fontSize: "0.95rem",
     fontWeight: 500,
     color: "#222",
+    wordBreak: "break-word",
     [theme.breakpoints.down("sm")]: {
       fontSize: "0.9rem",
     },
