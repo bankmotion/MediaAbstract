@@ -11,7 +11,11 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { KeyboardArrowUp, LightbulbOutlined } from "@mui/icons-material";
+import {
+  KeyboardArrowUp,
+  LightbulbOutlined,
+  Autorenew,
+} from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar/Nabvar";
 import ClearPitchDialog from "../../components/ClearPitchDialog/ClearPitchDialog";
@@ -297,15 +301,15 @@ const Onboarding = () => {
             }}
           />
         </Box>
-        <Link
-          component="button"
-          variant="body2"
+        <Button
+          variant="text"
+          color="primary"
           onClick={handleOpenConfirmDialog}
-          className={classes.refineLink}
-          sx={{ mt: 1, mb: 2 }}
+          className={classes.refineButton}
+          startIcon={<Autorenew />}
         >
           Try Another Angle
-        </Link>
+        </Button>
 
         <Typography variant="h6" className={classes.stepLabel}>
           Step 2: Select Audience

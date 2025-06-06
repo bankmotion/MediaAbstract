@@ -179,6 +179,36 @@ const styles = makeStyles()((theme: any) => ({
     "&:hover": { backgroundColor: "#1565c0" },
     display: "flex",
   },
+  refineButton: {
+    margin: "16px 0",
+    minWidth: 140,
+    width: "auto",
+    fontSize: "1.05rem",
+    fontWeight: 600,
+    borderRadius: 999,
+    textTransform: "none",
+    border: "none",
+    color: theme.palette.primary.dark,
+    background: "linear-gradient(90deg, #e3f0ff 0%, #f0f4ff 100%)",
+    boxShadow: "0 2px 8px rgba(25, 118, 210, 0.07)",
+    letterSpacing: 0.2,
+    padding: "8px 28px",
+    transition: "background 0.2s, color 0.2s",
+    "&:hover": {
+      background: "linear-gradient(90deg, #d0e6ff 0%, #e0eaff 100%)",
+      color: theme.palette.primary.main,
+      boxShadow: "0 4px 16px rgba(25, 118, 210, 0.12)",
+    },
+    "& .MuiButton-startIcon": {
+      marginRight: 8,
+    },
+    [theme.breakpoints.down("sm")]: {
+      width: "100%",
+      margin: theme.spacing(2, 0),
+      fontSize: "1rem",
+      padding: "8px 0",
+    },
+  },
 }));
 
 export default styles;
