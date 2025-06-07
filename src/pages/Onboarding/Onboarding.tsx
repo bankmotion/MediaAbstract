@@ -58,7 +58,7 @@ const Onboarding = () => {
   const [planType, setPlanType] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [matchesPerDay, setMatchesPerDay] = useState<string | number>("");
-  const [submissionsToday, setSubmissionsToday] = useState<number>(0);
+  const [currentMatches, setCurrentMatches] = useState<number>(0);
   const [limitReached, setLimitReached] = useState(false);
 
   const [errors, setErrors] = useState({ abstract: false, industry: false });
@@ -77,18 +77,16 @@ const Onboarding = () => {
         } = await supabase.auth.getSession();
 
         if (!session) {
-          // No session, redirect to login
           navigate("/login");
           return;
         }
 
-        // Store user ID
         setUserId(session.user.id);
 
-        // Get user profile to determine role
+        // Get user profile to determine role and fetch matches_perday
         const { data: profileData, error: profileError } = await supabase
           .from("user_profiles")
-          .select("plan_type")
+          .select("plan_type, matches_perday")
           .eq("user_id", session.user.id)
           .single();
 
@@ -100,6 +98,7 @@ const Onboarding = () => {
 
         if (profileData) {
           setPlanType(profileData.plan_type || null);
+          setCurrentMatches(profileData.matches_perday || 0);
           if (profileData.plan_type === "basic") {
             setMatchesPerDay(5);
           } else if (profileData.plan_type === "team") {
@@ -119,27 +118,6 @@ const Onboarding = () => {
             console.error("Invalid user role");
             navigate("/login");
           }
-
-          // Fetch submissions in the last 24 hours
-          if (["basic", "team", "enterprise"].includes(profileData.plan_type)) {
-            const { data: submissions, error: submissionsError } =
-              await supabase
-                .from("pitches")
-                .select("id, created_at")
-                .eq("user_id", session.user.id)
-                .gte(
-                  "created_at",
-                  new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
-                );
-            if (!submissionsError && submissions) {
-              setSubmissionsToday(submissions.length);
-              let limit = 0;
-              if (profileData.plan_type === "basic") limit = 5;
-              else if (profileData.plan_type === "team") limit = 15;
-              else if (profileData.plan_type === "enterprise") limit = Infinity;
-              setLimitReached(submissions.length >= limit);
-            }
-          }
         }
       } catch (error) {
         console.error("Session check error:", error);
@@ -151,6 +129,14 @@ const Onboarding = () => {
 
     checkSession();
   }, [navigate]);
+
+  useEffect(() => {
+    let limit = 0;
+    if (planType === "basic") limit = 5;
+    else if (planType === "team") limit = 15;
+    else if (planType === "enterprise") limit = Infinity;
+    setLimitReached(currentMatches >= limit);
+  }, [currentMatches, planType]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -176,7 +162,6 @@ const Onboarding = () => {
   const handleSubmit = async () => {
     if (!validateFields() || !userId) return;
     try {
-      // Update Redux store and fetch results
       dispatch(setPitchData({ abstract, industry, userId }));
       dispatch(
         fetchPitchResults({
@@ -187,11 +172,12 @@ const Onboarding = () => {
         })
       );
 
-      // Directly update matches_perday in user_profiles
+      // Directly update matches_perday in user_profiles and increment local state
       await supabase
         .from("user_profiles")
-        .update({ matches_perday: (submissionsToday || 0) + 1 })
+        .update({ matches_perday: currentMatches + 1 })
         .eq("user_id", userId);
+      setCurrentMatches((prev) => prev + 1);
 
       navigate("/results");
     } catch (error) {
@@ -373,7 +359,11 @@ const Onboarding = () => {
         )}
         {matchesPerDay && (
           <Typography variant="body2" sx={{ mt: 1, mb: 2, color: "#64748b" }}>
-            Matches per day: <b>{matchesPerDay}</b>
+            Matches per day:{" "}
+            <b>
+              {currentMatches}
+              {matchesPerDay === "Unlimited" ? "/∞" : `/${matchesPerDay}`}
+            </b>
           </Typography>
         )}
         <Button
