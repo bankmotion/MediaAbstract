@@ -20,6 +20,8 @@ import {
   InputLabel,
   Select,
   Collapse,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import {
   Logout,
@@ -107,36 +109,28 @@ const AgenciesDashboard = () => {
     hasPrioritySupport: false,
   });
 
-  // Update maxUsers based on plan type
+  // Update maxUsers and maxMatchesPerDay based on plan type
   useEffect(() => {
     if (planType === "basic") {
-      setPlanFeatures((prev) => ({ ...prev, maxUsers: 1 }));
+      setPlanFeatures((prev) => ({
+        ...prev,
+        maxUsers: 1,
+        maxMatchesPerDay: 5,
+      }));
     } else if (planType === "team") {
-      setPlanFeatures((prev) => ({ ...prev, maxUsers: 3 }));
+      setPlanFeatures((prev) => ({
+        ...prev,
+        maxUsers: 3,
+        maxMatchesPerDay: 15,
+      }));
     } else if (planType === "enterprise") {
-      setPlanFeatures((prev) => ({ ...prev, maxUsers: Infinity }));
+      setPlanFeatures((prev) => ({
+        ...prev,
+        maxUsers: Infinity,
+        maxMatchesPerDay: Infinity,
+      }));
     }
   }, [planType]);
-
-  // State for notifications
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: "new_user",
-      message: "New team member joined: John Doe",
-      date: "2024-03-21",
-      time: "2:30 PM",
-      read: false,
-    },
-    {
-      id: 2,
-      type: "plan_upgrade",
-      message: "Team upgraded to Enterprise plan",
-      date: "2024-03-20",
-      time: "1:45 PM",
-      read: false,
-    },
-  ]);
 
   const [activityLog, setActivityLog] = useState<any[]>([]);
 
@@ -225,6 +219,10 @@ const AgenciesDashboard = () => {
   const [teamRole, setTeamRole] = useState<string | null>(null);
 
   const [teamMembersCount, setTeamMembersCount] = useState<number>(0);
+
+  const [currentMatches, setCurrentMatches] = useState<number>(0);
+  const [limitReached, setLimitReached] = useState(false);
+  const [showLimitSnackbar, setShowLimitSnackbar] = useState(false);
 
   const handleEditChange = (
     pitchId: string,
@@ -495,6 +493,47 @@ const AgenciesDashboard = () => {
     fetchTeamMembersCount();
   }, [userId]);
 
+  // Fetch current matches from user_profiles
+  useEffect(() => {
+    const fetchCurrentMatches = async () => {
+      if (!userId) return;
+      const { data: userProfile } = await supabase
+        .from("user_profiles")
+        .select("matches_perday, plan_type")
+        .eq("user_id", userId)
+        .single();
+      if (userProfile) {
+        setCurrentMatches(userProfile.matches_perday || 0);
+        // Set planType if not already set
+        if (!planType && userProfile.plan_type)
+          setPlanType(userProfile.plan_type);
+      }
+    };
+    fetchCurrentMatches();
+  }, [userId]);
+
+  // Update limitReached state
+  useEffect(() => {
+    setLimitReached(
+      planFeatures.maxMatchesPerDay !== Infinity &&
+        currentMatches >= planFeatures.maxMatchesPerDay
+    );
+  }, [currentMatches, planFeatures.maxMatchesPerDay]);
+
+  // Reset current matches at UTC-0 (client-side demo)
+  useEffect(() => {
+    const now = new Date();
+    const msToNextUTC =
+      new Date(
+        Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1)
+      ).getTime() - now.getTime();
+    const timer = setTimeout(() => {
+      setCurrentMatches(0);
+      setLimitReached(false);
+    }, msToNextUTC);
+    return () => clearTimeout(timer);
+  }, [currentMatches]);
+
   return (
     <Box className={classes.wrapper}>
       <AppBar
@@ -562,7 +601,9 @@ const AgenciesDashboard = () => {
           <Box className={classes.userStats}>
             <Box className={classes.statItem}>
               <Typography className={classes.statValue}>
-                {planFeatures.maxMatchesPerDay}
+                {planFeatures.maxMatchesPerDay === Infinity
+                  ? `${currentMatches}/∞`
+                  : `${currentMatches}/${planFeatures.maxMatchesPerDay}`}
               </Typography>
               <Typography className={classes.statLabel}>Matches/Day</Typography>
             </Box>
@@ -593,7 +634,14 @@ const AgenciesDashboard = () => {
               size="large"
               className={classes.newPitchButton}
               startIcon={<AddCircleOutlineIcon />}
-              onClick={() => navigate("/onboarding")}
+              onClick={() => {
+                if (limitReached) {
+                  setShowLimitSnackbar(true);
+                  return;
+                }
+                navigate("/onboarding");
+              }}
+              disabled={limitReached}
             >
               New Pitch
             </Button>
@@ -1127,6 +1175,18 @@ const AgenciesDashboard = () => {
         isAdmin={teamRole === "admin"}
         teamId={userId || ""}
       />
+
+      <Snackbar
+        open={showLimitSnackbar}
+        autoHideDuration={4000}
+        onClose={() => setShowLimitSnackbar(false)}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="warning" onClose={() => setShowLimitSnackbar(false)}>
+          You have reached your daily match limit. Please try again after 00:00
+          UTC.
+        </Alert>
+      </Snackbar>
     </Box>
   );
 };

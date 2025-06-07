@@ -186,6 +186,13 @@ const Onboarding = () => {
           planType: planType || undefined,
         })
       );
+
+      // Directly update matches_perday in user_profiles
+      await supabase
+        .from("user_profiles")
+        .update({ matches_perday: (submissionsToday || 0) + 1 })
+        .eq("user_id", userId);
+
       navigate("/results");
     } catch (error) {
       console.error("Error in handleSubmit:", error);
