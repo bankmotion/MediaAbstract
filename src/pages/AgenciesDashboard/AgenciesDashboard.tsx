@@ -478,6 +478,17 @@ const AgenciesDashboard = () => {
             time: utc5Date.toLocaleTimeString(),
           },
         ]);
+        // Insert into Supabase activity_log table
+        await supabase.from("activity_log").insert([
+          {
+            user_id: user.id,
+            action: `Reminder set for "${
+              pitch.title
+            }" on ${utc5Date.toLocaleDateString()} at ${utc5Date.toLocaleTimeString()}`,
+            type: "reminder",
+            created_at: new Date().toISOString(),
+          },
+        ]);
         setSuccessMessage("Reminder set successfully!");
         setShowSuccess(true);
         setReminderDialogOpen(false);
@@ -624,6 +635,31 @@ const AgenciesDashboard = () => {
     return () => clearTimeout(timer);
   }, [currentMatches]);
 
+  // Priority Support Contact Form (simple email link for now)
+  const PrioritySupportContact = () => (
+    <Box
+      sx={{
+        mt: 2,
+        mb: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      <Typography variant="body2" sx={{ mb: 1, color: "#64748b" }}>
+        Need help? Contact our priority support team:
+      </Typography>
+      <Button
+        variant="outlined"
+        color="primary"
+        href="mailto:support@writefor.co"
+        sx={{ fontWeight: 600, borderRadius: 2 }}
+      >
+        Email Priority Support
+      </Button>
+    </Box>
+  );
+
   return (
     <Box className={classes.wrapper}>
       <AppBar
@@ -648,7 +684,7 @@ const AgenciesDashboard = () => {
           </Button>
 
           <Box className={classes.headerActions}>
-            {planFeatures.hasPrioritySupport && (
+            {planType === "enterprise" && (
               <Chip
                 icon={<Star />}
                 label="Priority Support"
@@ -1179,7 +1215,7 @@ const AgenciesDashboard = () => {
               </Box>
             </Box>
 
-            {planFeatures.hasPremiumInsights && (
+            {planType === "enterprise" && (
               <Box className={classes.premiumInsights}>
                 <Card className={classes.insightsCard}>
                   <CardContent>
@@ -1191,6 +1227,7 @@ const AgenciesDashboard = () => {
                     </Typography>
                   </CardContent>
                 </Card>
+                <PrioritySupportContact />
               </Box>
             )}
 
