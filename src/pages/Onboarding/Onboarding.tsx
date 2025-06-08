@@ -30,14 +30,17 @@ import useStyles from "./styles";
 
 const industryOptions = [
   "Business Executives",
-  "Tech",
-  "Marketing",
-  "General",
-  "Healthcare Tech",
-  "Sustainability",
-  "Cybersecurity",
-  "Real Estate",
-  "Energy",
+  "Tech Professionals",
+  "Cybersecurity Experts",
+  "Startup Founders & Entrepreneurs",
+  "Marketing & PR Professionals",
+  "Investors & Analysts",
+  "Healthcare & Health Tech Leaders",
+  "Education & Policy Leaders",
+  "Sustainability & Climate Leaders",
+  "Real Estate & Built Environment",
+  "Finance & Fintech Leaders",
+  "General Public",
 ];
 
 const Onboarding = () => {
