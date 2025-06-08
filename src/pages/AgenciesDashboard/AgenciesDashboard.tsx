@@ -22,6 +22,9 @@ import {
   Collapse,
   Snackbar,
   Alert,
+  Dialog,
+  DialogContent,
+  DialogActions,
 } from "@mui/material";
 import {
   Logout,
@@ -47,6 +50,7 @@ import {
   Comment as CommentIcon,
   Notifications,
   Close as CloseIcon,
+  CalendarToday,
 } from "@mui/icons-material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
@@ -224,6 +228,20 @@ const AgenciesDashboard = () => {
   const [limitReached, setLimitReached] = useState(false);
   const [showLimitSnackbar, setShowLimitSnackbar] = useState(false);
 
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  // For min date and time
+  const now = new Date();
+  const pad = (n: number) => n.toString().padStart(2, "0");
+  const todayStr = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(
+    now.getDate()
+  )}`;
+  const currentTimeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+
   const handleEditChange = (
     pitchId: string,
     field: "status" | "notes",
@@ -398,23 +416,95 @@ const AgenciesDashboard = () => {
     setSelectedPitchId(pitchId);
     setReminderDate("");
     setReminderTime("12:00");
+    setShowConfirm(false);
     setReminderDialogOpen(true);
   };
 
-  const handleSaveReminder = () => {
+  const handleSaveReminder = async () => {
     if (selectedPitchId && reminderDate) {
-      setActivityLog((prev) => [
-        {
-          id: Date.now(),
-          action: `Reminder set for pitch ID ${selectedPitchId} on ${reminderDate}`,
-          type: "reminder",
-          date: new Date().toLocaleDateString(),
-          time: new Date().toLocaleTimeString(),
-        },
-        ...prev,
-      ]);
-      setReminderDialogOpen(false);
+      // Validation: prevent past date/time
+      const now = new Date();
+      const [year, month, day] = reminderDate.split("-").map(Number);
+      const [hour, minute] = reminderTime.split(":").map(Number);
+      const localDate = new Date(year, month - 1, day, hour, minute, 0, 0);
+      if (localDate < now) {
+        setError("Reminder date and time must be in the future.");
+        setShowError(true);
+        return;
+      }
+      try {
+        const {
+          data: { user },
+          error: userError,
+        } = await supabase.auth.getUser();
+        if (userError || !user) throw new Error("User not authenticated");
+        const pitch = dashboardResult.myPitches.find(
+          (p) => p.id === selectedPitchId
+        );
+        if (!pitch) throw new Error("Pitch not found");
+        // Convert local time to UTC-5
+        const localOffset = localDate.getTimezoneOffset();
+        const utc5Offset = 300;
+        const totalOffset = localOffset - utc5Offset;
+        const utc5Date = new Date(localDate.getTime() + totalOffset * 60000);
+        const pad = (n: number) => n.toString().padStart(2, "0");
+        const formattedDateTime =
+          `${utc5Date.getFullYear()}-${pad(utc5Date.getMonth() + 1)}-${pad(
+            utc5Date.getDate()
+          )} ` +
+          `${pad(utc5Date.getHours())}:${pad(utc5Date.getMinutes())}:${pad(
+            utc5Date.getSeconds()
+          )}`;
+        await createReminder({
+          user_id: user.id,
+          pitch_id: selectedPitchId,
+          reminder_date: formattedDateTime,
+          email: user.email || "",
+          status: "pending",
+        });
+        setReminderStatuses((prev) => ({
+          ...prev,
+          [selectedPitchId]: "pending",
+        }));
+        setActivityLog((prevLog) => [
+          ...prevLog,
+          {
+            id: Date.now(),
+            action: `Reminder set for "${
+              pitch.title
+            }" on ${utc5Date.toLocaleDateString()} at ${utc5Date.toLocaleTimeString()}`,
+            type: "reminder",
+            date: utc5Date.toLocaleDateString(),
+            time: utc5Date.toLocaleTimeString(),
+          },
+        ]);
+        setSuccessMessage("Reminder set successfully!");
+        setShowSuccess(true);
+        setReminderDialogOpen(false);
+      } catch (error) {
+        setError(
+          error instanceof Error ? error.message : "Failed to set reminder"
+        );
+        setShowError(true);
+      }
     }
+  };
+
+  const handleCloseReminderDialog = () => {
+    setReminderDialogOpen(false);
+    setShowConfirm(false);
+    setReminderDate("");
+    setReminderTime("12:00");
+  };
+
+  const handleCloseError = () => {
+    setShowError(false);
+    setError(null);
+  };
+
+  const handleCloseSuccess = () => {
+    setShowSuccess(false);
+    setSuccessMessage("");
   };
 
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -940,15 +1030,22 @@ const AgenciesDashboard = () => {
                                 !!reminderStatuses[pitch.id] &&
                                 reminderStatuses[pitch.id] !== "sent"
                               }
+                              sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1,
+                              }}
                             >
-                              {reminderStatuses[pitch.id] &&
-                              reminderStatuses[pitch.id] !== "sent"
-                                ? "Reminder Set"
-                                : "Set Reminder"}
+                              {planType === "basic"
+                                ? reminderStatuses[pitch.id] &&
+                                  reminderStatuses[pitch.id] !== "sent"
+                                  ? "Reminder Set"
+                                  : "Set Reminder"
+                                : "Set Smart Reminder"}
                             </Button>
                           </Box>
                         </Box>
-                        {reminderStatuses[pitch.id] && (
+                        {planType !== "basic" && reminderStatuses[pitch.id] && (
                           <Chip
                             label={`Reminder: ${reminderStatuses[pitch.id]}`}
                             color={
@@ -1185,6 +1282,151 @@ const AgenciesDashboard = () => {
         <Alert severity="warning" onClose={() => setShowLimitSnackbar(false)}>
           You have reached your daily match limit. Please try again after 00:00
           UTC.
+        </Alert>
+      </Snackbar>
+
+      <Dialog
+        open={reminderDialogOpen}
+        onClose={handleCloseReminderDialog}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            p: 2,
+            boxShadow: 10,
+            background: "#fff",
+          },
+        }}
+      >
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          px={2}
+          pt={1}
+        >
+          <Box display="flex" alignItems="center" sx={{ margin: "10px" }}>
+            <CalendarToday sx={{ mr: 1, color: "primary.main" }} />
+            <Typography variant="h6" fontWeight={600}>
+              Set Follow-Up Reminder
+            </Typography>
+          </Box>
+          <IconButton onClick={handleCloseReminderDialog} size="small">
+            <CloseIcon />
+          </IconButton>
+        </Box>
+        <DialogContent sx={{ mt: 2, marginBottom: "15px" }}>
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            mb={1}
+            sx={{ margin: "15px" }}
+          >
+            Choose the date and time you'd like to be reminded to follow up.
+          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 2,
+              flexDirection: { xs: "column", sm: "row" },
+            }}
+          >
+            <TextField
+              label="Reminder Date"
+              type="date"
+              value={reminderDate}
+              onChange={(e) => setReminderDate(e.target.value)}
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              inputProps={{ min: todayStr }}
+              InputProps={{
+                sx: { borderRadius: 2, backgroundColor: "#f9f9f9" },
+              }}
+            />
+            <TextField
+              label="Reminder Time"
+              type="time"
+              value={reminderTime}
+              onChange={(e) => setReminderTime(e.target.value)}
+              InputLabelProps={{ shrink: true }}
+              fullWidth
+              inputProps={
+                reminderDate === todayStr ? { min: currentTimeStr } : {}
+              }
+              InputProps={{
+                sx: { borderRadius: 2, backgroundColor: "#f9f9f9" },
+              }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button
+            onClick={handleCloseReminderDialog}
+            variant="text"
+            sx={{ textTransform: "none", fontWeight: 500 }}
+          >
+            Cancel
+          </Button>
+          {!showConfirm ? (
+            <Button
+              onClick={() => setShowConfirm(true)}
+              variant="contained"
+              disabled={!reminderDate}
+              sx={{
+                textTransform: "none",
+                borderRadius: 2,
+                px: 3,
+                fontWeight: 600,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+              }}
+            >
+              Save Reminder
+            </Button>
+          ) : (
+            <Button
+              onClick={handleSaveReminder}
+              variant="contained"
+              color="primary"
+              sx={{
+                textTransform: "none",
+                borderRadius: 2,
+                px: 3,
+                fontWeight: 600,
+                boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+              }}
+            >
+              Confirm
+            </Button>
+          )}
+        </DialogActions>
+      </Dialog>
+      <Snackbar
+        open={showError}
+        autoHideDuration={6000}
+        onClose={handleCloseError}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseError}
+          severity="error"
+          sx={{ width: "100%" }}
+        >
+          {error}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={showSuccess}
+        autoHideDuration={3000}
+        onClose={handleCloseSuccess}
+        anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      >
+        <Alert
+          onClose={handleCloseSuccess}
+          severity="success"
+          sx={{ width: "100%" }}
+        >
+          {successMessage}
         </Alert>
       </Snackbar>
     </Box>
