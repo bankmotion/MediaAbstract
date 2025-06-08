@@ -25,6 +25,7 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
+  DialogTitle,
 } from "@mui/material";
 import {
   Logout,
@@ -1466,6 +1467,66 @@ const AgenciesDashboard = () => {
           {successMessage}
         </Alert>
       </Snackbar>
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleCancelDelete}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 3,
+            p: 2,
+            boxShadow: 10,
+            background: "#fff",
+          },
+        }}
+      >
+        <DialogTitle sx={{ pb: 1 }}>
+          <Typography variant="h6" fontWeight={600}>
+            Delete Pitch
+          </Typography>
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body1" color="text.secondary">
+            Are you sure you want to delete this pitch and all its saved
+            outlets? This action cannot be undone.
+          </Typography>
+          {pitchToDelete && (
+            <Box sx={{ mt: 2, p: 2, bgcolor: "grey.50", borderRadius: 1 }}>
+              <Typography variant="body2" color="text.secondary">
+                <strong>Description:</strong> {pitchToDelete.description}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                <strong>Saved on:</strong>{" "}
+                {new Date(pitchToDelete.selected_date).toLocaleDateString()}
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions sx={{ px: 3, pb: 2 }}>
+          <Button
+            onClick={handleCancelDelete}
+            variant="text"
+            sx={{ textTransform: "none", fontWeight: 500 }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={handleConfirmDelete}
+            variant="contained"
+            color="error"
+            sx={{
+              textTransform: "none",
+              borderRadius: 2,
+              px: 3,
+              fontWeight: 600,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+            }}
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
