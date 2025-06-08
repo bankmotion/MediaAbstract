@@ -47,7 +47,7 @@ import { supabase } from "../../utils/supabase";
 
 interface Match {
   name: string;
-  contact_email: string;
+  email: string;
   url: string;
   ai_partnered: string;
   match_percentage: number;
@@ -72,7 +72,7 @@ const Matches: React.FC = () => {
     pitchId,
     planType = "basic",
   } = location.state || {};
-  // console.log("matches:", matches);
+  console.log("matches:", matches);
   const [selectedOutlets, setSelectedOutlets] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
@@ -329,7 +329,7 @@ const Matches: React.FC = () => {
                   />
                 </Box>
                 <Typography className={classes.guide}>
-                  Contact: {outlet.contact_email}
+                  Contact: {outlet.email}
                 </Typography>
                 <a
                   href={outlet.url}
@@ -421,7 +421,7 @@ const Matches: React.FC = () => {
                       {outlet.name}
                     </Typography>
                   </TableCell>
-                  <TableCell>{outlet.contact_email}</TableCell>
+                  <TableCell>{outlet.email}</TableCell>
                   <TableCell>
                     <a
                       href={outlet.url}
