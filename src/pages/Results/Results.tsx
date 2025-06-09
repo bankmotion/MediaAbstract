@@ -399,7 +399,40 @@ const Results = () => {
                       {(planType === "team" || planType === "enterprise") && (
                         <>
                           <TableCell>
-                            <strong>Match Confidence</strong>
+                            <Box display="flex" alignItems="center" gap={0.5}>
+                              <strong>Match Confidence</strong>
+                              <Tooltip
+                                title={
+                                  <Box>
+                                    <Typography
+                                      variant="body2"
+                                      sx={{ fontWeight: 600, mb: 1 }}
+                                    >
+                                      What does Match Confidence mean?
+                                    </Typography>
+                                    <Typography variant="body2">
+                                      This score shows how closely your pitch
+                                      aligns with a publication's audience,
+                                      tone, and past contributed content. Higher
+                                      = stronger fit.
+                                    </Typography>
+                                  </Box>
+                                }
+                                arrow
+                                classes={{
+                                  tooltip: classes.matchExplanationTooltip,
+                                }}
+                              >
+                                <Info
+                                  sx={{
+                                    fontSize: "1.1rem",
+                                    color: theme.palette.primary.main,
+                                    ml: 0.5,
+                                    cursor: "pointer",
+                                  }}
+                                />
+                              </Tooltip>
+                            </Box>
                           </TableCell>
                           <TableCell>
                             <strong>AI Partnered</strong>
@@ -460,18 +493,10 @@ const Results = () => {
                                 Match
                                 <Tooltip
                                   title={
-                                    <Box>
-                                      <Typography
-                                        variant="body2"
-                                        sx={{ fontWeight: 600, mb: 1 }}
-                                      >
-                                        Why This Match?
-                                      </Typography>
-                                      <Typography variant="body2">
-                                        {outlet.match_explanation ||
-                                          "No match explanation available"}
-                                      </Typography>
-                                    </Box>
+                                    <Typography variant="body2">
+                                      {outlet.match_explanation ||
+                                        "No match explanation available"}
+                                    </Typography>
                                   }
                                   arrow
                                   classes={{
