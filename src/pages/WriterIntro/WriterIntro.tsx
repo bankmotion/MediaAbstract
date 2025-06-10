@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import Navbar from "../../components/Navbar/Nabvar";
 import VettingQuestions from "../../components/VettingQuestions/VettingQuestions";
+import PricingComparison from "../PricingComparison/PricingComparison";
 
 import LightbulbIcon from "@mui/icons-material/Lightbulb";
 import ChecklistIcon from "@mui/icons-material/Checklist";
@@ -113,6 +114,17 @@ const WritersIntro = () => {
               </CardContent>
             </Card>
           </Grid>
+
+          <Box className={classes.compareLinkContainer}>
+            <Button
+              variant="text"
+              color="primary"
+              onClick={() => navigate("/pricing-comparison")}
+              className={classes.compareLink}
+            >
+              Compare all plans in detail →
+            </Button>
+          </Box>
         </Box>
 
         <Button

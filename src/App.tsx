@@ -18,6 +18,7 @@ import PaymentSuccess from "./pages/PaymentSuccess/PaymentSuccess";
 import Matches from "./pages/Matches/Matches";
 import UserProfile from "./pages/UserProfile/UserProfile";
 import Payment from "./pages/Payment/Payment";
+import PricingComparison from "./pages/PricingComparison/PricingComparison";
 
 import "./App.css";
 
@@ -41,6 +42,10 @@ function App() {
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/profile" element={<UserProfile />} />
+          <Route
+            path="/pricing-comparison"
+            element={<PricingComparison isStandalonePage={true} />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />

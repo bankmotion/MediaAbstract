@@ -134,6 +134,18 @@ const useStyles = makeStyles()((theme) => ({
       fontSize: "0.9rem",
     },
   },
+  compareLinkContainer: {
+    display: "flex",
+    justifyContent: "center",
+    marginTop: theme.spacing(3),
+  },
+  compareLink: {
+    textTransform: "none",
+    fontWeight: 500,
+    "&:hover": {
+      textDecoration: "underline",
+    },
+  },
 }));
 
 export default useStyles;

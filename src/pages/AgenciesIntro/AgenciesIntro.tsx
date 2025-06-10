@@ -11,6 +11,7 @@ import { Lightbulb, ListChecks, Gauge } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import Navbar from "../../components/Navbar/Nabvar";
+import PricingComparison from "../PricingComparison/PricingComparison";
 
 const AgenciesIntro = () => {
   const { classes } = useStyles();
@@ -28,7 +29,7 @@ const AgenciesIntro = () => {
           Welcome, Agencies & Teams
         </Typography>
         <Typography variant="subtitle1" className={classes.subtitle}>
-          Collaborate better. Match your clients’ stories with top media.
+          Collaborate better. Match your clients' stories with top media.
         </Typography>
 
         <Typography className={classes.tagline}>
@@ -168,6 +169,17 @@ const AgenciesIntro = () => {
               </Card>
             </Grid>
           </Grid>
+
+          <Box className={classes.compareLinkContainer}>
+            <Button
+              variant="text"
+              color="primary"
+              onClick={() => navigate("/pricing-comparison")}
+              className={classes.compareLink}
+            >
+              Compare all plans in detail →
+            </Button>
+          </Box>
         </Box>
 
         <Button
