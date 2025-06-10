@@ -11,7 +11,6 @@ import { Lightbulb, ListChecks, Gauge } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import useStyles from "./styles";
 import Navbar from "../../components/Navbar/Nabvar";
-import PricingComparison from "../PricingComparison/PricingComparison";
 
 const AgenciesIntro = () => {
   const { classes } = useStyles();
