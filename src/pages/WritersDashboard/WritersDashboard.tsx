@@ -105,6 +105,7 @@ const WritersDashboard = () => {
   const [expandedOutlets, setExpandedOutlets] = useState<number[]>([]);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [showScrollToSaved, setShowScrollToSaved] = useState(false);
+  const [isNewUser, setIsNewUser] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -154,6 +155,18 @@ const WritersDashboard = () => {
       time: "5:45 PM",
     },
   ]);
+
+  // Determine if user is new based on their pitch count
+  useEffect(() => {
+    if (
+      dashboardResult.pitchesSent === 0 &&
+      dashboardResult.myPitches.length === 0
+    ) {
+      setIsNewUser(true);
+    } else {
+      setIsNewUser(false);
+    }
+  }, [dashboardResult.pitchesSent, dashboardResult.myPitches.length]);
 
   const nextStepsData =
     dashboardResult.pitchesSent === 0
@@ -659,7 +672,7 @@ const WritersDashboard = () => {
               <PersonIcon />
             </Avatar>
             <Typography className={classes.welcomeText}>
-              Welcome back, Jane
+              {isNewUser ? "Welcome, Jane" : "Welcome back, Jane"}
             </Typography>
           </Box>
           <Box className={classes.userStats}>

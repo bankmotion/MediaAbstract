@@ -102,6 +102,7 @@ const AgenciesDashboard = () => {
     description: string;
     selected_date: string;
   } | null>(null);
+  const [isNewUser, setIsNewUser] = useState<boolean>(false);
 
   // State for plan tier and features
   const [currentPlan, setCurrentPlan] = useState("$150/month");
@@ -142,8 +143,7 @@ const AgenciesDashboard = () => {
   // Fetch activity log from Supabase
   useEffect(() => {
     const fetchActivityLog = async () => {
-      if (!userId) return; // Only run if userId is set
-      console.log("userID:", userId);
+      if (!userId) return;
       const { data, error } = await supabase
         .from("activity_log")
         .select("id, created_at, action")
@@ -152,8 +152,15 @@ const AgenciesDashboard = () => {
       if (error) {
         console.error("Supabase error:", error);
       }
-      console.log("data:", data);
       setActivityLog(data || []);
+
+      // Determine if user is new based on activity log
+      // If they have no activity or only one entry (likely their first login), they're new
+      if (!data || data.length <= 1) {
+        setIsNewUser(true);
+      } else {
+        setIsNewUser(false);
+      }
     };
     fetchActivityLog();
   }, [userId]);
@@ -722,7 +729,7 @@ const AgenciesDashboard = () => {
               <Business />
             </Avatar>
             <Typography className={classes.welcomeText}>
-              Welcome back, Agency Team
+              {isNewUser ? "Welcome, Agency Team" : "Welcome back, Agency Team"}
             </Typography>
           </Box>
           <Box className={classes.userStats}>
