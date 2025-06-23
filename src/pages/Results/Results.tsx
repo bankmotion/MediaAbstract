@@ -359,17 +359,41 @@ const Results = () => {
                             </Tooltip>
                           </Typography>
                           <Box display="flex" alignItems="center" gap={0.5}>
-                            <span
-                              style={
-                                outlet.outlet?.ai_partnered === "Yes"
-                                  ? { color: "#1976d2", fontWeight: 600 }
-                                  : { color: "#666" }
+                            <Tooltip
+                              title={
+                                <Box>
+                                  <Typography
+                                    variant="body2"
+                                    sx={{ fontWeight: 600, mb: 1 }}
+                                  >
+                                    {outlet.outlet?.ai_partnered === "Yes"
+                                      ? "AI Partnered"
+                                      : "AI Partnership Unknown"}
+                                  </Typography>
+                                  <Typography variant="body2">
+                                    {outlet.outlet?.ai_partnered === "Yes"
+                                      ? "This outlet has a confirmed partnership with an AI platform like OpenAI. Publishing here may increase your story's visibility in AI-generated search results, summaries, and tools like ChatGPT or Perplexity."
+                                      : "We couldn't confirm an AI partnership for this outlet. Status may change over time as more media organizations sign licensing agreements with AI platforms."}
+                                  </Typography>
+                                </Box>
                               }
+                              arrow
+                              classes={{
+                                tooltip: classes.matchExplanationTooltip,
+                              }}
                             >
-                              {outlet.outlet?.ai_partnered === "Yes"
-                                ? "✓ AI Partnered"
-                                : "Unknown"}
-                            </span>
+                              <span
+                                style={
+                                  outlet.outlet?.ai_partnered === "Yes"
+                                    ? { color: "#1976d2", fontWeight: 600 }
+                                    : { color: "#666" }
+                                }
+                              >
+                                {outlet.outlet?.ai_partnered === "Yes"
+                                  ? "✓ AI Partnered"
+                                  : "Unknown"}
+                              </span>
+                            </Tooltip>
                           </Box>
                         </>
                       )}
@@ -510,15 +534,43 @@ const Results = () => {
                               </Box>
                             </TableCell>
                             <TableCell>
-                              {outlet.outlet?.ai_partnered === "Yes" ? (
-                                <span
-                                  style={{ color: "#1976d2", fontWeight: 600 }}
+                              <Box display="flex" alignItems="center" gap={0.5}>
+                                <Tooltip
+                                  title={
+                                    <Box>
+                                      <Typography
+                                        variant="body2"
+                                        sx={{ fontWeight: 600, mb: 1 }}
+                                      >
+                                        {outlet.outlet?.ai_partnered === "Yes"
+                                          ? "AI Partnered"
+                                          : "AI Partnership Unknown"}
+                                      </Typography>
+                                      <Typography variant="body2">
+                                        {outlet.outlet?.ai_partnered === "Yes"
+                                          ? "This outlet has a confirmed partnership with an AI platform like OpenAI. Publishing here may increase your story's visibility in AI-generated search results, summaries, and tools like ChatGPT or Perplexity."
+                                          : "We couldn't confirm an AI partnership for this outlet. Status may change over time as more media organizations sign licensing agreements with AI platforms."}
+                                      </Typography>
+                                    </Box>
+                                  }
+                                  arrow
+                                  classes={{
+                                    tooltip: classes.matchExplanationTooltip,
+                                  }}
                                 >
-                                  ✓ AI Partnered
-                                </span>
-                              ) : (
-                                <span style={{ color: "#666" }}>Unknown</span>
-                              )}
+                                  <span
+                                    style={
+                                      outlet.outlet?.ai_partnered === "Yes"
+                                        ? { color: "#1976d2", fontWeight: 600 }
+                                        : { color: "#666" }
+                                    }
+                                  >
+                                    {outlet.outlet?.ai_partnered === "Yes"
+                                      ? "✓ AI Partnered"
+                                      : "Unknown"}
+                                  </span>
+                                </Tooltip>
+                              </Box>
                             </TableCell>
                           </>
                         )}
