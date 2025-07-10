@@ -69,14 +69,15 @@ const VettingQuestions: React.FC<VettingQuestionsProps> = ({ onComplete }) => {
           <FormControlLabel
             value="agency"
             control={<Radio />}
-            label="I work for an agency or team"
+            label="I work for a brand, content team, or agency"
           />
         </RadioGroup>
       </div>
 
       <div className={classes.question}>
         <Typography className={classes.questionTitle}>
-          Are you signing up on behalf of a company or agency?
+          Are you signing up on behalf of a company, brand, content team, or
+          agency?
         </Typography>
         <RadioGroup
           className={classes.radioGroup}
@@ -91,16 +92,15 @@ const VettingQuestions: React.FC<VettingQuestionsProps> = ({ onComplete }) => {
           <FormControlLabel
             value="yes"
             control={<Radio />}
-            label="Yes, I represent a company or agency"
+            label="Yes, I represent a company, brand, content team, or agency"
           />
         </RadioGroup>
       </div>
 
       {(isAgency === "yes" || usageType === "agency") && (
         <Alert severity="info" className={classes.alert}>
-          Based on your responses, you might be better suited for our
-          Agency/Team plan. Would you like to learn more about our team
-          features?
+          Based on your responses, you might be better suited for our Team plan.
+          Would you like to learn more about our team features?
         </Alert>
       )}
 
@@ -121,11 +121,11 @@ const VettingQuestions: React.FC<VettingQuestionsProps> = ({ onComplete }) => {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Consider Our Agency Plan</DialogTitle>
+        <DialogTitle>Consider Our Team Plan</DialogTitle>
         <DialogContent className={classes.dialogContent}>
           <Typography gutterBottom>
-            We noticed you might be signing up as part of a team or agency. Our
-            Agency plan offers:
+            We noticed you might be signing up as part of a team, brand, content
+            team, or agency. Our Team plan offers:
           </Typography>
           <ul>
             <li>Team collaboration features</li>
@@ -136,7 +136,7 @@ const VettingQuestions: React.FC<VettingQuestionsProps> = ({ onComplete }) => {
             <li>Custom onboarding and training</li>
           </ul>
           <Typography>
-            Would you like to explore our Agency plan instead?
+            Would you like to explore our Team plan instead?
           </Typography>
         </DialogContent>
         <DialogActions className={classes.dialogActions}>
@@ -152,7 +152,7 @@ const VettingQuestions: React.FC<VettingQuestionsProps> = ({ onComplete }) => {
             color="primary"
             variant="contained"
           >
-            View Agency Plan
+            View Team Plan
           </Button>
         </DialogActions>
       </Dialog>

@@ -25,7 +25,7 @@ const AgenciesIntro = () => {
       <Navbar />
       <Box className={classes.introWrapper}>
         <Typography variant="h4" className={classes.title}>
-          Welcome, Agencies & Teams
+          Welcome, Brands, Content Teams, and Agencies
         </Typography>
         <Typography variant="subtitle1" className={classes.subtitle}>
           Collaborate better. Match your clients' stories with top media.

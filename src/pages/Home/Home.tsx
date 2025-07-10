@@ -222,13 +222,13 @@ const Home = () => {
           <Tab
             icon={<BusinessCenter className={classes.tabIcon} />}
             iconPosition="start"
-            label="For Agencies & Teams"
+            label="Brands, Content Teams, and Agencies"
             className={classes.tabLabel}
           />
           <Tab
             icon={<Lightbulb className={classes.tabIcon} />}
             iconPosition="start"
-            label="For Writers"
+            label="Writers"
             className={classes.tabLabel}
           />
         </Tabs>

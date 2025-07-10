@@ -724,12 +724,14 @@ const AgenciesDashboard = () => {
             <Avatar
               className={classes.avatar}
               src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-              alt="Agency Avatar"
+              alt="Brand, Content Team, or Agency Avatar"
             >
               <Business />
             </Avatar>
             <Typography className={classes.welcomeText}>
-              {isNewUser ? "Welcome, Agency Team" : "Welcome back, Agency Team"}
+              {isNewUser
+                ? "Welcome, Brands, Content Teams, and Agencies"
+                : "Welcome back, Brands, Content Teams, and Agencies"}
             </Typography>
           </Box>
           <Box className={classes.userStats}>

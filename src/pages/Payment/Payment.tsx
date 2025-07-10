@@ -21,7 +21,8 @@ const planOptions = [
     label: "Basic Plan",
     price: "$50",
     period: "/month",
-    description: "Perfect for individual agencies just getting started",
+    description:
+      "Perfect for individual brands, content teams, and agencies just getting started",
     features: [
       "1 user account",
       "5 matches per day",
@@ -37,7 +38,8 @@ const planOptions = [
     label: "Team Plan",
     price: "$120",
     period: "/month",
-    description: "Ideal for growing agencies with multiple team members",
+    description:
+      "Ideal for growing brands, content teams, and agencies with multiple team members",
     features: [
       "3 user accounts",
       "15 matches per day",
@@ -54,7 +56,8 @@ const planOptions = [
     label: "Enterprise Plan",
     price: "$200",
     period: "/month",
-    description: "For established agencies requiring maximum capabilities",
+    description:
+      "For established brands, content teams, and agencies requiring maximum capabilities",
     features: [
       "Unlimited user accounts",
       "Unlimited matches",
@@ -154,7 +157,8 @@ const Payment = () => {
             Choose Your Plan
           </Typography>
           <Typography variant="body1" className={classes.subtitle}>
-            Select the perfect plan for your agency's needs.
+            Select the perfect plan for your brand, content team, or agency's
+            needs.
           </Typography>
         </Box>
 
