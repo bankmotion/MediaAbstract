@@ -111,11 +111,12 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               </Typography>
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
-                WriteFor.co helps PR professionals, founders, content creators,
-                and subject-matter experts pitch smarter with AI—matching your
-                best ideas to the right media outlets. We're launching with 100+
-                vetted publications to streamline your thought leadership
-                strategy and amplify your voice where it matters most.
+                WriteFor.co helps Brands, founders, content creators, PR
+                professionals, and subject-matter experts pitch smarter with
+                AI—matching your best ideas to the right media outlets. We're
+                launching with 100+ vetted publications to streamline your
+                thought leadership strategy and amplify your voice where it
+                matters most.
               </Typography>
             </Box>
           </Zoom>
