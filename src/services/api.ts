@@ -1,8 +1,8 @@
 import axios from "axios";
 
 // Use environment variable with fallback
-const API_URL = "https://backend.writefor.co";
-// const API_URL = "http://146.190.131.130:10000";
+// const API_URL = "https://backend.writefor.co";
+const API_URL = "http://146.190.131.130:10000";
 
 export const submitPitch = async (
   abstract: string,
@@ -11,27 +11,24 @@ export const submitPitch = async (
   planType?: string
 ) => {
   try {
-    const response = await fetch(`${API_URL}/submit_pitch`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: JSON.stringify({ abstract, industry, userId, planType }),
+    const response = await axios.post(`${API_URL}/submit_pitch`, {
+      abstract,
+      industry,
+      userId,
+      planType,
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Error submitting pitch:", errorText);
-      throw new Error(`Submission failed: ${errorText}`);
-    }
+    console.log("Pitch submitted successfully:", response.data);
 
-    const data = await response.json();
-    console.log("Pitch submitted successfully:", data);
-
-    return data.matched_outlets || [];
+    return response.data.matched_outlets || [];
   } catch (error) {
     console.error("Error in submitPitch", error);
+    if (axios.isAxiosError(error)) {
+      console.error("Error submitting pitch:", error.response?.data);
+      throw new Error(
+        `Submission failed: ${error.response?.data || error.message}`
+      );
+    }
     return { error: "Failed to submit pitch" };
   }
 };
