@@ -45,6 +45,16 @@ const Results = () => {
 
   const results = useSelector((state: RootState) => state.pitch.results);
   console.log("Results:", results);
+  
+  // Debug: Log AI partnership values to see what's coming from database
+  useEffect(() => {
+    if (results.length > 0) {
+      console.log("AI Partnership Values from Database:");
+      results.forEach((outlet, index) => {
+        console.log(`Outlet ${index + 1}: "${outlet.outlet?.ai_partnered}" (type: ${typeof outlet.outlet?.ai_partnered})`);
+      });
+    }
+  }, [results]);
   const status = useSelector((state: RootState) => state.pitch.status);
   const abstract = useSelector((state: RootState) => state.pitch.abstract);
 
@@ -78,6 +88,18 @@ const Results = () => {
     url: string;
     pitchId: string;
   } | null>(null);
+
+  // Helper function to properly determine AI partnership status
+  const getAIPartnershipStatus = (aiPartnered: string | null | undefined) => {
+    if (aiPartnered === "Yes") {
+      return { status: "AI Partnered", display: "✓ AI Partnered", color: "#1976d2", fontWeight: 600 };
+    } else if (aiPartnered === "No") {
+      return { status: "Not AI Partnered", display: "✗ Not AI Partnered", color: "#d32f2f", fontWeight: 600 };
+    } else {
+      // Handle null, undefined, empty string, or any other value as "Unconfirmed"
+      return { status: "AI Partnership Unconfirmed", display: "? Unconfirmed", color: "#666" };
+    }
+  };
 
   const handleOpenModal = (outletName: string) => {
     const outlet = results.find((o) => o.outlet.name === outletName);
@@ -359,49 +381,38 @@ const Results = () => {
                             </Tooltip>
                           </Typography>
                           <Box display="flex" alignItems="center" gap={0.5}>
-                            <Tooltip
-                              title={
-                                <Box>
-                                  <Typography
-                                    variant="body2"
-                                    sx={{ fontWeight: 600, mb: 1 }}
-                                  >
-                                    {outlet.outlet?.ai_partnered === "Yes"
-                                      ? "AI Partnered"
-                                      : outlet.outlet?.ai_partnered === "No"
-                                      ? "Not AI Partnered"
-                                      : "AI Partnership Unconfirmed"}
-                                  </Typography>
-                                  <Typography variant="body2">
-                                    {outlet.outlet?.ai_partnered === "Yes"
-                                      ? "This outlet has a confirmed partnership with an AI platform like OpenAI. Publishing here may increase your story's visibility in AI-generated search results, summaries, and tools like ChatGPT or Perplexity."
-                                      : outlet.outlet?.ai_partnered === "No"
-                                      ? "This outlet has confirmed they do not have an AI partnership. Status may change over time as more media organizations sign licensing agreements with AI platforms."
-                                      : "Status unconfirmed per trackers. This outlet's AI partnership status is unclear based on current tracking data."}
-                                  </Typography>
-                                </Box>
-                              }
-                              arrow
-                              classes={{
-                                tooltip: classes.matchExplanationTooltip,
-                              }}
-                            >
-                              <span
-                                style={
-                                  outlet.outlet?.ai_partnered === "Yes"
-                                    ? { color: "#1976d2", fontWeight: 600 }
-                                    : outlet.outlet?.ai_partnered === "No"
-                                    ? { color: "#d32f2f", fontWeight: 600 }
-                                    : { color: "#666" }
-                                }
-                              >
-                                {outlet.outlet?.ai_partnered === "Yes"
-                                  ? "✓ AI Partnered"
-                                  : outlet.outlet?.ai_partnered === "No"
-                                  ? "✗ Not AI Partnered"
-                                  : "? Unconfirmed"}
-                              </span>
-                            </Tooltip>
+                            {(() => {
+                              const aiStatus = getAIPartnershipStatus(outlet.outlet?.ai_partnered);
+                              return (
+                                <Tooltip
+                                  title={
+                                    <Box>
+                                      <Typography
+                                        variant="body2"
+                                        sx={{ fontWeight: 600, mb: 1 }}
+                                      >
+                                        {aiStatus.status}
+                                      </Typography>
+                                      <Typography variant="body2">
+                                        {aiStatus.status === "AI Partnered"
+                                          ? "This outlet has a confirmed partnership with an AI platform like OpenAI. Publishing here may increase your story's visibility in AI-generated search results, summaries, and tools like ChatGPT or Perplexity."
+                                          : aiStatus.status === "Not AI Partnered"
+                                          ? "This outlet has confirmed they do not have an AI partnership. Status may change over time as more media organizations sign licensing agreements with AI platforms."
+                                          : "Status unconfirmed per trackers. This outlet's AI partnership status is unclear based on current tracking data."}
+                                      </Typography>
+                                    </Box>
+                                  }
+                                  arrow
+                                  classes={{
+                                    tooltip: classes.matchExplanationTooltip,
+                                  }}
+                                >
+                                  <span style={{ color: aiStatus.color, fontWeight: aiStatus.fontWeight }}>
+                                    {aiStatus.display}
+                                  </span>
+                                </Tooltip>
+                              );
+                            })()}
                           </Box>
                         </>
                       )}
@@ -543,49 +554,38 @@ const Results = () => {
                             </TableCell>
                             <TableCell>
                               <Box display="flex" alignItems="center" gap={0.5}>
-                                <Tooltip
-                                  title={
-                                    <Box>
-                                      <Typography
-                                        variant="body2"
-                                        sx={{ fontWeight: 600, mb: 1 }}
-                                      >
-                                        {outlet.outlet?.ai_partnered === "Yes"
-                                          ? "AI Partnered"
-                                          : outlet.outlet?.ai_partnered === "No"
-                                          ? "Not AI Partnered"
-                                          : "AI Partnership Unconfirmed"}
-                                      </Typography>
-                                      <Typography variant="body2">
-                                        {outlet.outlet?.ai_partnered === "Yes"
-                                          ? "This outlet has a confirmed partnership with an AI platform like OpenAI. Publishing here may increase your story's visibility in AI-generated search results, summaries, and tools like ChatGPT or Perplexity."
-                                          : outlet.outlet?.ai_partnered === "No"
-                                          ? "This outlet has confirmed they do not have an AI partnership. Status may change over time as more media organizations sign licensing agreements with AI platforms."
-                                          : "Status unconfirmed per trackers. This outlet's AI partnership status is unclear based on current tracking data."}
-                                      </Typography>
-                                    </Box>
-                                  }
-                                  arrow
-                                  classes={{
-                                    tooltip: classes.matchExplanationTooltip,
-                                  }}
-                                >
-                                  <span
-                                    style={
-                                      outlet.outlet?.ai_partnered === "Yes"
-                                        ? { color: "#1976d2", fontWeight: 600 }
-                                        : outlet.outlet?.ai_partnered === "No"
-                                        ? { color: "#d32f2f", fontWeight: 600 }
-                                        : { color: "#666" }
-                                    }
-                                  >
-                                    {outlet.outlet?.ai_partnered === "Yes"
-                                      ? "✓ AI Partnered"
-                                      : outlet.outlet?.ai_partnered === "No"
-                                      ? "✗ Not AI Partnered"
-                                      : "? Unconfirmed"}
-                                  </span>
-                                </Tooltip>
+                                {(() => {
+                                  const aiStatus = getAIPartnershipStatus(outlet.outlet?.ai_partnered);
+                                  return (
+                                    <Tooltip
+                                      title={
+                                        <Box>
+                                          <Typography
+                                            variant="body2"
+                                            sx={{ fontWeight: 600, mb: 1 }}
+                                          >
+                                            {aiStatus.status}
+                                          </Typography>
+                                          <Typography variant="body2">
+                                            {aiStatus.status === "AI Partnered"
+                                              ? "This outlet has a confirmed partnership with an AI platform like OpenAI. Publishing here may increase your story's visibility in AI-generated search results, summaries, and tools like ChatGPT or Perplexity."
+                                              : aiStatus.status === "Not AI Partnered"
+                                              ? "This outlet has confirmed they do not have an AI partnership. Status may change over time as more media organizations sign licensing agreements with AI platforms."
+                                              : "Status unconfirmed per trackers. This outlet's AI partnership status is unclear based on current tracking data."}
+                                          </Typography>
+                                        </Box>
+                                      }
+                                      arrow
+                                      classes={{
+                                        tooltip: classes.matchExplanationTooltip,
+                                      }}
+                                    >
+                                      <span style={{ color: aiStatus.color, fontWeight: aiStatus.fontWeight }}>
+                                        {aiStatus.display}
+                                      </span>
+                                    </Tooltip>
+                                  );
+                                })()}
                               </Box>
                             </TableCell>
                           </>

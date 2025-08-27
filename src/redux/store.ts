@@ -15,3 +15,13 @@ export const store = configureStore({
 
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+// Explicitly type the state structure
+declare module '@reduxjs/toolkit' {
+  interface RootState {
+    pitch: ReturnType<typeof pitchReducer>;
+    dashboard: ReturnType<typeof dashboardReducer>;
+    savedOutlets: ReturnType<typeof saveOutletsReducer>;
+    allOutlets: ReturnType<typeof outletsReducer>;
+  }
+}
