@@ -92,12 +92,12 @@ const Results = () => {
   // Helper function to properly determine AI partnership status
   const getAIPartnershipStatus = (aiPartnered: string | null | undefined) => {
     if (aiPartnered === "Yes") {
-      return { status: "AI Partnered", display: "✓ AI Partnered", color: "#1976d2", fontWeight: 600 };
+      return { status: "Yes", display: "Yes", color: "#1976d2", fontWeight: 600 };
     } else if (aiPartnered === "No") {
-      return { status: "Not AI Partnered", display: "✗ Not AI Partnered", color: "#d32f2f", fontWeight: 600 };
+      return { status: "No", display: "No", color: "#d32f2f", fontWeight: 600 };
     } else {
       // Handle null, undefined, empty string, or any other value as "Unconfirmed"
-      return { status: "AI Partnership Unconfirmed", display: "? Unconfirmed", color: "#666" };
+      return { status: "Unconfirmed", display: "Unconfirmed", color: "#666" };
     }
   };
 
@@ -394,9 +394,9 @@ const Results = () => {
                                         {aiStatus.status}
                                       </Typography>
                                       <Typography variant="body2">
-                                        {aiStatus.status === "AI Partnered"
+                                        {aiStatus.status === "Yes"
                                           ? "This outlet has a confirmed partnership with an AI platform like OpenAI. Publishing here may increase your story's visibility in AI-generated search results, summaries, and tools like ChatGPT or Perplexity."
-                                          : aiStatus.status === "Not AI Partnered"
+                                          : aiStatus.status === "No"
                                           ? "This outlet has confirmed they do not have an AI partnership. Status may change over time as more media organizations sign licensing agreements with AI platforms."
                                           : "Status unconfirmed per trackers. This outlet's AI partnership status is unclear based on current tracking data."}
                                       </Typography>
@@ -567,9 +567,9 @@ const Results = () => {
                                             {aiStatus.status}
                                           </Typography>
                                           <Typography variant="body2">
-                                            {aiStatus.status === "AI Partnered"
+                                            {aiStatus.status === "Yes"
                                               ? "This outlet has a confirmed partnership with an AI platform like OpenAI. Publishing here may increase your story's visibility in AI-generated search results, summaries, and tools like ChatGPT or Perplexity."
-                                              : aiStatus.status === "Not AI Partnered"
+                                              : aiStatus.status === "No"
                                               ? "This outlet has confirmed they do not have an AI partnership. Status may change over time as more media organizations sign licensing agreements with AI platforms."
                                               : "Status unconfirmed per trackers. This outlet's AI partnership status is unclear based on current tracking data."}
                                           </Typography>
