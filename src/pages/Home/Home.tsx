@@ -205,11 +205,12 @@ const Home = () => {
       </AppBar>
       <Box className={classes.heroSection}>
         <Typography variant="h4" className={classes.title}>
-          Pitch Your Content with WriteFor.co to Top Outlets
+          {/* Pitch Your Content with WriteFor.co to Top Outlets */}
+          Get Your Ideas in Front of the Right Outlets
         </Typography>
         <Typography variant="subtitle1" className={classes.subtitle}>
-          Match your bylines, op-eds, and articles with the right media outlets
-          in seconds.
+          {/* <p>Get Your Ideas in Front of the Right Outlets</p> */}
+          <p>Match your bylines, op-eds, and articles with vetted publications—fast and smart.</p>
         </Typography>
         <Tabs
           className={classes.tabRoot}
@@ -288,7 +289,7 @@ const Home = () => {
                   3. Get Matched
                 </Typography>
                 <Typography className={classes.howText}>
-                  Get instant matches with top media outlets based on fit.
+                  See AI-assisted matches with vetted media outlets, prioritized by fit.
                 </Typography>
               </CardContent>
             </Card>

@@ -27,8 +27,8 @@ const AgenciesIntro = () => {
         <Typography variant="h4" className={classes.title}>
           Welcome, Brands, Content Teams, and Agencies
         </Typography>
-        <Typography variant="subtitle1" className={classes.subtitle}>
-          Collaborate better. Match your clients' stories with top media.
+        <Typography variant="subtitle1" className={classes.subtitle}>          
+          Match your clients' stories with the right media outlets-smarter, faster, more credible.
         </Typography>
 
         <Typography className={classes.tagline}>
@@ -40,8 +40,8 @@ const AgenciesIntro = () => {
             Why WriteFor.co?
           </Typography>
           <Typography className={classes.whyDescription}>
-            Built for content pitching—perfect for bylines, op-eds, commentary,
-            columns, and freelance articles.
+            Purpose-built for content pitching—bylines, op-eds, commentary, and thought leadership. 
+            WriteFor.co combines a vetted outlet database with AI-assisted matching to connect your ideas where they’ll have the most impact.
           </Typography>
           <Grid container spacing={3} className={classes.iconTextGrid}>
             <Grid item xs={12} md={4}>
@@ -51,7 +51,7 @@ const AgenciesIntro = () => {
                   Pitch Smarter
                 </Typography>
                 <Typography className={classes.iconTextDesc}>
-                  Leverage AI to fine-tune pitches that resonate.
+                  Use AI-assisted matching to align your ideas with the right outlets.
                 </Typography>
               </Box>
             </Grid>
@@ -62,7 +62,7 @@ const AgenciesIntro = () => {
                   Get Matches Fast
                 </Typography>
                 <Typography className={classes.iconTextDesc}>
-                  Rapidly discover media outlets aligned with your story.
+                  Quickly discover publications vetted for your audience and story.
                 </Typography>
               </Box>
             </Grid>
@@ -73,7 +73,7 @@ const AgenciesIntro = () => {
                   Track Progress
                 </Typography>
                 <Typography className={classes.iconTextDesc}>
-                  Monitor outreach and refine your strategy easily.
+                  Save matches, monitor outreach, and refine your strategy easily.
                 </Typography>
               </Box>
             </Grid>
@@ -107,7 +107,7 @@ const AgenciesIntro = () => {
                     </Typography>
                   </Box>
                   <Typography className={classes.planDesc}>
-                    1 user, 5 matches/day, basic media guidelines.
+                    1 user, 5 matches/day, access to vetted outlet database.
                   </Typography>
                 </CardContent>
               </Card>
@@ -134,7 +134,7 @@ const AgenciesIntro = () => {
                     </Typography>
                   </Box>
                   <Typography className={classes.planDesc}>
-                    3 users, 15 matches/day, upgraded pitch tracking.
+                    3 users, 15 matches/day, upgraded tracking & shared media guidelines.
                   </Typography>
                 </CardContent>
               </Card>
@@ -161,8 +161,7 @@ const AgenciesIntro = () => {
                     </Typography>
                   </Box>
                   <Typography className={classes.planDesc}>
-                    Unlimited users, unlimited matches, priority support,
-                    premium insights.
+                    Unlimited users, unlimited matches, priority support, premium insights, and custom reporting.
                   </Typography>
                 </CardContent>
               </Card>

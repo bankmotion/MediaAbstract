@@ -66,7 +66,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
             <Box className={classes.titleDecoration} />
           </Box>
           <Typography variant="subtitle1" className={classes.subtitle}>
-            Where Smart Pitching Meets AI Innovation
+            Where Smart Pitching Meets AI-Guided Media Intelligence
           </Typography>
           <Box className={classes.badgeContainer}>
             <Chip
@@ -112,9 +112,8 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
                 WriteFor.co helps brands, founders, content creators, PR
-                professionals, and subject-matter experts pitch smarter with
-                AI—matching your best ideas to the right media outlets. We're
-                launching with 100+ vetted publications to streamline your
+                professionals, and subject-matter experts pitch smarter-using
+                AI—assisted matching and a vetted database of 100+ publications to streamline your
                 thought leadership strategy and amplify your voice where it
                 matters most.
               </Typography>
@@ -140,7 +139,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
                 Founded by a PR leader with 25+ years of experience, WriteFor.co
-                brings together deep media expertise and AI innovation to make
+                brings together deep media expertise and AI-assisted matching to make
                 pitching faster, smarter, and more effective.
               </Typography>
             </Box>
@@ -165,7 +164,7 @@ const AboutModal: React.FC<AboutModalProps> = ({ open, onClose }) => {
               <Divider className={classes.sectionDivider} />
               <Typography variant="body1" className={classes.sectionText}>
                 Join our early beta and help shape the future of smarter, more
-                targeted pitching. Get early access, share your feedback, and
+                targeted pitching. Get early access, influence product direction, and
                 connect your ideas with the right media—faster.
               </Typography>
             </Box>
